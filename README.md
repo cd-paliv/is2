@@ -9,6 +9,6 @@ Instalaciones necesarias:
   - virtualenv
   - Django
 
-Para ejecutar la aplicación es necesario activar el entorno virtual con `venv/Scripts/activate` (o `source bin/activate` en Linux/MacOS) e instalar las dependencias con `pip install requests`. Luego, ingresar a la carpeta _vetapp_ y ejecutar `python manage.py runserver`.
+Para ejecutar la aplicación es necesario activar el entorno virtual con `venv/Scripts/activate` (o `source bin/activate` en Linux/MacOS) e instalar las dependencias con `pip install requests`. Luego, ejecutar `python manage.py runserver`.
 
 ## Contacto
