@@ -72,7 +72,7 @@ def RegisterView(request):
             messages.success(request, f'Registro exitoso. Por favor, dirígase a {email} para activar su cuenta y completar el registro.')
             return redirect(reverse("register"))
         messages.error(request, 'Registro fallido. Información inválida')
-        return render(request, "accounts/register.html", {'register_form':form})
+        return redirect(reverse("register"))
     form = RegisterForm
     return render(request, "accounts/register.html", {'register_form':form})
 
