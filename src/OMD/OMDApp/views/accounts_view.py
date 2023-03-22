@@ -31,6 +31,11 @@ class LoginView(views.LoginView):
         except ObjectDoesNotExist:
             messages.error(self.request, 'El email no se encuentra registrado.')
             return redirect(reverse("login"))
+        
+        confirmed = getattr(user, 'email_confirmed')
+        if not confirmed:
+            messages.error(request, 'El email no se encuentra confirmado. Dirígase a su correo para finalizar el registro.')
+            return redirect(reverse("register"))
 
         password = instance_form.cleaned_data['password']
         if check_password(password, user.password):
