@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700');
+body {
+  background-color: #0a0909;
+  font-family: 'Montserrat', Helvetica, sans-serif;
+  font-size: 14px;
+  color: white;
+}
+
+.clear {
+  clear: both;
+  height: 0;
+  overflow: hidden;
+}
+
+#footer {
+  width: 75%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#main {
+  width: 75%;
+  margin: 0 auto;
+  background-color: #FFF;
+  padding: 20px 40px;
+  border: solid 1px black;
+  margin-top: 20px;
+  min-height: 400px;
+}
+
+a.link {
+  text-transform: uppercase;
+  font-size: 10px;
+  background-color: #92a4ad;
+  padding: 10px 15px;
+  border-radius: 0;
+  color: #416475;
+  display: inline-block;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  line-height: 1.5;
+  text-decoration: none;
+  margin-top: 50px;
+  letter-spacing: 1px;
+}
+
+/* Used for tables on index pages. */
+.index-table {
+  border-spacing: 0;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.index-table td,
+.index-table th {
+  padding: 1rem;
+  text-align: left;
+}
+
+.index-table td,
+.index-table th {
+  border-bottom: 1px solid #f4f4f4; /* grey-1 */
+}
+
+.index-table tr:last-child td {
+  border-bottom: none;
+}
+
+.index-table tr:hover {
+  background-color: rgba(0, 0, 0, .04);
+}
+
+/* Don't highlight thead on hover */
+.index-table thead tr:hover {
+  background-color: rgba(0, 0, 0, 0);;
+}
+
+.index-table-link,
+.index-table-action-link {
+  margin: -1rem;
+  padding: 1rem;
+  color: black; 
+  fill: black;
+
+  text-decoration: none;
+}
+
+.index-table-link {
+  display: block;
+}
+
+.index-table-action-link:hover {
+  display: inline-block;
+  background-color: rgba(0, 0, 0, .04);
+}
+
+.index-table-action-link {
+  float: right;
+}
+
+tr.disabled {
+  color: #bbb !important;
+}
+
+p.flash {
+  width: 100%;
+  padding: 5px;
+}
+
+p.flash.error {
+  border: 3px solid red;
+  background-color: #ff440070;
+}
+
+p.flash.success {
+  border: 3px solid green;
+  background-color: #acff2f70;
+}
+
+p.flash.info {
+  border: 3px solid blue;
+  background-color: #0000ff6e;
+}
+
+.btn-especial {
+  background-color: #b5a369 !important;
+  color: black;
+}
+
+.btn-outline-especial {
+  color: #638c6f;
+  border-color: #638c6f;
+}
+
+.btn-outline-especial:hover{
+  color: black;
+  background-color: #638c6f;
+}
+
+.btn-borrar {
+  background-color: #963131  !important;
+  color: white;
+}
+
+.btn-inscribir {
+  background-color: #0C4D67  !important;
+  color: white;
+}
+
+.btn-dark{
+  background-color: #3f3f3f;
+  color: white;
+}
+
+.btn-especial:hover{
+  color: white;
+}
+
+.btn-inscribir:hover{
+  color: white;
+}
+
+.btn-success{
+  background-color: #39771B;
+}
+
+.text-bg-danger{
+  background-color: #963131 !important;
+}
+
+.text-bg-success{
+  background-color: #39771B !important;
+}

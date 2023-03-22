@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!--Log in-->
+<div class="container py-5">
+	<h1>Inicio de sesión</h1>
+	<form method="POST">
+		{% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary" type="submit">Iniciar sesión</button>
+	</form>
+</div>
+{% endblock %}
