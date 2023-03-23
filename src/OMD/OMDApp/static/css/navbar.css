@@ -1,0 +1,30 @@
+
+@media (min-width: 768px){
+    .navbar .navbar-nav .nav-link{
+        font-size: larger;
+    }
+
+    .navbar .navbar-nav .dropdown-menu .dropdown-item{
+        font-size: larger;
+    }
+}
+
+@media (max-width: 767px){
+    a.navbar-brand{
+        font-size: 5vw;
+    }
+    
+    .navbar .navbar-nav .nav-link{
+        font-size: medium;
+    }
+    
+    .navbar .navbar-nav .dropdown-menu .dropdown-item{
+        font-size: medium;
+    }
+}
+
+@media (max-width: 440px){
+    a.navbar-brand{
+        font-size: 0px;
+    }
+}
