@@ -32,22 +32,15 @@
         {% endblock %}
     </main>
     <div class="w-100 mt-auto">
-      <div class="container mb-5">
-        {% block buttons %} 
+        <div class="container mb-5">
+            {% block buttons %} 
+            {% endblock %}
+        </div>
+        {% block footer %} 
+        <footer class="footer text-center text-lg-start bg-dark text-muted position-relative bottom-0 top-0 w-100">
+            {% include 'footer.html' %}
+        </footer>
         {% endblock %}
-      </div>
-      <footer class="bg-dark text-center text-white">
-          {% block footer %} 
-            <footer class="text-muted py-4">
-                <div class="container">
-                    <p class="float-end mb-1">
-                        <a href="">Volver arriba</a>
-                    </p>
-                    <p align="left" class="mb-1">&copy; Ingeniería de Software II - Grupo 27</p>
-                </div>
-            </footer>
-          {% endblock %}
-      </footer>
     </div>
 </body>
 {% endblock %}
