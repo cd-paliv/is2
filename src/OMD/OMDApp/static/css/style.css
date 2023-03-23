@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700');
 body {
-  background-color: #0a0909;
+  background-color: #e3e3ec;
   font-family: 'Montserrat', Helvetica, sans-serif;
   font-size: 14px;
-  color: white;
+  color: black;
 }
 
 .clear {
@@ -120,54 +120,4 @@ p.flash.success {
 p.flash.info {
   border: 3px solid blue;
   background-color: #0000ff6e;
-}
-
-.btn-especial {
-  background-color: #b5a369 !important;
-  color: black;
-}
-
-.btn-outline-especial {
-  color: #638c6f;
-  border-color: #638c6f;
-}
-
-.btn-outline-especial:hover{
-  color: black;
-  background-color: #638c6f;
-}
-
-.btn-borrar {
-  background-color: #963131  !important;
-  color: white;
-}
-
-.btn-inscribir {
-  background-color: #0C4D67  !important;
-  color: white;
-}
-
-.btn-dark{
-  background-color: #3f3f3f;
-  color: white;
-}
-
-.btn-especial:hover{
-  color: white;
-}
-
-.btn-inscribir:hover{
-  color: white;
-}
-
-.btn-success{
-  background-color: #39771B;
-}
-
-.text-bg-danger{
-  background-color: #963131 !important;
-}
-
-.text-bg-success{
-  background-color: #39771B !important;
 }
