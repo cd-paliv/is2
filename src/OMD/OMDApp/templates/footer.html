@@ -1,41 +1,42 @@
-{% load static %}
 
-<footer class="footer text-center text-lg-start bg-dark text-muted position-relative bottom-0 top-0 w-100">
-    <div class="d-flex justify-content-center p-4 border-bottom" style="border-bottom-color: #5A5A5A;">
-      <div class="me-5 d-none d-lg-block">
-        <span>Redes sociales:</span>
-      </div>
-      <div class="d-flex justify-content-between align-items-center" style="min-width:100px;">
-        <a target="_blank" href="" class="text-reset ">
-          <i class="bi bi-facebook"></i>
-        </a>
-        <a target="_blank" href="" class="text-reset">
-          <i class="bi bi-twitter"></i>
-        </a>
-        <a target="_blank" href="" class="text-reset">
-          <i class="bi bi-instagram"></i>
-        </a>
-      </div>
+{% load static %}
+<footer class="footer text-center text-lg-start bg-light text-muted position-relative bottom-0 top-0 w-100">
+  <div class="d-flex justify-content-center p-3 border-bottom">
+    <div class="me-5 d-none d-lg-block">
+      <span>Redes sociales:</span>
     </div>
-    <section class="">
-      <div class="container text-center text-md-start mt-5 ">
-        <div class="row mt-3">
-          <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-            <h6 class="text-uppercase fw-bold mb-4">Contacto</h6>
-            <p><i class="bi bi-house me-3"></i>Plaza Italia</p>
-            <i class="bi bi-geo-alt me-3"></i>La Plata</p>
-            <p><i class="bi bi-phone me-3"></i>(0221) 487-0193</p>
-          </div>
-          <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4 d-flex justify-content-center">
-            <img alt="Logo del Club" src="{% static 'img/logo.png' %}" style="height:7rem;" />
-            <!-- Copyright -->
-            <p class="mx-auto d-flex justify-content-center" style="position:absolute; bottom:0px;">
-                Ingeniería de Software II: 
-                <a class="text-white" href="" target="_blank">Grupo 27</a>
-            </p>
-            <!-- Copyright -->
-          </div>
+    <div class="d-flex justify-content-between align-items-center" style="min-width:100px;">
+      <a target="_blank" href="" class="text-reset">
+        <i class="bi bi-facebook"></i>
+      </a>
+      <a target="_blank" href="" class="text-reset">
+        <i class="bi bi-twitter"></i>
+      </a>
+      <a target="_blank" href="" class="text-reset">
+        <i class="bi bi-instagram"></i>
+      </a>
+    </div>
+  </div>
+  <section class="">
+    <div class="container text-center text-md-start mt-4">
+      <div class="row mt-3">
+        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+          <h6 class="text-uppercase fw-bold mb-4 text-center">
+            Oh My Dog
+          </h6>
+          <p class="mx-auto d-flex justify-content-center">
+            <img alt="Logo" src="{% static 'img/logo.png' %}" style="height:5rem;" />
+          </p>
+        </div>
+        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4 d-flex justify-content-center">
+        </div>
+
+        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+          <h6 class="text-uppercase fw-bold mb-4">Contacto</h6>
+          <p><i class="bi bi-house me-3"></i>La Plata, Plaza Italia</p>
+          <p><i class="bi bi-phone me-3"></i>(0221) 487-0193</p>
         </div>
       </div>
-    </section>
-  </footer>
+    </div>
+  </section>
+</footer>
