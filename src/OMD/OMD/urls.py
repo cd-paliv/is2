@@ -15,8 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
+from OMDApp.views.accounts_view import LoginView, LogOut, RegisterView
 from OMDApp.views.home_view import LandingView
-from OMDApp.views.accounts_view import RegisterView, ConfirmRegisterView, LoginView, LogOut
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
@@ -24,7 +24,6 @@ urlpatterns = [
     
     # Accounts
     path('register/', RegisterView, name='register'),
-    re_path(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', ConfirmRegisterView, name='activate'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogOut.as_view(), name='logout'),
     

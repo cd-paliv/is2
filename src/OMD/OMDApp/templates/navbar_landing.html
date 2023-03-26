@@ -3,7 +3,7 @@
 
 <nav class="navbar sticky-top navbar-expand-md bg-light" role="navigation">
     <div class="container-fluid">
-      <a class="navbar-brand" href="">
+      <a class="navbar-brand" href="{% url 'landing' %}">
         <img src="{% static 'img/logo.png' %}" alt="Logo" width="50" height="50" class="d-inline-block align-text-middle ms-3">
             Oh My Dog
       </a>
@@ -27,8 +27,8 @@
                 Acceder
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
-                  <li><a class="dropdown-item" href="login/">Iniciar sesión</a></li>
-                  <li><a class="dropdown-item" href="register/">Registrarse</a></li>
+                  <li><a class="dropdown-item" href="{% url 'login' %}">Iniciar sesión</a></li>
+                  <li><a class="dropdown-item" href="{% url 'register' %}">Registrarse</a></li>
             </ul>
           </li>
         </ul>

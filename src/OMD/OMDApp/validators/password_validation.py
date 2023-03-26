@@ -1,6 +1,8 @@
 import re
+
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
+
 
 class MinimumLengthValidator:
     def __init__(self, min_length=6):
