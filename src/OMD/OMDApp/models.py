@@ -50,12 +50,12 @@ class CustomUserAccountManager(BaseUserManager):
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
+    password = models.CharField(max_length=50)
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=30)
     dni = models.IntegerField(unique=True)
     birthdate = models.DateField()
     photo = models.TextField(blank=True, null=True)
-    email_confirmed = models.BooleanField(default=False)
 
     class Meta:
         permissions = [
@@ -64,7 +64,7 @@ class CustomUser(AbstractUser):
 
     objects = CustomUserAccountManager()
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ["first_name", "last_name", "dni", "birthdate"]
+    REQUIRED_FIELDS = ["first_name", "last_name", "dni", "birthdate", "password"]
 
     def __str__(self):
         return self.email

@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import get_user_model
 
 
@@ -14,10 +14,10 @@ class LoginForm(AuthenticationForm):
             raise forms.ValidationError("No existe una cuenta para el mail ingresado")
         return email
 
-class RegisterForm(UserCreationForm):
+class RegisterForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
-        fields = ("first_name", "last_name", "email", "password1", "password2", "dni", "birthdate")
+        fields = ("first_name", "last_name", "email", "dni", "birthdate")
         labels = {"email" : "Email(*)", "first_name" : "Nombre(*)", "last_name" : "Apellido(*)", "dni" : "DNI(*)","birthdate" : "Fecha de nacimiento(*)"}
 
         widgets = {
