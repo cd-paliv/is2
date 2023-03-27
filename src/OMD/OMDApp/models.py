@@ -9,8 +9,10 @@ class CustomUserAccountManager(BaseUserManager):
         other_fields.setdefault('is_staff', True)
         other_fields.setdefault('is_superuser', True)
         other_fields.setdefault('is_active', True)
+        user.user_permissions.set([Permission.objects.get(codename="Veterinario")])
+        user.user_permissions.set([Permission.objects.get(codename="Cliente")])
         
-        user =  self.create_user(email=email, password=password, dni=dni, first_name=first_name, last_name=last_name, birthdate=birthdate, **other_fields)
+        user = self.create_user(email=email, password=password, dni=dni, first_name=first_name, last_name=last_name, birthdate=birthdate, **other_fields)
         user.set_password(password)
         user.save()
         return user

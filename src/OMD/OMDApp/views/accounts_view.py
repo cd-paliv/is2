@@ -1,16 +1,11 @@
-from typing import Any
-
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login, logout, views
 from django.contrib.auth.hashers import check_password, make_password
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpRequest
-from django.http.response import HttpResponseBase
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.views.generic import RedirectView
 from OMDApp.forms.accounts_form import LoginForm, RegisterForm
 
 
@@ -42,11 +37,10 @@ class LoginView(views.LoginView):
             messages.error(self.request, 'Contraseña incorrecta')
             return redirect(reverse("login"))
 
-class LogOut(LoginRequiredMixin, RedirectView):
-    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponseBase:
-        logout(request)
-        self.pattern_name="login"
-        return super().get(request, *args, **kwargs)
+@login_required
+def LogOut(request):
+    logout(request)
+    return redirect('home')
 
 def RegisterView(request):
     if request.method == "POST":
@@ -62,7 +56,7 @@ def RegisterView(request):
             user.email_user(subject, message)
             email = form.cleaned_data['email']
             messages.success(request, f'Registro exitoso. Por favor, dirígase a {email} para activar su cuenta y completar el registro.')
-            return redirect(reverse("landing"))
+            return redirect(reverse("home"))
         messages.error(request, 'Registro fallido. Información inválida')
         return redirect(reverse("register"))
     form = RegisterForm

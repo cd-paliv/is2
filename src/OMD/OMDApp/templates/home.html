@@ -14,7 +14,7 @@
   <div class="d-flex flex-column justify-content-center mt-5 mb-5 align-items-center">
     <div class="card">
       <div class="card-body text-center d-flex flex-column align-items-center border bg-light" style="padding: 5rem">
-        <h1 class="fw-bold">¡Bienvenidos!</h1>
+        <h1 class="fw-bold">¡Bienvenido/a{% if user.is_authenticated %} {{ user.last_name }} {% endif %}!</h1>
         <img alt="Logo" src="{% static 'img/logo.png' %}"class="resize my-3" />
         <div class="text-center">
           <h2 class="fw-bold">Oh My Dog</h2>
