@@ -137,14 +137,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom configurations
 AUTH_USER_MODEL = 'OMDApp.CustomUser'
-"""
-AUTHENTICATION_BACKENDS = (
-        'OMDApp.backends.UsuarioBackend',
-)
 
-LOGIN_URL = "/accounts/login/"
-PERMISSION_DENIED_URL = "/"
-"""
+#LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "home"
+
 MESSAGE_TAGS = {
         messages.DEBUG: 'alert-secondary',
         messages.INFO: 'alert-info',

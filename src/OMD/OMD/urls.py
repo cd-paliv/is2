@@ -15,16 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
+from django.views.generic.base import TemplateView
 from OMDApp.views.accounts_view import LoginView, LogOut, RegisterView
-from OMDApp.views.home_view import LandingView
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
-    path('', LandingView, name='landing'),
+    path('', TemplateView.as_view(template_name='home.html'), name='home'),
     
     # Accounts
     path('register/', RegisterView, name='register'),
     path('login/', LoginView.as_view(), name='login'),
-    path('logout/', LogOut.as_view(), name='logout'),
+    path('logout/', LogOut, name='logout'),
     
 ]
