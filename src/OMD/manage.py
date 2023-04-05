@@ -15,6 +15,9 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
+    
+    execute_from_command_line(["manage.py", "flush", "--no-input"])
+    execute_from_command_line(["manage.py", "initdata"])
     execute_from_command_line(sys.argv)
 
 

@@ -5,14 +5,35 @@ from django.utils.translation import gettext as _
 # Create your models here.
 # Accounts
 class CustomUserAccountManager(BaseUserManager):
+    def create_user(self, email, password, dni, first_name, last_name, birthdate, **other_fields):
+        if not dni:
+            raise ValueError("El DNI es obligatorio")
+        if not first_name:
+            raise ValueError("El nombre es obligatorio")
+        if not last_name:
+            raise ValueError("El apellido es obligatorio")
+        if not birthdate:
+            raise ValueError("La fecha de nacimiento es obligatoria")
+        if not email:
+            raise ValueError("El email es obligatorio")
+        
+        email = self.normalize_email(email)
+        user = self.model(email=email, password=password, dni=dni, first_name=first_name, last_name=last_name, birthdate=birthdate, **other_fields)
+        
+        if password is not None:
+            user.save()
+        else:
+            user.set_unusable_password()
+            user.save()
+
+        return user
+
     def create_superuser(self, email, password, dni, first_name, last_name, birthdate, **other_fields):
         other_fields.setdefault('is_staff', True)
         other_fields.setdefault('is_superuser', True)
         other_fields.setdefault('is_active', True)
-        user.user_permissions.set([Permission.objects.get(codename="Veterinario")])
-        user.user_permissions.set([Permission.objects.get(codename="Cliente")])
         
-        user = self.create_user(email=email, password=password, dni=dni, first_name=first_name, last_name=last_name, birthdate=birthdate, **other_fields)
+        user =  self.create_user(email=email, password=password, dni=dni, first_name=first_name, last_name=last_name, birthdate=birthdate, **other_fields)
         user.set_password(password)
         user.save()
         return user
@@ -25,28 +46,6 @@ class CustomUserAccountManager(BaseUserManager):
         user = self.create_user(email=email, password=password, dni=dni, first_name=first_name, last_name=last_name, birthdate=birthdate, **other_fields)
         user.user_permissions.set([Permission.objects.get(codename="Veterinario")])
         user.save()
-        return user
-
-    def create_user(self, email, password, dni, first_name, last_name, birthdate, **other_fields):
-        if not dni:
-            raise ValueError("El DNI es obligatorio")
-        if not first_name:
-            raise ValueError("El nombre es obligatorio")
-        if not last_name:
-            raise ValueError("El apellido es obligatorio")
-        if not birthdate:
-            raise ValueError("La fecha de nacimiento es obligatoria")
-        if not email:
-            raise ValueError("El email es obligatorio")
-        email = self.normalize_email(email)
-        user = self.model(email=email, password=password, dni=dni, first_name=first_name, last_name=last_name, birthdate=birthdate, **other_fields)
-        user.user_permissions.set([Permission.objects.get(codename="Cliente")])
-        if password is not None:
-            user.save()
-        else:
-            user.set_unusable_password()
-            user.save()
-
         return user
 
 class CustomUser(AbstractUser):

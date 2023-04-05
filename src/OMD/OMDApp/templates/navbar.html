@@ -12,7 +12,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-2">
-          {% if user.is_authenticated %}
+          {% if user.is_authenticated and not perms.OMDApp.Veterinario %}
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="/">Mis perros</a>
             </li>
@@ -31,17 +31,21 @@
           <div class="vr"></div>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="margin-left: 0%;">
-                {% if user.is_authenticated %} {{ user.first_name }} {% else %}
-                Acceder
+                {% if user.is_authenticated %}
+                  {{ user.first_name }}
+                {% else %}
+                  Acceder
                 {% endif %}
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
                 {% if user.is_authenticated %}
                   <li><a class="dropdown-item" href="/">Perfil</a></li>
+                  {% if perms.OMDApp.Veterinario %}
+                    <li><a class="dropdown-item" href="{% url 'register' %}">Registrar cliente</a></li>
+                  {% endif %}
                   <li><a class="dropdown-item" href="{% url 'logout' %}">Cerrar sesión</a></li>
                 {% else %}
                   <li><a class="dropdown-item" href="{% url 'login' %}">Iniciar sesión</a></li>
-                  <li><a class="dropdown-item" href="{% url 'register' %}">Registrarse</a></li>
                 {% endif %}
             </ul>
           </li>
