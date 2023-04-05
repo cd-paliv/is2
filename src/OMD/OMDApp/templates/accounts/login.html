@@ -1,13 +1,19 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block css %}
+	<link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock css %}
 
 {% block content %}
 <!--Log in-->
-<div class="container py-5">
-	<h1>Inicio de sesión</h1>
+<div class="container py-5 form_width">
+	<h1 class="text-center fw-semibold mb-4">Inicio de sesión</h1>
 	<form method="POST">
 		{% csrf_token %}
         {{ form.as_p }}
-        <button class="btn btn-primary" type="submit">Iniciar sesión</button>
+		<div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
+			<button class="btn btn-primary" type="submit">Iniciar sesión</button>
+		</div>
 	</form>
 </div>
 {% endblock %}

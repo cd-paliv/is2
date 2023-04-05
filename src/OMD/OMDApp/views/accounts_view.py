@@ -6,7 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
-from OMDApp.forms.accounts_form import LoginForm, RegisterForm
+from OMDApp.forms.accounts_form import LoginForm, RegisterForm, RegisterDogForm
 
 
 # Create your views here.
@@ -27,9 +27,10 @@ class LoginView(views.LoginView):
 
         password = instance_form.cleaned_data['password']
         if check_password(password, user.password):
+            if not user.is_active:
+                user.is_active = True
+                user.save()
             request.session['email'] = user.email
-            user.is_active = True
-            user.save()
             login(request, user)
             messages.success(request, 'Inicio de sesión exitoso')
             return redirect(reverse("register"))
@@ -54,10 +55,23 @@ def RegisterView(request):
             subject = 'Activa tu cuenta en OhMyDog'
             message = render_to_string('accounts/account_activation_email.html', { 'user': user, 'password': actual_password })
             user.email_user(subject, message)
-            email = form.cleaned_data['email']
-            messages.success(request, f'Registro exitoso. Por favor, dirígase a {email} para activar su cuenta y completar el registro.')
-            return redirect(reverse("home"))
+            return redirect(reverse("registerDog", kwargs={"owner_id" : user.id}))
         messages.error(request, 'Registro fallido. Información inválida')
         return redirect(reverse("register"))
     form = RegisterForm
-    return render(request, "accounts/register.html", {'register_form':form})
+    return render(request, "accounts/register.html", {'register_form':form, 'dog_register':False})
+
+def RegisterDogView(request, owner_id):
+    if request.method == "POST":
+        form = RegisterDogForm(request.POST)
+        if form.is_valid():
+            dog = form.save(commit=False)
+            owner = get_user_model().objects.get(id=owner_id)
+            dog.owner = owner
+            dog.save()
+            messages.success(request, f'Registro exitoso. Por favor, dirígase a {owner.email} para activar su cuenta y completar el registro.')
+            return redirect(reverse("home"))
+        messages.error(request, 'Registro fallido. Información inválida')
+        return redirect(reverse("registerDog", kwargs={"owner_id" : owner.id}))
+    form = RegisterDogForm
+    return render(request, "accounts/register.html", {'register_form':form, 'dog_register':True})
