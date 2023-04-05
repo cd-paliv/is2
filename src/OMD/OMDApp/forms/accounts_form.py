@@ -19,7 +19,8 @@ class RegisterForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
         fields = ("first_name", "last_name", "email", "dni", "birthdate")
-        labels = {"email" : "Email(*)", "first_name" : "Nombre(*)", "last_name" : "Apellido(*)", "dni" : "DNI(*)","birthdate" : "Fecha de nacimiento(*)"}
+        labels = {"email" : "Email(*)", "first_name" : "Nombre(*)", "last_name" : "Apellido(*)", "dni" : "DNI(*)",
+                                                                            "birthdate" : "Fecha de nacimiento(*)"}
 
         widgets = {
             'email' : forms.EmailInput(attrs={'type': 'email', 'class': 'form-control', 'id' : 'inputEmail',
@@ -46,8 +47,9 @@ class RegisterForm(forms.ModelForm):
 class RegisterDogForm(forms.ModelForm):
     class Meta:
         model = Perro
-        fields = ("name", "breed", "color", "birthdate", "observations")
-        labels = {"name" : "Nombre del perro(*)", "breed" : "Raza del perro(*)", "color" : "Color del perro(*)", "birthdate" : "Fecha de nacimiento estimada del perro(*)", "observations" : "Observaciones sobre el perro"}
+        fields = ("name", "breed", "color", "birthdate")
+        labels = {"name" : "Nombre del perro(*)", "breed" : "Raza del perro(*)", "color" : "Color del perro(*)",
+                                                    "birthdate" : "Fecha de nacimiento estimada del perro(*)"}
 
         widgets = {
             'name' : forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputDogName',
@@ -58,6 +60,4 @@ class RegisterDogForm(forms.ModelForm):
                                         'placeholder' : 'Ingresa el color del perro', 'required': 'True'}),
             'birthdate' : forms.DateInput(format=('%d-%m-%Y'), attrs={'type': 'date', 'class': 'form-control', 'id': 'inputDogBirthdate',
                                         'placeholder' : 'Ingresa la fecha de nacimiento estimada del perro', 'required': 'True'}),
-            'observations' : forms.Textarea(attrs={"rows" : 3, "cols" : 10, 'type': 'text', 'class': 'form-control', 'id': 'inputDogObservations',
-                                        'placeholder' : 'Ingresa observaciones del perro', 'required': 'False'}),
         }

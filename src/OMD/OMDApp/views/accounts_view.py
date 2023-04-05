@@ -52,9 +52,8 @@ def RegisterView(request):
             actual_password = get_user_model().objects.make_random_password(length=20)
             user.password = make_password(actual_password)
             user.save()
-            subject = 'Activa tu cuenta en OhMyDog'
-            message = render_to_string('accounts/account_activation_email.html', { 'user': user, 'password': actual_password })
-            user.email_user(subject, message)
+            
+            request.session['message'] = render_to_string('accounts/account_activation_email.html', { 'user': user, 'password': actual_password })
             return redirect(reverse("registerDog", kwargs={"owner_id" : user.id}))
         messages.error(request, 'Registro fallido. Información inválida')
         return redirect(reverse("register"))
@@ -69,6 +68,10 @@ def RegisterDogView(request, owner_id):
             owner = get_user_model().objects.get(id=owner_id)
             dog.owner = owner
             dog.save()
+
+            subject = 'Activa tu cuenta en OhMyDog'
+            owner.email_user(subject, request.session.get('message'))
+
             messages.success(request, f'Registro exitoso. Por favor, dirígase a {owner.email} para activar su cuenta y completar el registro.')
             return redirect(reverse("home"))
         messages.error(request, 'Registro fallido. Información inválida')
