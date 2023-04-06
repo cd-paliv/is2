@@ -1,6 +1,7 @@
 from django.core.management import BaseCommand, call_command
-from django.contrib.auth.models import User
+from OMDApp.models import Veterinario
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 # from yourapp.models import User # if you have a custom user
 
 
@@ -9,7 +10,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         call_command('loaddata', 'vet.json')
-        # Fix the passwords of fixtures
+        # Set vet permissions
+        vet_perm = Permission.objects.get(codename='is_vet')
+        print(vet_perm)
+        for vet in Veterinario.objects.all():
+            vet.user.user_permissions.add(vet_perm)
+        # Fix the passwords of fixtures and set client permissions
+        client_perm = Permission.objects.get(codename='is_client')
         for user in get_user_model().objects.all():
+            if user.first_name.startswith("User"):
+                user.user_permissions.add(client_perm)
             user.set_password(user.password)
             user.save()

@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager, Permission
+from django.contrib.auth.models import AbstractUser, BaseUserManager, Permission, PermissionsMixin
 from django.utils.translation import gettext as _
 
 # Create your models here.
@@ -48,7 +48,7 @@ class CustomUserAccountManager(BaseUserManager):
         user.save()
         return user
 
-class CustomUser(AbstractUser):
+class CustomUser(AbstractUser, PermissionsMixin):
     username = None
     email = models.EmailField(_('email address'), unique=True)
     password = models.CharField(max_length=50)
@@ -60,7 +60,7 @@ class CustomUser(AbstractUser):
 
     class Meta:
         permissions = [
-            ("Cliente", "Correspondiente al rol de Cliente en la documentación"),
+            ("is_client", "Correspondiente al rol de Cliente en la documentación"),
         ]
 
     objects = CustomUserAccountManager()
@@ -75,7 +75,7 @@ class Veterinario(models.Model):
 
     class Meta:
         permissions = [
-            ("Veterinario", "Correspondiente al rol de Veterinario en la documentación"),
+            ("is_vet", "Correspondiente al rol de Veterinario en la documentación"),
         ]
 
     def __str__(self):

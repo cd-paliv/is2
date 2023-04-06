@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login, logout, views
+from django.contrib.auth.models import Permission
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
@@ -33,7 +34,7 @@ class LoginView(views.LoginView):
             request.session['email'] = user.email
             login(request, user)
             messages.success(request, 'Inicio de sesión exitoso')
-            return redirect(reverse("register"))
+            return redirect(reverse("home"))
         else:
             messages.error(self.request, 'Contraseña incorrecta')
             return redirect(reverse("login"))
@@ -41,7 +42,7 @@ class LoginView(views.LoginView):
 @login_required
 def LogOut(request):
     logout(request)
-    return redirect('home')
+    return redirect(reverse("home"))
 
 def RegisterView(request):
     if request.method == "POST":
@@ -51,7 +52,10 @@ def RegisterView(request):
             user.is_active = False
             actual_password = get_user_model().objects.make_random_password(length=20)
             user.password = make_password(actual_password)
+            
             user.save()
+            client_perm = Permission.objects.get(codename='is_client')
+            user.user_permissions.add(client_perm)
             
             request.session['message'] = render_to_string('accounts/account_activation_email.html', { 'user': user, 'password': actual_password })
             return redirect(reverse("registerDog", kwargs={"owner_id" : user.id}))
