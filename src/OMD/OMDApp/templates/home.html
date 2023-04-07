@@ -1,10 +1,6 @@
 {% extends "base.html" %}
 {% block head %} 
-  {{ block.super }}
-  {% block css %}
   {% load static %}
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Amaranth&amp;display=swap" />
-  {% endblock css %}
 {% endblock %}
 
 {% block title %}Bienvenido{% endblock %}
@@ -14,24 +10,13 @@
   <div class="d-flex flex-column justify-content-center mt-5 mb-5 align-items-center">
     <div class="card">
       <div class="card-body text-center d-flex flex-column align-items-center border bg-light" style="padding: 5rem">
-        <h1 class="fw-bold">¡Bienvenido/a{% if user.is_authenticated %} {{ user.last_name }} {% endif %}!</h1>
-        <img alt="Logo" src="{% static 'img/logo.png' %}"class="resize my-3" />
-        <div class="text-center">
-          <h2 class="fw-bold">Oh My Dog</h2>
-          <p class="fw-bold" style="
-              color: #b5a166;
-              font-style: italic;
-              font-family: Amaranth, sans-serif;
-              text-align: center;
-              letter-spacing: 1px;
-            ">
-            Pruebawa
-          </p>
-        </div>
+        <h1 class="fw-bold pb-4">¡Bienvenido/a{% if user.is_authenticated %} {{ user.last_name }} {% endif %}!</h1>
+        <img alt="Logo" src="{% static 'img/logo.png' %}" class="responsive my-2" style="max-width: 100%; width: auto; height: auto;"/>
       </div>
     </div>
   </div>
-
 </main>
-
 {% endblock %}
+
+{% block footer %}
+{% endblock footer %}
