@@ -10,6 +10,7 @@
 	<h1 class="text-center fw-semibold mb-4">Registro{% if dog_register %} del perro{% endif %}</h1>
 	<form method="POST">
 		{% csrf_token %}
+		{% include "form_errors.html" with form=register_form %}
 		{{ register_form.as_p }}
 		<div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
 			<button class="btn btn-primary" type="submit">{% if dog_register %}Registrar{% else %}Continuar{% endif %}</button>
