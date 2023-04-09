@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import get_user_model
 from OMDApp.models import Perro
+from django.utils.translation import gettext as _
 
 
 # Create your forms here.
@@ -37,12 +38,26 @@ class RegisterForm(forms.ModelForm):
 
         error_messages = {
             'email': {
-                'unique' : {'Registro fallido. El email ya se encuentra registrado'}
+                'unique' : 'Registro fallido. El email ya se encuentra registrado'
             },
             'dni': {
-                'unique' : {'Registro fallido. El DNI ya se encuentra registrado'}
+                'unique' : 'Registro fallido. El DNI ya se encuentra registrado'
             }
         }
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email:
+            if get_user_model().objects.filter(email=email).exists():
+                raise forms.ValidationError(_('El email ya se encuentra registrado'), code="invalid")
+        return email
+    
+    def clean_dni(self):
+        dni = self.cleaned_data.get('dni')
+        if dni:
+            if get_user_model().objects.filter(dni=dni).exists():
+                raise forms.ValidationError(_('El DNI ya se encuentra registrado'), code="invalid")
+        return dni
 
 class RegisterDogForm(forms.ModelForm):
     class Meta:
