@@ -12,7 +12,6 @@ class Command(BaseCommand):
         call_command('loaddata', 'vet.json')
         # Set vet permissions
         vet_perm = Permission.objects.get(codename='is_vet')
-        print(vet_perm)
         for vet in Veterinario.objects.all():
             vet.user.user_permissions.add(vet_perm)
         # Fix the passwords of fixtures and set client permissions
