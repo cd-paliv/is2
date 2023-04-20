@@ -6,14 +6,30 @@
 
 {% block content %}
 <!--Log in-->
-<div class="container py-5 form_width">
-	<h1 class="text-center fw-semibold mb-4">Inicio de sesión</h1>
-	<form method="POST">
-		{% csrf_token %}
-        {{ form.as_p }}
-		<div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
-			<button class="btn btn-primary" type="submit">Aceptar</button>
-		</div>
-	</form>
-</div>
+<body class="text-center form-signin w-100 m-auto">
+	<div class="container py-5 form_width">
+		<h1 class="text-center fw-semibold mb-4">Inicio de sesión</h1>
+		<form method="POST">
+			{% csrf_token %}
+			<div class="form-floating">
+				<input type="username" name="username" id="floatingInput" class="form-control" placeholder="Email" required>
+				<label for="floatingInput">Email</label>
+			</div>
+			<div class="form-floating">
+				<input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Contraseña" required>
+				<label for="floatingPassword" >Contraseña</label>
+			</div>
+	
+			<button class="w-100 btn btn-lg btn-light" type="submit">Iniciar sesión</button>
+			<p class="mt-5 mb-3 text-muted">&copy; Ingeniería de software II - Grupo 27</p>
+	
+		</form>
+	</div>
+</body>
+{% block footer %}{% endblock %}
+
 {% endblock %}
+
+<style>
+
+</style>
