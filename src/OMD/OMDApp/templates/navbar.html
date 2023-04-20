@@ -10,14 +10,31 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-2">
-          {% if perms.OMDApp.is_client %}
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/">Mis perros</a>
-            </li>
-          {% endif %}
-          <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/">Servicios</a>
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-2">
+          <li class="nav-item dropdown opt-nav-center">
+            <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="margin-left: 0%;">
+              Perros
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+                {% if perms.OMDApp.is_client %}
+                  <li><a class="dropdown-item" href="/">Mis perros</a></li>
+                {% endif %}
+                {% if perms.OMDApp.is_client or perms.OMDApp.is_vet %}
+                  <li><a class="dropdown-item" href="/">Perros en adopción</a></li> <!--clivet-->
+                {% endif %}
+                <li><a class="dropdown-item" href="/">Perros encontrados</a></li>
+                <li><a class="dropdown-item" href="/">Perros perdidos</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="margin-left: 0%;">
+              Servicios
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="/">Paseadores</a></li>
+                <li><a class="dropdown-item" href="/">Cuidadores</a></li>
+            </ul>
           </li>
           {% if perms.OMDApp.is_vet %}
             <li class="nav-item">
@@ -27,6 +44,7 @@
           <li class="nav-item">
               <a class="nav-link" aria-current="page" href="/">Nosotros</a>
           </li>
+          
           <div class="vr"></div>
           {% if user.is_authenticated %}
           <li class="nav-item dropdown">
