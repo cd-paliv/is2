@@ -56,6 +56,9 @@
                 {% if perms.OMDApp.is_vet %}
                   <li><a class="dropdown-item" href="{% url 'register' %}">Registrar cliente</a></li>
                 {% endif %}
+                {% if perms.OMDApp.is_client %}
+                  <li><a class="dropdown-item" href="{% url 'registerSingleDog' %}">Registrar perro</a></li>
+                {% endif %}
                 <li><a class="dropdown-item" href="{% url 'logout' %}">Cerrar sesión</a></li>
             </ul>
           </li>

@@ -59,7 +59,9 @@ def RegisterView(request):
             
             request.session['message'] = render_to_string('accounts/account_activation_email.html', { 'user': user, 'password': actual_password })
             return redirect(reverse("registerDog", kwargs={"owner_id" : user.id}))
-        messages.error(request, 'Registro fallido. Información inválida')
+        elif form.errors:
+            error_message = form.errors.as_data().get(list(form.errors.as_data().keys())[0])[0].message
+            messages.error(request, error_message)
         return redirect(reverse("register"))
     form = RegisterForm
     return render(request, "accounts/register.html", {'register_form':form, 'dog_register':False})
@@ -78,7 +80,28 @@ def RegisterDogView(request, owner_id):
 
             messages.success(request, f'Registro exitoso. Por favor, dirígase a {owner.email} para activar su cuenta y completar el registro.')
             return redirect(reverse("home"))
-        messages.error(request, 'Registro fallido. Información inválida')
+        elif form.errors:
+            error_message = form.errors.as_data().get(list(form.errors.as_data().keys())[0])[0].message
+            messages.error(request, error_message)
         return redirect(reverse("registerDog", kwargs={"owner_id" : owner.id}))
+    form = RegisterDogForm
+    return render(request, "accounts/register.html", {'register_form':form, 'dog_register':True})
+
+@login_required
+def RegisterSingleDogView(request):
+    if request.method == "POST":
+        form = RegisterDogForm(request.POST)
+        if form.is_valid():
+            dog = form.save(commit=False)
+            owner = get_user_model().objects.get(email=request.session['email'])
+            dog.owner = owner
+            dog.save()
+
+            messages.success(request, f'Registro de perro exitoso.')
+            return redirect(reverse("home"))
+        elif form.errors:
+            error_message = form.errors.as_data().get(list(form.errors.as_data().keys())[0])[0].message
+            messages.error(request, error_message)
+        return redirect(reverse("registerSingleDog"))
     form = RegisterDogForm
     return render(request, "accounts/register.html", {'register_form':form, 'dog_register':True})

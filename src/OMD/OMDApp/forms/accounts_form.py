@@ -25,39 +25,57 @@ class RegisterForm(forms.ModelForm):
 
         widgets = {
             'email' : forms.EmailInput(attrs={'type': 'email', 'class': 'form-control', 'id' : 'inputEmail',
-                                        'placeholder' : 'Ingresa tu email', 'required': 'True'}),
+                                        'placeholder' : 'Ingresa tu email'}),
             'first_name' : forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputName',
-                                        'placeholder' : 'Ingresa tu nombre', 'required': 'True'}),
+                                        'placeholder' : 'Ingresa tu nombre'}),
             'last_name' : forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputLastname',
-                                        'placeholder' : 'Ingresa tu apellido', 'required': 'True'}),
+                                        'placeholder' : 'Ingresa tu apellido'}),
             'dni' : forms.NumberInput(attrs={'type': 'number', 'class': 'form-control', 'id': 'inputDNI',
-                                        'placeholder' : 'Ingresa tu DNI', 'required': 'True'}),
+                                        'placeholder' : 'Ingresa tu DNI'}),
             'birthdate' : forms.DateInput(format=('%d-%m-%Y'), attrs={'type': 'date', 'class': 'form-control', 'id': 'inputBirthdate',
-                                        'placeholder' : 'Ingresa tu fecha de nacimiento', 'required': 'True'}),
+                                        'placeholder' : 'Ingresa tu fecha de nacimiento'}),
         }
 
-        error_messages = {
-            'email': {
-                'unique' : 'Registro fallido. El email ya se encuentra registrado'
-            },
-            'dni': {
-                'unique' : 'Registro fallido. El DNI ya se encuentra registrado'
-            }
-        }
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get('first_name')
+        if not first_name:
+            raise forms.ValidationError(_('El nombre es obligatorio'), code="required")
+        return first_name
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get('last_name')
+        if not last_name:
+            raise forms.ValidationError(_('El apellido es obligatorio'), code="required")
+        return last_name
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        if email:
-            if get_user_model().objects.filter(email=email).exists():
-                raise forms.ValidationError(_('El email ya se encuentra registrado'), code="invalid")
+        if not email:
+            raise forms.ValidationError(_('El email es obligatorio'), code="required")
         return email
-    
+
     def clean_dni(self):
         dni = self.cleaned_data.get('dni')
-        if dni:
-            if get_user_model().objects.filter(dni=dni).exists():
-                raise forms.ValidationError(_('El DNI ya se encuentra registrado'), code="invalid")
+        if not dni:
+            raise forms.ValidationError(_('El DNI es obligatorio'), code="required")
         return dni
+
+    def clean_birthdate(self):
+        birthdate = self.cleaned_data.get('birthdate')
+        if not birthdate:
+            raise forms.ValidationError(_('La fecha de nacimiento es obligatoria'), code="required")
+        return birthdate
+
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get('email')
+        dni = cleaned_data.get('dni')
+        if email and dni:
+            if get_user_model().objects.filter(dni=dni).exists():
+                raise forms.ValidationError(_('El DNI ya se encuentra registrado'), code="unique")
+            if get_user_model().objects.filter(email=email).exists():
+                raise forms.ValidationError(_('El email ya se encuentra registrado'), code="unique")
+        return cleaned_data
 
 class RegisterDogForm(forms.ModelForm):
     class Meta:
@@ -76,3 +94,38 @@ class RegisterDogForm(forms.ModelForm):
             'birthdate' : forms.DateInput(format=('%d-%m-%Y'), attrs={'type': 'date', 'class': 'form-control', 'id': 'inputDogBirthdate',
                                         'placeholder' : 'Ingresa la fecha de nacimiento estimada del perro', 'required': 'True'}),
         }
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if not name:
+            raise forms.ValidationError(_('El nombre es obligatorio'), code="required")
+        return name
+
+    def clean_breed(self):
+        breed = self.cleaned_data.get('breed')
+        if not breed:
+            raise forms.ValidationError(_('La raza es obligatoria'), code="required")
+        return breed
+
+    def clean_color(self):
+        color = self.cleaned_data.get('color')
+        if not color:
+            raise forms.ValidationError(_('El color es obligatorio'), code="required")
+        return color
+
+    def clean_birthdate(self):
+        birthdate = self.cleaned_data.get('birthdate')
+        if not birthdate:
+            raise forms.ValidationError(_('La fecha de nacimiento es obligatoria'), code="required")
+        return birthdate
+
+    def clean(self):
+        cleaned_data = super().clean()
+        name = cleaned_data.get('name')
+        breed = cleaned_data.get('breed')
+        color = cleaned_data.get('color')
+        birthdate = cleaned_data.get('birthdate')
+        if name and breed and color and birthdate:
+            if Perro.objects.filter(name=name, breed=breed, color=color, birthdate=birthdate).exists():
+                raise forms.ValidationError(_('El perro ya se encuentra registrado'), code="unique")
+        return cleaned_data

@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from django.views.generic.base import TemplateView
-from OMDApp.views.accounts_view import LoginView, LogOut, RegisterView, RegisterDogView
+from OMDApp.views.accounts_view import LoginView, LogOut, RegisterView, RegisterDogView, RegisterSingleDogView
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
@@ -25,6 +25,7 @@ urlpatterns = [
     # Accounts
     path('register/', RegisterView, name='register'),
     path('registerdog/<int:owner_id>/', RegisterDogView, name='registerDog'),
+    path('registersingledog', RegisterSingleDogView, name='registerSingleDog'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogOut, name='logout'),
     
