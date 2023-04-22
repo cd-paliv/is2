@@ -7,7 +7,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
-from OMDApp.forms.accounts_form import LoginForm, RegisterForm, RegisterDogForm
+from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
+from OMDApp.forms.accounts_form import LoginForm, RegisterForm, RegisterDogForm, UserEditForm
 
 
 # Create your views here.
@@ -44,12 +46,15 @@ def LogOut(request):
     logout(request)
     return redirect(reverse("home"))
 
+@login_required
 def RegisterView(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.is_active = False
+            user.first_name = user.first_name.capitalize()
+            user.last_name = user.last_name.capitalize()
             actual_password = get_user_model().objects.make_random_password(length=20)
             user.password = make_password(actual_password)
             
@@ -66,6 +71,7 @@ def RegisterView(request):
     form = RegisterForm
     return render(request, "accounts/register.html", {'register_form':form, 'dog_register':False})
 
+@login_required
 def RegisterDogView(request, owner_id):
     if request.method == "POST":
         form = RegisterDogForm(request.POST)
@@ -105,3 +111,35 @@ def RegisterSingleDogView(request):
         return redirect(reverse("registerSingleDog"))
     form = RegisterDogForm
     return render(request, "accounts/register.html", {'register_form':form, 'dog_register':True})
+
+@login_required
+def ProfileView(request):
+    user = request.user
+    return render(request, 'accounts/profile.html', {'user': user})
+
+
+class EditProfileView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    template_name = 'accounts/edit_profile.html'
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        form = UserEditForm(instance=user)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        form = UserEditForm(request.POST, instance=user)
+        if form.is_valid():
+            # Update user object with new data
+            if form.cleaned_data.get('first_name'):
+                user.first_name = form.cleaned_data['first_name']
+            if form.cleaned_data.get('last_name'):
+                user.last_name = form.cleaned_data['last_name']
+            if form.cleaned_data.get('birthdate'):
+                user.birthdate = form.cleaned_data['birthdate']
+            user.save()
+            # Redirect to a success page or display a success message
+            messages.success(request, f'Datos modificados.')
+            return redirect(reverse("profile"))
+        return render(request, self.template_name, {'form': form})

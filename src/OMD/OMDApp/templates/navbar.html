@@ -52,7 +52,7 @@
                 {{ user.first_name }}
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="/">Perfil</a></li>
+                <li><a class="dropdown-item" href="{% url 'profile' %}">Perfil</a></li>
                 {% if perms.OMDApp.is_vet %}
                   <li><a class="dropdown-item" href="{% url 'register' %}">Registrar cliente</a></li>
                 {% endif %}

@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserChangeForm
 from django.contrib.auth import get_user_model
 from OMDApp.models import Perro
 from django.utils.translation import gettext as _
@@ -76,6 +76,20 @@ class RegisterForm(forms.ModelForm):
             if get_user_model().objects.filter(email=email).exists():
                 raise forms.ValidationError(_('El email ya se encuentra registrado'), code="unique")
         return cleaned_data
+
+class UserEditForm(forms.ModelForm):
+    class Meta:
+        model = get_user_model()
+        fields = ("first_name", "last_name", "birthdate")
+
+        widgets = {
+            'first_name' : forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputName',
+                                        'placeholder' : 'Ingresa tu nombre'}),
+            'last_name' : forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputLastname',
+                                        'placeholder' : 'Ingresa tu apellido'}),
+            'birthdate' : forms.DateInput(format=('%Y-%m-%d'), attrs={'type': 'date', 'class': 'form-control', 'id': 'inputBirthdate',
+                                        'placeholder' : 'Ingresa tu fecha de nacimiento'}),
+        }
 
 class RegisterDogForm(forms.ModelForm):
     class Meta:

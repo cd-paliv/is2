@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+	<link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock css %}
+
+{% block title %} Perfil {% endblock title %}
+
+{% block content %}
+<div class="container py-5 form_width mb-5">
+  <h1 class="text-center fw-semibold mb-4">Perfil de {{ user.last_name }}</h1>
+  <div class="mb-3">
+    <label for="first_name" class="form-label">Nombre:</label>
+    <input type="text" class="form-control" id="first_name" value="{{ user.first_name }}" disabled>
+  </div>
+  <div class="mb-3">
+    <label for="last_name" class="form-label">Apellido:</label>
+    <input type="text" class="form-control" id="last_name" value="{{ user.last_name }}" disabled>
+  </div>
+  <div class="mb-3">
+    <label for="email" class="form-label">Email:</label>
+    <input type="text" class="form-control" id="email" value="{{ user.email }}" disabled>
+  </div>
+  {% if perms.OMDApp.is_client %}
+    <div class="mb-3">
+      <label for="dni" class="form-label">DNI:</label>
+      <input type="text" class="form-control" id="dni" value="{{ user.dni }}" disabled>
+    </div>
+    <div class="mb-3">
+      <label for="birthdate" class="form-label">Fecha de nacimiento:</label>
+      <input type="text" class="form-control" id="birthdate" value="{{ user.birthdate }}" disabled>
+    </div>
+  {% endif %}
+  <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
+    <a href="{% url 'editProfile' %}" class="btn btn-primary">Editar</a>
+    <a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>
+  </div>
+</div>
+{% endblock %}

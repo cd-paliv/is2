@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+	<link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock css %}
+
+{% block content %} 
+<!--Register--> 
+<div class="container py-5 form_width">
+	<h1 class="text-center fw-semibold mb-4">Editando perfil</h1>
+	<form method="POST">
+		{% csrf_token %}
+		{{ form.as_p }}
+		{% include "form_error.html" with form=form %}
+		<div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
+			<button class="btn btn-primary" type="submit">Editar</button>
+            <a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+	</form>
+</div>
+{% endblock %}
+
+<script>
+    // Set the value for the birthdate input field
+    document.getElementById("inputBirthdate").value = "{{ form.instance.birthdate }}";
+</script>
