@@ -121,3 +121,8 @@ p.flash.info {
   border: 3px solid blue;
   background-color: #0000ff6e;
 }
+
+.btn-primary-custom {
+  background-color: #4195af  !important;
+  color: white;
+}
