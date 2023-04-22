@@ -42,11 +42,35 @@
         "model" : "OMDApp.CustomUser",
         "pk" : 4,
         "fields" : {
-            "email" : "user@gmail.com",
+            "email" : "pv@gmail.com",
             "password" : "user",
-            "first_name" : "User",
-            "last_name" : "1",
+            "first_name" : "Paula",
+            "last_name" : "Vaccaro",
             "dni" : "34567891",
+            "birthdate" : "1992-01-01"
+        }
+    },
+    {
+        "model" : "OMDApp.CustomUser",
+        "pk" : 5,
+        "fields" : {
+            "email" : "nr@gmail.com",
+            "password" : "user",
+            "first_name" : "Nahuel",
+            "last_name" : "Rodriguez",
+            "dni" : "34567892",
+            "birthdate" : "1992-01-01"
+        }
+    },
+    {
+        "model" : "OMDApp.CustomUser",
+        "pk" : 6,
+        "fields" : {
+            "email" : "gal@gmail.com",
+            "password" : "user",
+            "first_name" : "German",
+            "last_name" : "Alvarez Lugo",
+            "dni" : "34567893",
             "birthdate" : "1992-01-01"
         }
     },
@@ -65,14 +89,147 @@
         }
     },
     {
+        "model": "OMDApp.Perro",
+        "pk": 1,
+        "fields": {
+            "name": "Sofia",
+            "breed": "Perro",
+            "color": "Negro",
+            "birthdate": "2014-11-04",
+            "owner": 4
+        }
+    },
+    {
+        "model": "OMDApp.Perro",
+        "pk": 2,
+        "fields": {
+            "name": "Bondiola",
+            "breed": "Doberman",
+            "color": "Marron",
+            "birthdate": "2022-11-04",
+            "owner": 4
+        }
+    },
+    {
+        "model": "OMDApp.Perro",
+        "pk": 3,
+        "fields": {
+            "name": "Emma",
+            "breed": "Caniche",
+            "color": "Blanco y negro",
+            "birthdate": "2022-02-04",
+            "owner": 5
+        }
+    },
+    {
+        "model": "OMDApp.Perro",
+        "pk": 4,
+        "fields": {
+            "name": "Michi",
+            "breed": "Bulldog",
+            "color": "Marron",
+            "birthdate": "2020-02-04",
+            "owner": 6
+        }
+    },
+    {
+        "model": "OMDApp.Perro",
+        "pk": 5,
+        "fields": {
+            "name": "Buddy",
+            "breed": "Golden Retriever",
+            "color": "Dorado",
+            "birthdate": "2019-05-12",
+            "owner": 4
+        }
+    },
+    {
+        "model": "OMDApp.Perro",
+        "pk": 6,
+        "fields": {
+            "name": "Luna",
+            "breed": "Schnauzer",
+            "color": "Blanco",
+            "birthdate": "2020-09-02",
+            "owner": 5
+        }
+    },
+    {
+        "model": "OMDApp.Perro",
+        "pk": 7,
+        "fields": {
+            "name": "Rocky",
+            "breed": "Boxer",
+            "color": "Marron y blanco",
+            "birthdate": "2018-12-24",
+            "owner": 6
+        }
+    },
+    {
+        "model": "OMDApp.Perro",
+        "pk": 8,
+        "fields": {
+            "name": "Coco",
+            "breed": "Labrador Retriever",
+            "color": "Negro",
+            "birthdate": "2021-02-28",
+            "owner": 4
+        }
+    },
+    {
+        "model": "OMDApp.Perro",
+        "pk": 9,
+        "fields": {
+            "name": "Firulais",
+            "breed": "Poodle",
+            "color": "Blanco",
+            "birthdate": "2022-01-20",
+            "owner": 5
+        }
+    },
+    {
+        "model": "OMDApp.Perro",
+        "pk": 10,
+        "fields": {
+            "name": "Zeus",
+            "breed": "Rottweiler",
+            "color": "Negro y marron",
+            "birthdate": "2020-06-10",
+            "owner": 6
+        }
+    },
+    {
         "model" : "OMDApp.Perro",
-        "pk" : 1,
+        "pk" : 11,
         "fields" : {
-            "name" : "Sofia",
-            "breed" : "Perro",
-            "color" : "Negro",
-            "birthdate" : "2014-11-04",
+            "name" : "Rocky",
+            "breed" : "Golden Retriever",
+            "color" : "Golden",
+            "birthdate" : "2019-07-01",
+            "owner" : 4
+        }
+    },
+    {
+        "model" : "OMDApp.Perro",
+        "pk" : 12,
+        "fields" : {
+            "name" : "Lola",
+            "breed" : "Poodle",
+            "color" : "White",
+            "birthdate" : "2018-04-17",
+            "owner" : 4
+        }
+    },
+    {
+        "model" : "OMDApp.Perro",
+        "pk" : 13,
+        "fields" : {
+            "name" : "Thor",
+            "breed" : "German Shepherd",
+            "color" : "Black and Tan",
+            "birthdate" : "2020-01-01",
             "owner" : 4
         }
     }
+    
 ]

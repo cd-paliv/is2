@@ -17,7 +17,7 @@ class Command(BaseCommand):
         # Fix the passwords of fixtures and set client permissions
         client_perm = Permission.objects.get(codename='is_client')
         for user in get_user_model().objects.all():
-            if user.first_name.startswith("User"):
+            if user.password.startswith("user"):
                 user.user_permissions.add(client_perm)
             user.set_password(user.password)
             user.save()
