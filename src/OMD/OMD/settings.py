@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 from django.contrib import messages
+from django.urls import reverse_lazy
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -128,7 +129,7 @@ STATICFILES_DIR = [
 ]
 
 #MEDIA_URL='/img/profile_img/'
-#MEDIA_ROOT=os.path.join(BASE_DIR,'Vacunation_app/static/img/profile_img')
+#MEDIA_ROOT=os.path.join(BASE_DIR,'OMDApp/static/img/profile_img')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -138,8 +139,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Custom configurations
 AUTH_USER_MODEL = 'OMDApp.CustomUser'
 
-#LOGIN_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
+LOGIN_URL = reverse_lazy('login')
 
 MESSAGE_TAGS = {
         messages.DEBUG: 'alert-secondary',
