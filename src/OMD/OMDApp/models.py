@@ -57,6 +57,7 @@ class CustomUser(AbstractUser, PermissionsMixin):
     dni = models.IntegerField(unique=True)
     birthdate = models.DateField()
     photo = models.TextField(blank=True, null=True)
+    email_confirmed = models.BooleanField(default=False)
 
     class Meta:
         permissions = [

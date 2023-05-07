@@ -3,6 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserChangeForm
 from django.contrib.auth import get_user_model
 from OMDApp.models import Perro
 from django.utils.translation import gettext as _
+from OMDApp.validators.password_validation import SymbolValidator, NumberValidator, UppercaseValidator, MinimumLengthValidator
 
 
 # Create your forms here.
@@ -143,3 +144,14 @@ class RegisterDogForm(forms.ModelForm):
             if Perro.objects.filter(name=name, breed=breed, color=color, birthdate=birthdate).exists():
                 raise forms.ValidationError(_('El perro ya se encuentra registrado'), code="unique")
         return cleaned_data
+    
+class EditPasswordForm(forms.Form):
+    password = forms.CharField(label='Contraseña actual', widget=forms.PasswordInput())
+    new_password = forms.CharField(label='Nueva contraseña', widget=forms.PasswordInput(),
+                                   validators=[
+                                       MinimumLengthValidator(),
+                                       SymbolValidator(),
+                                       NumberValidator(),
+                                       UppercaseValidator(),
+                                    ])
+    repeat_new_password = forms.CharField(label='Repita nueva contraseña', widget=forms.PasswordInput())

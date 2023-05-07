@@ -8,7 +8,7 @@ class MinimumLengthValidator:
     def __init__(self, min_length=6):
         self.min_length = min_length
 
-    def validate(self, password, user=None):
+    def __call__(self, password, user=None):
         if len(password) < self.min_length:
             raise ValidationError(
                 ("Tu contraseña debe contener al menos %(min_length)d caracteres."),
@@ -23,24 +23,24 @@ class MinimumLengthValidator:
         )
 
 
-class SymbolValidator(object):
-    def validate(self, password, user=None):
-        if not re.findall('[()[\]{}|\\`~!@#$%^&*_\-+=;:\'",<>./?]', password):
+class SymbolValidator:
+    def __call__(self, password):
+        if not re.findall(r'[()[\]{}|\\`~!@#$%^&*_\-+=;:\'",<>./?]', password):
             raise ValidationError(
                 _("Tu contraseña debe contener al menos 1 caracter especial: " +
-                  "()[]{}|\`~!@#$%^&*_-+=;:'\",<>./?"),
+                  "()[]{}|\\`~!@#$%^&*_\\-+=;:'\",<>./?"),
                 code='password_no_symbol',
             )
 
     def get_help_text(self):
         return _(
             "Tu contraseña debe contener al menos 1 caracter especial: " +
-            "()[]{}|\`~!@#$%^&*_-+=;:'\",<>./?"
+            "()[]{}|\\`~!@#$%^&*_\\-+=;:'\",<>./?"
         )
 
-class NumberValidator(object):
-    def validate(self, password, user=None):
-        if not re.findall('\d', password):
+class NumberValidator:
+    def __call__(self, password):
+        if not re.findall(r'\d', password):
             raise ValidationError(
                 _("Tu contraseña debe contener al menos 1 dígito, 0-9."),
                 code='password_no_number',
@@ -51,9 +51,9 @@ class NumberValidator(object):
             "Tu contraseña debe contener al menos 1 dígito, 0-9."
         )
 
-class UppercaseValidator(object):
-    def validate(self, password, user=None):
-        if not re.findall('[A-Z]', password):
+class UppercaseValidator:
+    def __call__(self, password):
+        if not re.findall(r'[A-Z]', password):
             raise ValidationError(
                 _("Tu contraseña debe contener al menos 1 mayúscula, A-Z."),
                 code='password_no_upper',

@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from OMDApp.forms.accounts_form import LoginForm, RegisterForm, RegisterDogForm, UserEditForm
+from OMDApp.forms.accounts_form import LoginForm, RegisterForm, RegisterDogForm, UserEditForm, EditPasswordForm
 
 
 # Create your views here.
@@ -30,11 +30,14 @@ class LoginView(views.LoginView):
 
         password = instance_form.cleaned_data['password']
         if check_password(password, user.password):
+            request.session['email'] = user.email
+            login(request, user)
+            if not user.email_confirmed:
+                messages.success(request, 'Inicio de sesión exitoso. Por favor, modifique la contraseña para acceder al sitio.')
+                return redirect(reverse("editPassword"))
             if not user.is_active:
                 user.is_active = True
                 user.save()
-            request.session['email'] = user.email
-            login(request, user)
             messages.success(request, 'Inicio de sesión exitoso')
             return redirect(reverse("home"))
         else:
@@ -143,3 +146,39 @@ class EditProfileView(LoginRequiredMixin, View):
             messages.success(request, f'Datos modificados.')
             return redirect(reverse("profile"))
         return render(request, self.template_name, {'form': form})
+
+class EditPasswordView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    template_name = 'accounts/edit_password.html'
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        form = EditPasswordForm()
+        return render(request, self.template_name, {'form': form, 'first_time': user.email_confirmed})
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        form = EditPasswordForm(request.POST)
+
+        if form.is_valid():
+            password = form.cleaned_data['password']
+            if check_password(password, user.password):
+                newPassword = form.cleaned_data['new_password']
+
+                if newPassword != form.cleaned_data['repeat_new_password']:
+                    messages.error(request, 'Las contraseñas no coinciden, por favor, intente de nuevo')
+                    return redirect(reverse("editPassword"))
+                
+                if not user.email_confirmed:
+                    get_user_model().objects.filter(id=user.id).update(password=make_password(newPassword), email_confirmed=True)
+                else:
+                    get_user_model().objects.filter(id=user.id).update(password=make_password(newPassword))
+                user.refresh_from_db()
+
+                request.session['email'] = user.email
+                messages.success(request, 'Cambio de contraseña exitoso')
+                return redirect(reverse("home"))
+            else:
+                messages.error(self.request, 'Contraseña actual incorrecta')
+                return redirect(reverse("editPassword"))
+        return render(request, self.template_name, {'form': form, 'first_time': user.email_confirmed})

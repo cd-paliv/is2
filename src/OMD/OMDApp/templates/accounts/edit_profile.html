@@ -6,18 +6,23 @@
 
 {% block content %} 
 <!--Register--> 
-<div class="container py-5 form_width">
-	<h1 class="text-center fw-semibold mb-4">Editando perfil</h1>
-	<form method="POST">
-		{% csrf_token %}
-		{{ form.as_p }}
-		{% include "form_error.html" with form=form %}
-		<div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
-			<button class="btn btn-primary" type="submit">Editar</button>
-            <a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>
-        </div>
-	</form>
-</div>
+<body class="form-signin w-100 m-auto">
+	<div class="container py-5 form_width">
+		<h1 class="text-center fw-semibold mb-4">Editando perfil</h1>
+		<form method="POST">
+			{% csrf_token %}
+			{{ form.as_p }}
+			{% include "form_error.html" with form=form %}
+			<div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
+				<button class="btn btn-primary" type="submit">Aceptar</button>
+				<a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>
+			</div>
+		</form>
+	</div>
+	<div class="d-grid gap-2 d-md-flex justify-content-end mt-auto mb-4 me-4">
+		<a href="{% url 'editPassword' %}" class="btn btn-secondary">Cambiar contraseña</a>
+	</div>
+</body>
 {% endblock %}
 
 <script>
