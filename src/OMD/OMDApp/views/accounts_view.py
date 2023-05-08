@@ -1,15 +1,19 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login, logout, views
-from django.contrib.auth.models import Permission
-from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import check_password, make_password
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import Permission
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import View
-from django.contrib.auth.mixins import LoginRequiredMixin
-from OMDApp.forms.accounts_form import LoginForm, RegisterForm, RegisterDogForm, UserEditForm, EditPasswordForm
+from OMDApp.decorators import email_verification_required
+from OMDApp.forms.accounts_form import (EditPasswordForm, LoginForm,
+                                        RegisterDogForm, RegisterForm,
+                                        UserEditForm)
 
 
 # Create your views here.
@@ -50,6 +54,7 @@ def LogOut(request):
     return redirect(reverse("home"))
 
 @login_required
+@email_verification_required
 def RegisterView(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
@@ -75,6 +80,7 @@ def RegisterView(request):
     return render(request, "accounts/register.html", {'register_form':form, 'dog_register':False})
 
 @login_required
+@email_verification_required
 def RegisterDogView(request, owner_id):
     if request.method == "POST":
         form = RegisterDogForm(request.POST)
@@ -97,6 +103,7 @@ def RegisterDogView(request, owner_id):
     return render(request, "accounts/register.html", {'register_form':form, 'dog_register':True})
 
 @login_required
+@email_verification_required
 def RegisterSingleDogView(request):
     if request.method == "POST":
         form = RegisterDogForm(request.POST)
@@ -116,11 +123,12 @@ def RegisterSingleDogView(request):
     return render(request, "accounts/register.html", {'register_form':form, 'dog_register':True})
 
 @login_required
+@email_verification_required
 def ProfileView(request):
     user = request.user
     return render(request, 'accounts/profile.html', {'user': user})
 
-
+@method_decorator(email_verification_required, name='dispatch')
 class EditProfileView(LoginRequiredMixin, View):
     login_url = '/login/'
     template_name = 'accounts/edit_profile.html'
@@ -154,7 +162,7 @@ class EditPasswordView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         user = request.user
         form = EditPasswordForm()
-        return render(request, self.template_name, {'form': form, 'first_time': user.email_confirmed})
+        return render(request, self.template_name, {'form': form, 'confirmed': user.email_confirmed})
 
     def post(self, request, *args, **kwargs):
         user = request.user
@@ -181,4 +189,4 @@ class EditPasswordView(LoginRequiredMixin, View):
             else:
                 messages.error(self.request, 'Contraseña actual incorrecta')
                 return redirect(reverse("editPassword"))
-        return render(request, self.template_name, {'form': form, 'first_time': user.email_confirmed})
+        return render(request, self.template_name, {'form': form, 'confirmed': user.email_confirmed})

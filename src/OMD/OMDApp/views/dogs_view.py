@@ -1,9 +1,15 @@
-from django.views.generic import ListView
 from datetime import date
-from dateutil.relativedelta import relativedelta
-from OMDApp.models import Perro
-from django.contrib.auth.mixins import LoginRequiredMixin
 
+from dateutil.relativedelta import relativedelta
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.decorators import method_decorator
+from django.views.generic import ListView
+from OMDApp.decorators import email_verification_required
+from OMDApp.models import Perro
+
+
+# Create your views here
+@method_decorator(email_verification_required, name='dispatch')
 class DogListView(LoginRequiredMixin, ListView):
     login_url = '/login/'
     model = Perro
