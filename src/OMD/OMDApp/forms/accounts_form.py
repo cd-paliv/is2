@@ -82,6 +82,7 @@ class UserEditForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
         fields = ("first_name", "last_name", "birthdate")
+        labels = {"first_name" : "Nombre", "last_name" : "Apellido", "birthdate" : "Fecha de nacimiento"}
 
         widgets = {
             'first_name' : forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputName',

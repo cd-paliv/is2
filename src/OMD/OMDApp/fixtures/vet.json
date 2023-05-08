@@ -11,7 +11,8 @@
             "birthdate" : "1992-01-01",
             "is_active" : "True",
             "is_staff" : "True",
-            "is_superuser" : "True"
+            "is_superuser" : "True",
+            "email_confirmed": "True"
         }
     },
     {
@@ -23,7 +24,8 @@
             "first_name" : "Graciela",
             "last_name" : "Gatti",
             "dni" : "23456789",
-            "birthdate" : "1992-01-01"
+            "birthdate" : "1992-01-01",
+            "email_confirmed": "True"
         }
     },
     {
@@ -35,43 +37,34 @@
             "first_name" : "Pedro",
             "last_name" : "Perrino",
             "dni" : "12345678",
-            "birthdate" : "1992-01-01"
+            "birthdate" : "1992-01-01",
+            "email_confirmed": "True"
         }
     },
     {
         "model" : "OMDApp.CustomUser",
         "pk" : 4,
         "fields" : {
-            "email" : "pv@gmail.com",
+            "email" : "user@gmail.com",
             "password" : "user",
-            "first_name" : "Paula",
-            "last_name" : "Vaccaro",
+            "first_name" : "Devs",
+            "last_name" : "PNG",
             "dni" : "34567891",
-            "birthdate" : "1992-01-01"
+            "birthdate" : "1992-01-01",
+            "email_confirmed": "True"
         }
     },
     {
         "model" : "OMDApp.CustomUser",
         "pk" : 5,
         "fields" : {
-            "email" : "nr@gmail.com",
+            "email" : "user2@gmail.com",
             "password" : "user",
-            "first_name" : "Nahuel",
-            "last_name" : "Rodriguez",
-            "dni" : "34567892",
-            "birthdate" : "1992-01-01"
-        }
-    },
-    {
-        "model" : "OMDApp.CustomUser",
-        "pk" : 6,
-        "fields" : {
-            "email" : "gal@gmail.com",
-            "password" : "user",
-            "first_name" : "German",
-            "last_name" : "Alvarez Lugo",
+            "first_name" : "User",
+            "last_name" : "Trial",
             "dni" : "34567893",
-            "birthdate" : "1992-01-01"
+            "birthdate" : "1992-01-01",
+            "email_confirmed": "True"
         }
     },
     {
@@ -118,7 +111,7 @@
             "breed": "Caniche",
             "color": "Blanco y negro",
             "birthdate": "2022-02-04",
-            "owner": 5
+            "owner": 4
         }
     },
     {
@@ -129,7 +122,7 @@
             "breed": "Bulldog",
             "color": "Marron",
             "birthdate": "2020-02-04",
-            "owner": 6
+            "owner": 4
         }
     },
     {
@@ -151,7 +144,7 @@
             "breed": "Schnauzer",
             "color": "Blanco",
             "birthdate": "2020-09-02",
-            "owner": 5
+            "owner": 4
         }
     },
     {
@@ -162,7 +155,7 @@
             "breed": "Boxer",
             "color": "Marron y blanco",
             "birthdate": "2018-12-24",
-            "owner": 6
+            "owner": 4
         }
     },
     {
@@ -184,7 +177,7 @@
             "breed": "Poodle",
             "color": "Blanco",
             "birthdate": "2022-01-20",
-            "owner": 5
+            "owner": 4
         }
     },
     {
@@ -195,7 +188,7 @@
             "breed": "Rottweiler",
             "color": "Negro y marron",
             "birthdate": "2020-06-10",
-            "owner": 6
+            "owner": 4
         }
     },
     {
@@ -217,7 +210,7 @@
             "breed" : "Poodle",
             "color" : "White",
             "birthdate" : "2018-04-17",
-            "owner" : 4
+            "owner" : 5
         }
     },
     {
@@ -228,7 +221,7 @@
             "breed" : "German Shepherd",
             "color" : "Black and Tan",
             "birthdate" : "2020-01-01",
-            "owner" : 4
+            "owner" : 5
         }
     }
     
