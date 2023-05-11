@@ -6,15 +6,18 @@
 
 {% block content %} 
 <!--Register--> 
-<div class="container py-5 form_width">
-	<h1 class="text-center fw-semibold mb-4">Registro{% if dog_register %} del perro{% endif %}</h1>
-	<form method="POST" novalidate>
-		{% csrf_token %}
-		{{ register_form.as_p }}
-		{% include "form_error.html" with form=register_form %}
-		<div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
-			<button class="btn btn-primary" type="submit">{% if dog_register %}Registrar{% else %}Continuar{% endif %}</button>
-		</div>
-	</form>
-</div>
+<body class="form-signin w-100 m-auto">
+	<div class="container py-5 form_width">
+		<h1 class="text-center fw-semibold mb-4">Registro{% if dog_register %} del perro{% endif %}</h1>
+		<form method="POST" novalidate>
+			{% csrf_token %}
+
+			{% include 'form_iterator.html' with form=register_form %}
+			
+			<div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
+				<button class="btn btn-primary" type="submit">{% if dog_register %}Registrar{% else %}Continuar{% endif %}</button>
+			</div>
+		</form>
+	</div>
+</body>
 {% endblock %}

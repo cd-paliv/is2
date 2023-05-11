@@ -11,20 +11,17 @@
 		<h1 class="text-center fw-semibold mb-4">Editando perfil</h1>
 		<form method="POST">
 			{% csrf_token %}
-			{{ form.as_p }}
+
+			{% include 'form_iterator.html' with form=form %}
+			
 			<div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
 				<button class="btn btn-primary" type="submit">Aceptar</button>
 				<a href="{% url 'profile' %}" class="btn btn-secondary">Cancelar</a>
 			</div>
+			<div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
+				<a href="{% url 'editPassword' %}" class="btn btn-secondary">Cambiar contraseña</a>
+			</div>
 		</form>
-	</div>
-	<div class="d-grid gap-2 d-md-flex justify-content-end mt-auto mb-4 me-4">
-		<a href="{% url 'editPassword' %}" class="btn btn-secondary">Cambiar contraseña</a>
 	</div>
 </body>
 {% endblock %}
-
-<script>
-    // Set the value for the birthdate input field
-    document.getElementById("inputBirthdate").value = "{{ form.instance.birthdate }}";
-</script>
