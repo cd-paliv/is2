@@ -17,7 +17,7 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
                 {% if perms.OMDApp.is_client %}
-                  <li><a class="dropdown-item" href="{% url 'dog_list' %}">Mis perros</a></li>
+                  <li><a class="dropdown-item" href="{% url 'my_dogs' %}">Mis perros</a></li>
                 {% endif %}
                 {% if perms.OMDApp.is_client or perms.OMDApp.is_vet %}
                   <li><a class="dropdown-item" href="/">Perros en adopción</a></li> <!--clivet-->
