@@ -84,7 +84,7 @@ class RegisterDogForm(forms.ModelForm):
                                                           'placeholder': 'Ingresa el color del perro', 'required': 'True'}),
                                                           validators=[EmptyFieldValidator(), NoNumbersFieldValidator()])
     birthdate = forms.DateField(label="Fecha de nacimiento estimada del perro(*)",
-                                widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control', 'id': 'inputDogBirthdate',
+                                widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'type': 'date', 'class': 'form-control', 'id': 'inputDogBirthdate',
                                                               'placeholder': 'Ingresa la fecha de nacimiento estimada del perro',
                                                               'required': 'True'}), validators=[EmptyFieldValidator(), DogAgeValidator()])
 
@@ -92,10 +92,10 @@ class RegisterDogForm(forms.ModelForm):
         model = Perro
         fields = ("name", "breed", "color", "birthdate")
         labels = {
-            "name": "Nombre del perro(*)",
-            "breed": "Raza del perro(*)",
-            "color": "Color del perro(*)",
-            "birthdate": "Fecha de nacimiento estimada del perro(*)"
+            "name": "Nombre del perro",
+            "breed": "Raza del perro",
+            "color": "Color del perro",
+            "birthdate": "Fecha de nacimiento estimada del perro"
         }
 
     

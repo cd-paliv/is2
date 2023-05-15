@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+	<link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock css %}
+
+{% block content %} 
+<!--Register--> 
+<body class="form-signin w-100 m-auto">
+	<div class="container py-5 form_width">
+		<h1 class="text-center fw-semibold mb-4">Editando perfil</h1>
+		<form method="POST" novalidate>
+			{% csrf_token %}
+			
+			{{ form.as_p }}
+			
+			<div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
+				<button class="btn btn-primary" type="submit">Aceptar</button>
+				<a href="{% url 'dog_profile' dog_id=dog_id|add:"0" %}" class="btn btn-secondary">Cancelar</a>
+			</div>
+		</form>
+	</div>
+</body>
+{% endblock %}
+
+<script>
+    // Set the value for the birthdate input field
+    document.getElementById("inputDogBirthdate").value = "{{ form.instance.birthdate }}";
+</script>
