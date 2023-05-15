@@ -9,17 +9,14 @@
 <body class="form-signin w-100 m-auto">
 	<div class="container py-5 form_width">
 		<h1 class="text-center fw-semibold mb-4">Editando perfil</h1>
-		<form method="POST">
+		<form method="POST" novalidate>
 			{% csrf_token %}
-
+			
 			{{ form.as_p }}
 			
 			<div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
 				<button class="btn btn-primary" type="submit">Aceptar</button>
-				<a href="{% url 'profile' %}" class="btn btn-secondary">Cancelar</a>
-			</div>
-			<div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
-				<a href="{% url 'editPassword' %}" class="btn btn-secondary">Cambiar contraseña</a>
+				<a href="{% url 'my_dogs' %}" class="btn btn-secondary">Cancelar</a>
 			</div>
 		</form>
 	</div>
@@ -28,5 +25,5 @@
 
 <script>
     // Set the value for the birthdate input field
-    document.getElementById("inputBirthdate").value = "{{ form.instance.birthdate }}";
+    document.getElementById("inputDogBirthdate").value = "{{ form.instance.birthdate }}";
 </script>

@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login, logout, views
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Permission
