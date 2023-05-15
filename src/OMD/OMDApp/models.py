@@ -92,3 +92,11 @@ class Perro(models.Model):
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     REQUIRED_FIELDS = ["name", "breed", "color", "birthdate"]
+
+class Turno(models.Model):
+    type = models.CharField(max_length=15) # emergency ^ castration ^ turn ^ vacunation ^
+    hour = models.CharField(max_length=50)
+    date = models.DateField()
+    motive = models.TextField()
+    observations = models.TextField(blank=True, null=True)
+    amount = models.DecimalField(max_digits=10)
