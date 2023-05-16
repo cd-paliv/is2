@@ -94,6 +94,7 @@ class Perro(models.Model):
     REQUIRED_FIELDS = ["name", "breed", "color", "birthdate"]
 
 class Turno(models.Model):
+    state = models.CharField(max_length=10, default="solicited") # solicited ^ accepted ^ rejected
     type = models.CharField(max_length=15) # emergency ^ castration ^ turn ^ vacunation ^
     hour = models.CharField(max_length=50)
     date = models.DateField()
