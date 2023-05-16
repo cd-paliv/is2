@@ -109,13 +109,3 @@ class EditPasswordForm(forms.Form):
                                        UppercaseValidator(),
                                     ])
     repeat_new_password = forms.CharField(label='Repita nueva contraseña', widget=forms.PasswordInput())
-
-class AskForTurnForm(forms.Form):
-     date = forms.DateField(label="Fecha del turno(*)",
-                                widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control', 'id': 'turnDate',
-                                                              'placeholder': 'Ingrese la fecha en la que quiera pedir el turno',
-                                                              'required': 'True'}), validators=[EmptyFieldValidator()])
-     reason = forms.CharField(label="Razon del turno(*)",
-                             widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control','id': 'inputDogName',
-                                                         'placeholder': 'Ingresae la razon por la cual quiere su turno', 'required': 'True'}),
-                                                         validators=[EmptyFieldValidator()])

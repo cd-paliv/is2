@@ -12,7 +12,17 @@
 		<form method="POST">
 			{% csrf_token %}
 
-			{% include 'form_iterator.html' with form=form %}
+			{% for field in form %}
+				<div class="mb-3">
+					{{ field.label_tag }} {{ field }}
+					{% if field.help_text %}
+						<small class="form-text text-muted">{{ field.help_text|safe }}</small>
+					{% endif %}
+					{% for error in field.errors %}
+						<small class="form-text text-danger">{{ error|escape }}</small>
+					{% endfor %}
+				</div>
+			{% endfor %}
 			
 			<div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
 				<button class="btn btn-primary" type="submit">Pedir Turno</button>

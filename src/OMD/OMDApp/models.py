@@ -99,4 +99,6 @@ class Turno(models.Model):
     date = models.DateField()
     motive = models.TextField()
     observations = models.TextField(blank=True, null=True)
-    amount = models.DecimalField(max_digits=10)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+
+    REQUIRED_FIELDS = ["type", "hour", "date", "motive"]

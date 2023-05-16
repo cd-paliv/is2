@@ -14,7 +14,7 @@ from OMDApp.models import Perro
 from OMDApp.decorators import email_verification_required
 from OMDApp.forms.accounts_form import (EditPasswordForm, LoginForm,
                                         RegisterDogForm, RegisterForm,
-                                        UserEditForm,AskForTurnForm)
+                                        UserEditForm)
 
 
 # Create your views here.
@@ -124,12 +124,6 @@ def RegisterSingleDogView(request):
     else:
         form = RegisterDogForm
     return render(request, "accounts/register.html", {'register_form':form, 'dog_register':True})
-
-@login_required
-@email_verification_required
-def AskForTurn(request):
-    user=request.user
-    return render(request, 'accounts/askForTurn.html', {'user': user})
 
 
 @login_required
