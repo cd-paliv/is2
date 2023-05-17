@@ -52,3 +52,7 @@ class AcceptTurnsView(ListView):
 def ViewPendingTurns(request):
     turnos = list(Turno.objects.filter(state="S")) # solicited
     return render(request, "turns/acceptTurns.html", {"turn_list" : turnos})
+
+def ViewAcceptedTurns(request):
+    turnos = list(Turno.objects.filter(state="A")) # accepted
+    return render(request, "turns/acceptedTurns.html", {"turn_list" : turnos})
