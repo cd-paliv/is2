@@ -36,6 +36,7 @@
                 <li><a class="dropdown-item" href="/">Cuidadores</a></li>
             </ul>
           </li>
+<<<<<<< HEAD
 
           {% if user.is_authenticated %}
             <li class="nav-item dropdown">
@@ -54,6 +55,24 @@
               </ul>
             </li>
           {% endif %}
+=======
+          {% if user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="margin-left: 0%;">
+              Turnos
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+            {% if perms.OMDApp.is_client %}
+            <li><a class="dropdown-item" href="{% url 'askForTurn' %}">Pedir turno</a></li>
+            <li><a class="dropdown-item" href="/">Mis turnos</a></li>
+            {% endif %}
+            {% if perms.OMDApp.is_vet %}
+            <li><a class="dropdown-item" href="{% url 'acceptTurn' %}">Turnos pendientes</a></li>
+            <li><a class="dropdown-item" href="/">Turnos Aceptados</a></li>
+            {% endif %}
+            </ul>
+          </li>
+>>>>>>> d7b1f0074743574adbd80d9dbf0c755ab639a8bd
           {% if perms.OMDApp.is_vet %}
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="/">Donaciones</a>
@@ -62,7 +81,7 @@
           <li class="nav-item">
               <a class="nav-link" aria-current="page" href="/">Nosotros</a>
           </li>
-          
+          {% endif %}
           <div class="vr"></div>
           {% if user.is_authenticated %}
           <li class="nav-item dropdown">

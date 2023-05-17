@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+	<link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock css %}
+
+{% block title %} Turnos pendientes {% endblock title %}
+{% block content %}
+<div class="container d-flex flex-column justify-content-center mt-5 mb-5 align-items-center">
+    <h1 class="text-center fw-semibold mb-4">Turnos pendientes</h1>
+    <div class="row justify-content-center mt-3">
+      {% for turn in turn_list %}
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title text-center"><strong>{{ turn.type }}</strong></h5>
+            <div class="card-text">
+              <p><strong>Fecha:</strong> {{ turn.date }}</p>
+              <p><strong>Motivo:</strong> {{ turn.motive }} </p>
+              <div class="card-footer bg-white text-center">
+                <a href="/" class="btn btn-primary">Aceptar</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock content %}
