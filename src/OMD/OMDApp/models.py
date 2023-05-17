@@ -90,7 +90,7 @@ class Perro(models.Model):
     observations = models.TextField(blank=True, null=True)
     photo = models.TextField(blank=True, null=True)
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-
+    
     REQUIRED_FIELDS = ["name", "breed", "color", "birthdate"]
 
 class Turno(models.Model):
@@ -100,5 +100,6 @@ class Turno(models.Model):
     motive = models.TextField()
     observations = models.TextField(blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    status = models.BooleanField()
 
     REQUIRED_FIELDS = ["type", "hour", "date", "motive"]
