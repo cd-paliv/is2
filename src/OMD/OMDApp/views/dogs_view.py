@@ -38,7 +38,7 @@ class DogListView(LoginRequiredMixin, ListView):
         context['one_dog'] = len(dog_list) == 1
         return context
     
-@login_required
+@login_required(login_url='/login/')
 @email_verification_required
 def ProfileDogView(request, dog_id):
     request.session['actual_dog'] = dog_id

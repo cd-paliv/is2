@@ -49,12 +49,12 @@ class LoginView(views.LoginView):
             messages.error(self.request, 'Contraseña incorrecta')
             return redirect(reverse("login"))
 
-@login_required
+@login_required(login_url='/login/')
 def LogOut(request):
     logout(request)
     return redirect(reverse("home"))
 
-@login_required
+@login_required(login_url='/login/')
 @email_verification_required
 def RegisterView(request):
     if request.method == "POST":
@@ -80,7 +80,7 @@ def RegisterView(request):
         form = RegisterForm()
     return render(request, "accounts/register.html", {'register_form':form, 'dog_register':False})
 
-@login_required
+@login_required(login_url='/login/')
 @email_verification_required
 def RegisterDogView(request, owner_id):
     if request.method == "POST":
@@ -100,7 +100,7 @@ def RegisterDogView(request, owner_id):
         form = RegisterDogForm
     return render(request, "accounts/register.html", {'register_form':form, 'dog_register':True})
 
-@login_required
+@login_required(login_url='/login/')
 @email_verification_required
 def RegisterSingleDogView(request):
     if request.method == "POST":
@@ -126,7 +126,7 @@ def RegisterSingleDogView(request):
     return render(request, "accounts/register.html", {'register_form':form, 'dog_register':True})
 
 
-@login_required
+@login_required(login_url='/login/')
 @email_verification_required
 def ProfileView(request):
     user = request.user

@@ -19,12 +19,10 @@ def AskForTurn(request):
     if request.method == "POST":
         form = AskForTurnForm(request.POST)
         if form.is_valid():
-            turn = form.save(commit=False)
-            turn.save()
+            form.save()
 
             messages.success(request, f'Solicitud de turno exitosa')
             return redirect(reverse("home"))
-            
     else:
         form = AskForTurnForm()
     return render(request, 'turns/askForTurn.html', {'form': form})
@@ -49,3 +47,4 @@ class AcceptTurnsView(ListView):
         context['turn_list'] = turn_list
         context['one_turn'] = len(turn_list) == 1
         return context
+        #return render(request, 'turns/ask_for_turn.html', {'form': form})
