@@ -25,7 +25,7 @@ def AskForTurn(request):
             return redirect(reverse("home"))
     else:
         form = AskForTurnForm()
-    return render(request, 'turns/askForTurn.html', {'form': form})
+    return render(request, 'turns/ask_for_turn.html', {'form': form})
 
 
 class AcceptTurnsView(ListView):
@@ -48,3 +48,7 @@ class AcceptTurnsView(ListView):
         context['one_turn'] = len(turn_list) == 1
         return context
         #return render(request, 'turns/ask_for_turn.html', {'form': form})
+
+def ViewPendingTurns(request):
+    turnos = list(Turno.objects.filter(state="S")) # solicited
+    return render(request, "turns/acceptTurns.html", {"turn_list" : turnos})

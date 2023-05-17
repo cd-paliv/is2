@@ -18,7 +18,7 @@ from django.urls import path, re_path
 from django.views.generic.base import TemplateView
 from OMDApp.views.accounts_view import LoginView, LogOut, RegisterView, RegisterDogView, RegisterSingleDogView, ProfileView, EditProfileView, EditPasswordView
 from OMDApp.views.dogs_view import DogListView, ProfileDogView, EditProfileDogView
-from OMDApp.views.turns_view import AskForTurn, AcceptTurnsView
+from OMDApp.views.turns_view import AskForTurn, AcceptTurnsView, ViewPendingTurns
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
@@ -33,11 +33,14 @@ urlpatterns = [
     path('profile/', ProfileView, name='profile'),
     path('editprofile/', EditProfileView.as_view(), name='editProfile'),
     path('editpassword/', EditPasswordView.as_view(), name='editPassword'),
-    path('askforturn/', AskForTurn, name='askForTurn'),
-    path('acceptturns/', AcceptTurnsView.as_view(),name='acceptTurn'),
     
     # Dogs
     path('mydogs/', DogListView.as_view(), name='my_dogs'),
     path('dog/<int:dog_id>/', ProfileDogView, name='dog_profile'),
     path('profiledog', EditProfileDogView.as_view(), name='dog_edit_profile'),
+
+    # Turns
+    path('askforturn/', AskForTurn, name='askForTurn'),
+    path('pendingturns/', ViewPendingTurns, name='pendingTurns'),
+    path('acceptturns/', AcceptTurnsView.as_view(),name='acceptTurn'),
 ]

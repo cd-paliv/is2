@@ -94,13 +94,13 @@ class Perro(models.Model):
     REQUIRED_FIELDS = ["name", "breed", "color", "birthdate"]
 
 class Turno(models.Model):
-    state = models.CharField(max_length=10, default="solicited") # solicited ^ accepted ^ rejected
+    state = models.CharField(max_length=10, default="S") # solicited ^ accepted ^ rejected
     type = models.CharField(max_length=15) # emergency ^ castration ^ turn ^ vacunation ^
     hour = models.CharField(max_length=50)
     date = models.DateField()
     motive = models.TextField()
     observations = models.TextField(blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    status = models.BooleanField()
+    #status = models.BooleanField()
 
     REQUIRED_FIELDS = ["type", "hour", "date", "motive"]
