@@ -8,14 +8,16 @@ from django.views.generic import ListView
 from django.views import View
 from OMDApp.forms.accounts_form import RegisterDogForm
 from OMDApp.decorators import email_verification_required
+from django.views.decorators.cache import cache_control
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from OMDApp.models import Perro
 
+logged_decorators = [login_required, email_verification_required, cache_control(max_age=3600, no_store=True)]
 
 # Create your views here
-@method_decorator(email_verification_required, name='dispatch')
+@method_decorator(logged_decorators, name='dispatch')
 class DogListView(LoginRequiredMixin, ListView):
     login_url = '/login/'
     model = Perro
@@ -40,12 +42,13 @@ class DogListView(LoginRequiredMixin, ListView):
     
 @login_required
 @email_verification_required
+@cache_control(max_age=3600, no_store=True)
 def ProfileDogView(request, dog_id):
     request.session['actual_dog'] = dog_id
     dog = Perro.objects.get(id=dog_id)
     return render(request, 'dogs/profile.html', {'dog': dog})
 
-@method_decorator(email_verification_required, name='dispatch')
+@method_decorator(logged_decorators, name='dispatch')
 class EditProfileDogView(LoginRequiredMixin, View):
     login_url = '/login/'
     template_name = 'dogs/edit_profile.html'

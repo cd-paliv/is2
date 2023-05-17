@@ -10,6 +10,7 @@ from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_control
 from django.views import View
 from OMDApp.models import Perro
 from OMDApp.decorators import email_verification_required
@@ -18,6 +19,8 @@ from OMDApp.forms.accounts_form import (EditPasswordForm, LoginForm,
                                         RegisterDogForm, RegisterForm,
                                         UserEditForm,AskForTurnForm)
 
+
+logged_decorators = [login_required, email_verification_required, cache_control(max_age=3600, no_store=True)]
 
 # Create your views here.
 class LoginView(views.LoginView):
@@ -54,6 +57,7 @@ def LogOut(request):
 
 @login_required
 @email_verification_required
+@cache_control(max_age=3600, no_store=True)
 def RegisterView(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
@@ -81,6 +85,7 @@ def RegisterView(request):
 
 @login_required
 @email_verification_required
+@cache_control(max_age=3600, no_store=True)
 def RegisterDogView(request, owner_id):
     if request.method == "POST":
         form = RegisterDogForm(request.POST)
@@ -104,6 +109,7 @@ def RegisterDogView(request, owner_id):
 
 @login_required
 @email_verification_required
+@cache_control(max_age=3600, no_store=True)
 def RegisterSingleDogView(request):
     if request.method == "POST":
         form = RegisterDogForm(request.POST)
@@ -129,6 +135,7 @@ def RegisterSingleDogView(request):
 
 @login_required
 @email_verification_required
+@cache_control(max_age=3600, no_store=True)
 def AskForTurn(request):
     user=request.user
     return render(request, 'accounts/askForTurn.html', {'user': user})
@@ -136,11 +143,12 @@ def AskForTurn(request):
 
 @login_required
 @email_verification_required
+@cache_control(max_age=3600, no_store=True)
 def ProfileView(request):
     user = request.user
     return render(request, 'accounts/profile.html', {'user': user})
 
-@method_decorator(email_verification_required, name='dispatch')
+@method_decorator(logged_decorators, name='dispatch')
 class EditProfileView(LoginRequiredMixin, View):
     login_url = '/login/'
     template_name = 'accounts/edit_profile.html'
