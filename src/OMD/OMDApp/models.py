@@ -5,7 +5,7 @@ from django.utils.translation import gettext as _
 # Create your models here.
 # Accounts
 class CustomUserAccountManager(BaseUserManager):
-    def create_user(self, email, password, dni, first_name, last_name, birthdate, **other_fields):
+    def create_user(self, email, password, dni, first_name, last_name, birthdate, email_confirmed, **other_fields):
         if not dni:
             raise ValueError("El DNI es obligatorio")
         if not first_name:
@@ -18,7 +18,7 @@ class CustomUserAccountManager(BaseUserManager):
             raise ValueError("El email es obligatorio")
         
         email = self.normalize_email(email)
-        user = self.model(email=email, password=password, dni=dni, first_name=first_name, last_name=last_name, birthdate=birthdate, **other_fields)
+        user = self.model(email=email, password=password, dni=dni, first_name=first_name, last_name=last_name, birthdate=birthdate, email_confirmed=email_confirmed, is_active=True, **other_fields)
         
         if password is not None:
             user.save()

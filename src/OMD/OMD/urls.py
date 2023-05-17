@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from django.views.generic.base import TemplateView
-from OMDApp.views.accounts_view import LoginView, LogOut, RegisterView, RegisterDogView, RegisterSingleDogView, ProfileView, EditProfileView, EditPasswordView, AskForTurn
+from OMDApp.views.accounts_view import LoginView, LogOut, RegisterView, RegisterDogView, RegisterSingleDogView, ProfileView, EditProfileView, EditPasswordView1, AskForTurn
 from OMDApp.views.dogs_view import DogListView, ProfileDogView, EditProfileDogView
 
 urlpatterns = [
@@ -31,7 +31,7 @@ urlpatterns = [
     path('logout/', LogOut, name='logout'),
     path('profile/', ProfileView, name='profile'),
     path('editprofile/', EditProfileView.as_view(), name='editProfile'),
-    path('editpassword/', EditPasswordView.as_view(), name='editPassword'),
+    path('editpassword/', EditPasswordView1, name='editPassword'),
     path('askforturn/', AskForTurn, name='askForTurn'),
     
     # Dogs

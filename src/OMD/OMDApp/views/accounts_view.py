@@ -40,9 +40,7 @@ class LoginView(views.LoginView):
             if not user.email_confirmed:
                 messages.success(request, 'Inicio de sesión exitoso. Por favor, modifique la contraseña para acceder al sitio.')
                 return redirect(reverse("editPassword"))
-            if not user.is_active:
-                user.is_active = True
-                user.save()
+            
             messages.success(request, 'Inicio de sesión exitoso')
             return redirect(reverse("home"))
         else:
@@ -163,6 +161,36 @@ class EditProfileView(LoginRequiredMixin, View):
             messages.success(request, f'Datos modificados.')
             return redirect(reverse("profile"))
         return render(request, self.template_name, {'form': form})
+
+@login_required
+def EditPasswordView1(request):
+    user = request.user
+    form = EditPasswordForm()
+    if request.method == 'POST':
+        if form.is_valid():
+            password = form.cleaned_data['password']
+            if check_password(password, user.password):
+                newPassword = form.cleaned_data['new_password']
+
+                if newPassword != form.cleaned_data['repeat_new_password']:
+                    messages.error(request, 'Las contraseñas no coinciden, por favor, intente de nuevo')
+                    return redirect(reverse("editPassword"))
+                
+                if not user.email_confirmed:
+                    get_user_model().objects.filter(id=user.id).update(password=make_password(newPassword), email_confirmed=True)
+                else:
+                    get_user_model().objects.filter(id=user.id).update(password=make_password(newPassword))
+                user.refresh_from_db()
+
+                #request.session['email'] = user.email
+                messages.success(request, 'Cambio de contraseña exitoso')
+                return redirect(reverse("home"))
+            else:
+                messages.error(request, 'Contraseña actual incorrecta')
+                return redirect(reverse("editPassword"))
+    #print(user.email)
+    return render(request, 'accounts/edit_password.html', {'form': form, 'confirmed': user.email_confirmed})
+        
 
 class EditPasswordView(LoginRequiredMixin, View):
     login_url = '/login/'
