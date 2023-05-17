@@ -5,17 +5,22 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Permission
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_control
 from django.views import View
 from OMDApp.models import Perro
 from OMDApp.decorators import email_verification_required
+from django.contrib.auth import authenticate
 from OMDApp.forms.accounts_form import (EditPasswordForm, LoginForm,
                                         RegisterDogForm, RegisterForm,
                                         UserEditForm)
 
+
+logged_decorators = [login_required, email_verification_required, cache_control(max_age=3600, no_store=True)]
 
 # Create your views here.
 class LoginView(views.LoginView):
@@ -23,31 +28,27 @@ class LoginView(views.LoginView):
     template_name = 'accounts/login.html'
     
     def post(self, request, *args, **kwargs):
-        instance_form = self.get_form(form_class=self.authentication_form)
-        instance_form.is_valid()
-        email = instance_form.cleaned_data['username']
+        email = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, email=email, password=password)
         
-        try:
-            user = get_user_model().objects.get(email=email)
-        except ObjectDoesNotExist:
+        if user is None:
             messages.error(self.request, 'El email no se encuentra registrado.')
-            return redirect(reverse("login"))
-
-        password = instance_form.cleaned_data['password']
+            return HttpResponseRedirect(reverse("login"))
+        
         if check_password(password, user.password):
-            request.session['email'] = user.email
+            request.session['email'] = email
             login(request, user)
+
             if not user.email_confirmed:
                 messages.success(request, 'Inicio de sesión exitoso. Por favor, modifique la contraseña para acceder al sitio.')
-                return redirect(reverse("editPassword"))
-            if not user.is_active:
-                user.is_active = True
-                user.save()
+                return HttpResponseRedirect(reverse("editPassword"))
+            
             messages.success(request, 'Inicio de sesión exitoso')
-            return redirect(reverse("home"))
+            return HttpResponseRedirect(reverse("home"))
         else:
             messages.error(self.request, 'Contraseña incorrecta')
-            return redirect(reverse("login"))
+            return HttpResponseRedirect(reverse("login"))
 
 @login_required(login_url='/login/')
 def LogOut(request):
@@ -56,6 +57,7 @@ def LogOut(request):
 
 @login_required(login_url='/login/')
 @email_verification_required
+@cache_control(max_age=3600, no_store=True)
 def RegisterView(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
@@ -65,6 +67,7 @@ def RegisterView(request):
             user.is_active = False
             user.first_name = user.first_name.capitalize()
             user.last_name = user.last_name.capitalize()
+            user.is_active = True
             actual_password = get_user_model().objects.make_random_password(length=20)
             user.password = make_password(actual_password)
             
@@ -82,11 +85,15 @@ def RegisterView(request):
 
 @login_required(login_url='/login/')
 @email_verification_required
+@cache_control(max_age=3600, no_store=True)
 def RegisterDogView(request, owner_id):
     if request.method == "POST":
         form = RegisterDogForm(request.POST)
         if form.is_valid():
             dog = form.save(commit=False)
+            dog.name = dog.name.capitalize()
+            dog.breed = dog.breed.capitalize()
+            dog.color = dog.color.capitalize()
             owner = get_user_model().objects.get(id=owner_id)
             dog.owner = owner
             dog.save()
@@ -94,7 +101,7 @@ def RegisterDogView(request, owner_id):
             subject = 'Activa tu cuenta en OhMyDog'
             owner.email_user(subject, request.session.get('message'))
 
-            messages.success(request, f'Registro exitoso. Por favor, dirígase a {owner.email} para activar su cuenta y completar el registro.')
+            messages.success(request, f'Registro exitoso. Por favor, diríjase a {owner.email} para activar su cuenta y completar el registro.')
             return redirect(reverse("home"))
     else:
         form = RegisterDogForm
@@ -102,6 +109,7 @@ def RegisterDogView(request, owner_id):
 
 @login_required(login_url='/login/')
 @email_verification_required
+@cache_control(max_age=3600, no_store=True)
 def RegisterSingleDogView(request):
     if request.method == "POST":
         form = RegisterDogForm(request.POST)
@@ -128,11 +136,12 @@ def RegisterSingleDogView(request):
 
 @login_required(login_url='/login/')
 @email_verification_required
+@cache_control(max_age=3600, no_store=True)
 def ProfileView(request):
     user = request.user
     return render(request, 'accounts/profile.html', {'user': user})
 
-@method_decorator(email_verification_required, name='dispatch')
+@method_decorator(logged_decorators, name='dispatch')
 class EditProfileView(LoginRequiredMixin, View):
     login_url = '/login/'
     template_name = 'accounts/edit_profile.html'
@@ -157,6 +166,7 @@ class EditProfileView(LoginRequiredMixin, View):
             messages.success(request, f'Datos modificados.')
             return redirect(reverse("profile"))
         return render(request, self.template_name, {'form': form})
+        
 
 class EditPasswordView(LoginRequiredMixin, View):
     login_url = '/login/'

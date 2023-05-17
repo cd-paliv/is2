@@ -64,7 +64,7 @@
             "last_name" : "Trial",
             "dni" : "34567893",
             "birthdate" : "1992-01-01",
-            "email_confirmed": "True"
+            "email_confirmed": "False"
         }
     },
     {
@@ -118,10 +118,10 @@
         "model": "OMDApp.Perro",
         "pk": 4,
         "fields": {
-            "name": "Michi",
-            "breed": "Bulldog",
+            "name": "Manchi",
+            "breed": "Shih-tzu",
             "color": "Marron",
-            "birthdate": "2020-02-04",
+            "birthdate": "2012-02-29",
             "owner": 4
         }
     },
@@ -129,10 +129,10 @@
         "model": "OMDApp.Perro",
         "pk": 5,
         "fields": {
-            "name": "Buddy",
-            "breed": "Golden Retriever",
+            "name": "Nilo",
+            "breed": "Caniche",
             "color": "Dorado",
-            "birthdate": "2019-05-12",
+            "birthdate": "2021-05-31",
             "owner": 4
         }
     },
@@ -140,10 +140,10 @@
         "model": "OMDApp.Perro",
         "pk": 6,
         "fields": {
-            "name": "Luna",
-            "breed": "Schnauzer",
-            "color": "Blanco",
-            "birthdate": "2020-09-02",
+            "name": "Asuka",
+            "breed": "Perro",
+            "color": "Tricolor",
+            "birthdate": "2020-10-10",
             "owner": 4
         }
     },
@@ -151,55 +151,11 @@
         "model": "OMDApp.Perro",
         "pk": 7,
         "fields": {
-            "name": "Rocky",
-            "breed": "Boxer",
-            "color": "Marron y blanco",
-            "birthdate": "2018-12-24",
+            "name": "Nimeria",
+            "breed": "Perro",
+            "color": "Tricolor",
+            "birthdate": "2015-10-10",
             "owner": 4
-        }
-    },
-    {
-        "model": "OMDApp.Perro",
-        "pk": 8,
-        "fields": {
-            "name": "Coco",
-            "breed": "Labrador Retriever",
-            "color": "Negro",
-            "birthdate": "2021-02-28",
-            "owner": 4
-        }
-    },
-    {
-        "model": "OMDApp.Perro",
-        "pk": 9,
-        "fields": {
-            "name": "Firulais",
-            "breed": "Poodle",
-            "color": "Blanco",
-            "birthdate": "2022-01-20",
-            "owner": 4
-        }
-    },
-    {
-        "model": "OMDApp.Perro",
-        "pk": 10,
-        "fields": {
-            "name": "Zeus",
-            "breed": "Rottweiler",
-            "color": "Negro y marron",
-            "birthdate": "2020-06-10",
-            "owner": 4
-        }
-    },
-    {
-        "model" : "OMDApp.Perro",
-        "pk" : 11,
-        "fields" : {
-            "name" : "Rocky",
-            "breed" : "Golden Retriever",
-            "color" : "Golden",
-            "birthdate" : "2019-07-01",
-            "owner" : 4
         }
     },
     {

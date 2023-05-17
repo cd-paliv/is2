@@ -37,21 +37,23 @@
             </ul>
           </li>
 
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="margin-left: 0%;">
-              Turnos
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-            {% if perms.OMDApp.is_client %}
-            <li><a class="dropdown-item" href="{% url 'askForTurn' %}">Pedir turno</a></li>
-            <li><a class="dropdown-item" href="/">Mis turnos</a></li>
-            {% endif %}
-            {% if perms.OMDApp.is_vet %}
-            <li><a class="dropdown-item" href="/">Turnos pendientes</a></li>
-            <li><a class="dropdown-item" href="/">Turnos Aceptados</a></li>
-            {% endif %}
-            </ul>
-          </li>
+          {% if user.is_authenticated %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="margin-left: 0%;">
+                Turnos
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+              {% if perms.OMDApp.is_client %}
+              <li><a class="dropdown-item" href="{% url 'askForTurn' %}">Pedir turno</a></li>
+              <li><a class="dropdown-item" href="/">Mis turnos</a></li>
+              {% endif %}
+              {% if perms.OMDApp.is_vet %}
+              <li><a class="dropdown-item" href="/">Turnos pendientes</a></li>
+              <li><a class="dropdown-item" href="/">Turnos aceptados</a></li>
+              {% endif %}
+              </ul>
+            </li>
+          {% endif %}
           {% if perms.OMDApp.is_vet %}
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="/">Donaciones</a>
@@ -71,9 +73,6 @@
                 <li><a class="dropdown-item" href="{% url 'profile' %}">Perfil</a></li>
                 {% if perms.OMDApp.is_vet %}
                   <li><a class="dropdown-item" href="{% url 'register' %}">Registrar cliente</a></li>
-                {% endif %}
-                {% if perms.OMDApp.is_client %}
-                  <li><a class="dropdown-item" href="{% url 'registerSingleDog' %}">Registrar perro</a></li>
                 {% endif %}
                 <li><a class="dropdown-item" href="{% url 'logout' %}">Cerrar sesión</a></li>
             </ul>
