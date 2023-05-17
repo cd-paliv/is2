@@ -35,7 +35,7 @@ class DogListView(LoginRequiredMixin, ListView):
                 'age': calculate_age(dog.birthdate),
             })
         context['dog_list'] = dog_list
-        context['four_dogs'] = len(dog_list) == 4
+        context['four_dogs'] = len(dog_list) <= 4
         return context
     
 @login_required

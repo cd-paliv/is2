@@ -139,7 +139,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Custom configurations
 AUTH_USER_MODEL = 'OMDApp.CustomUser'
 
-LOGIN_REDIRECT_URL = "home"
+#LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 LOGIN_URL = reverse_lazy('login')
 

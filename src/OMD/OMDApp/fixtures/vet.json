@@ -64,7 +64,7 @@
             "last_name" : "Trial",
             "dni" : "34567893",
             "birthdate" : "1992-01-01",
-            "email_confirmed": "True"
+            "email_confirmed": "False"
         }
     },
     {
