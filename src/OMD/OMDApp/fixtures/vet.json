@@ -179,6 +179,81 @@
             "birthdate" : "2020-01-01",
             "owner" : 5
         }
-    }
+    },
+    {
+        "model": "OMDApp.turno",
+        "pk": 1,
+        "fields": {
+          "state": "S",
+          "type": "T",
+          "hour": "Morning",
+          "date": "2023-07-15",
+          "motive": "Emergency case",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 4,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 2,
+        "fields": {
+          "state": "S",
+          "type": "C",
+          "hour": "Afternoon",
+          "date": "2023-08-01",
+          "motive": "Castration",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 4,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 3,
+        "fields": {
+          "state": "S",
+          "type": "V",
+          "hour": "Morning",
+          "date": "2023-09-10",
+          "motive": "Vaccination",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 4,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 4,
+        "fields": {
+          "state": "S",
+          "type": "O",
+          "hour": "Afternoon",
+          "date": "2023-12-15",
+          "motive": "Other",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 4,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 5,
+        "fields": {
+          "state": "S",
+          "type": "T",
+          "hour": "Morning",
+          "date": "2023-12-31",
+          "motive": "Emergency case",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 4,
+          "accepted_by": null
+        }
+      }
     
 ]

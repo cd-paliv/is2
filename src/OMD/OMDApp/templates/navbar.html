@@ -49,7 +49,7 @@
               {% endif %}
               {% if perms.OMDApp.is_vet %}
               <li><a class="dropdown-item" href="{% url 'pendingTurns' %}">Turnos pendientes</a></li>
-              <li><a class="dropdown-item" href="/">Turnos aceptados</a></li>
+              <li><a class="dropdown-item" href="{% url 'acceptedTurns' %}">Turnos aceptados</a></li>
               {% endif %}
               </ul>
             </li>
