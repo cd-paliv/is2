@@ -44,12 +44,12 @@
               </a>
               <ul class="dropdown-menu dropdown-menu-end">
               {% if perms.OMDApp.is_client %}
-              <li><a class="dropdown-item" href="{% url 'askForTurn' %}">Pedir turno</a></li>
-              <li><a class="dropdown-item" href="/">Mis turnos</a></li>
+                <li><a class="dropdown-item" href="{% url 'askForTurn' %}">Pedir turno</a></li>
+                <li><a class="dropdown-item" href="{% url 'myTurns' %}">Mis turnos</a></li>
               {% endif %}
               {% if perms.OMDApp.is_vet %}
-              <li><a class="dropdown-item" href="{% url 'pendingTurns' %}">Turnos pendientes</a></li>
-              <li><a class="dropdown-item" href="{% url 'acceptedTurns' %}">Turnos aceptados</a></li>
+                <li><a class="dropdown-item" href="{% url 'pendingTurns' %}">Turnos pendientes</a></li>
+                <li><a class="dropdown-item" href="{% url 'acceptedTurns' %}">Turnos aceptados</a></li>
               {% endif %}
               </ul>
             </li>

@@ -11,6 +11,27 @@ from django.views.decorators.cache import cache_control
 
 
 # Create your views here
+def turn_type_mapping():
+    map = {
+        'T': 'Turno normal',
+        'C': 'Castración',
+        'V': 'Vacunación',
+        'O': 'Operacion',
+    }
+    return map
+
+def turn_hour_mapping():
+    map = {
+        'Morning': 'Tanda mañana: 08:00 a 13:00hs',
+        'Afternoon': 'Tanda tarde: 15:00 a 20:00hs',
+    }
+    return map
+
+from django.template.defaulttags import register
+
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
 
 @login_required(login_url='/login/')
 @email_verification_required
@@ -31,15 +52,25 @@ def AskForTurn(request):
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
 def ViewPendingTurns(request):
-    turnos = list(Turno.objects.filter(state="S")) # solicited
-    return render(request, "turns/acceptTurns.html", {"turn_list" : turnos, "pending" : True})
+    turnos = list(Turno.objects.filter(state="S").order_by('-hour', 'date')) # solicited
+    return render(request, "turns/turn_list.html", {"turn_list" : turnos, "turns" : "P",
+                                                    'turn_type_mapping': turn_type_mapping(), 'turn_hour_mapping': turn_hour_mapping()})
 
 @login_required(login_url='/login/')
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
 def ViewAcceptedTurns(request):
-    turnos = list(Turno.objects.filter(state="A")) # accepted
-    return render(request, "turns/acceptTurns.html", {"turn_list" : turnos, "pending" : False})
+    turnos = list(Turno.objects.filter(state="A").order_by('-hour', 'date')) # accepted
+    return render(request, "turns/turn_list.html", {"turn_list" : turnos, "turns" : "A",
+                                                    'turn_type_mapping': turn_type_mapping(), 'turn_hour_mapping': turn_hour_mapping()})
+
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
+def ViewMyTurns(request):
+    turnos = list(Turno.objects.filter(solicited_by=request.user).order_by('state', '-hour', 'date')) # accepted
+    return render(request, "turns/turn_list.html", {"turn_list" : turnos, "turns" : "U",
+                                                    'turn_type_mapping': turn_type_mapping(), 'turn_hour_mapping': turn_hour_mapping()})
 
 @login_required(login_url='/login/')
 @email_verification_required
