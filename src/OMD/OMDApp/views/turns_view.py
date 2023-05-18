@@ -8,6 +8,7 @@ from OMDApp.decorators import email_verification_required
 from OMDApp.forms.turns_form import (AskForTurnForm)
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_control
+from django.db.models import Q
 
 
 # Create your views here
@@ -60,16 +61,8 @@ def ViewPendingTurns(request):
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
 def ViewAcceptedTurns(request):
-    turnos = list(Turno.objects.filter(state="A").order_by('-hour', 'date')) # accepted
+    turnos = list(Turno.objects.filter(Q(state="A") | Q(state="AC")).order_by('-hour', 'date')) # accepted
     return render(request, "turns/turn_list.html", {"turn_list" : turnos, "turns" : "A",
-                                                    'turn_type_mapping': turn_type_mapping(), 'turn_hour_mapping': turn_hour_mapping()})
-
-@login_required(login_url='/login/')
-@email_verification_required
-@cache_control(max_age=3600, no_store=True)
-def ViewMyTurns(request):
-    turnos = list(Turno.objects.filter(solicited_by=request.user).order_by('state', '-hour', 'date')) # accepted
-    return render(request, "turns/turn_list.html", {"turn_list" : turnos, "turns" : "U",
                                                     'turn_type_mapping': turn_type_mapping(), 'turn_hour_mapping': turn_hour_mapping()})
 
 @login_required(login_url='/login/')
@@ -82,7 +75,8 @@ def AcceptTurn(request, turn_id):
     turn.save()
 
     soliciter = get_user_model().objects.get(id=turn.solicited_by.id)
-    soliciter.email_user('Cambio en estado de turno', 'Se ha aceptado su turno en Oh My Dog')
+    message = 'Se ha aceptado su turno del %s en Oh My Dog' % turn.date.strftime('%d/%m/%Y')
+    soliciter.email_user('Cambio en estado de turno', message)
 
     messages.success(request, "Turno aceptado")
     return redirect(reverse("pendingTurns"))
@@ -94,9 +88,36 @@ def RejectTurn(request, turn_id):
     turn = Turno.objects.get(id=turn_id)
 
     soliciter = get_user_model().objects.get(id=turn.solicited_by.id)
-    soliciter.email_user('Cambio en estado de turno', 'Se ha rechazado su turno en Oh My Dog')
+    message = 'Se ha rechazado su turno del %s en Oh My Dog' % turn.date.strftime('%d/%m/%Y')
+    soliciter.email_user('Cambio en estado de turno', message)
 
     turn.delete()
 
     messages.success(request, "Turno rechazado")
     return redirect(reverse("pendingTurns"))
+
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
+def ViewMyTurns(request):
+    turnos = list(Turno.objects.filter(solicited_by=request.user).order_by('state', 'date', '-hour').exclude(state="AC"))
+    return render(request, "turns/turn_list.html", {"turn_list" : turnos, "turns" : "U",
+                                                    'turn_type_mapping': turn_type_mapping(), 'turn_hour_mapping': turn_hour_mapping()})
+
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
+def CancelTurn(request, turn_id):
+    turn = Turno.objects.get(id=turn_id)
+    if turn.state == "A":
+        turn.state = "AC"
+        turn.save()
+    else:
+        turn.delete()
+
+    soliciter = get_user_model().objects.get(id=turn.solicited_by.id)
+    message = 'Usted ha cancelado su turno del %s en Oh My Dog' % turn.date.strftime('%d/%m/%Y')
+    soliciter.email_user('Cambio en estado de turno', message)
+
+    messages.success(request, "Turno cancelado")
+    return redirect(reverse("myTurns"))

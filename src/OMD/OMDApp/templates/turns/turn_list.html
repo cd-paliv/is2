@@ -18,16 +18,16 @@
                   <h6 class="card-title"><strong>Fecha:</strong> {{ turn.date|date:'d/m/Y' }}</h6>
                   <p class="card-text mt-3"><strong>Horario:</strong> {{ turn_hour_mapping|get_item:turn.hour }} </p>
                   {% if turn.motive %}<p class="card-text"><strong>Motivo:</strong> {{ turn.motive }} </p>{% endif %}
-                  {% if turns == "U" %}
-                    <p class="card-text"><strong>Estado:</strong> {% if turn.state == "S" %}Solicitado{% elif turn.state == "A" %}Aceptado{% endif %} </p>
-                  {% endif %}
+                  <p class="card-text"><strong>Estado:</strong> {% if turn.state == "S" %}Solicitado{% elif turn.state == "A" %}Aceptado{% elif turn.state == "AC" %}Cancelado por cliente{% endif %} </p>
                 </div>
                 <div class="d-grid gap-2 d-md-flex justify-content-lg-center justify-content-center mt-3">
                   {% if turns == "P" %}
                     <a href="{% url 'acceptTurn' turn_id=turn.id %}" class="btn btn-primary-custom">Aceptar</a>
                     <a href="{% url 'rejectTurn' turn_id=turn.id %}" class="btn btn-secondary">Rechazar</a>
-                  {% elif turns == "A" %}
+                  {% elif turns == "A" and turn.state != "AC" %}
                     <a href="/" class="btn btn-primary-custom">Atender</a>
+                  {% elif turns == "U" %}
+                  <a href="{% url 'cancelTurn' turn_id=turn.id %}" class="btn btn-primary-custom">Cancelar</a>
                   {% endif %}
                 </div>
               </div>
