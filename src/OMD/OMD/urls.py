@@ -33,13 +33,14 @@ urlpatterns = [
     path('profile/', ProfileView, name='profile'),
     path('editprofile/', EditProfileView.as_view(), name='editProfile'),
     path('editpassword/', EditPasswordView.as_view(), name='editPassword'),
+    path('viewadoption/',view_adoption(),name='viewAdoption'),
     
     # Dogs
     path('mydogs/', DogListView.as_view(), name='my_dogs'),
     path('dog/<int:dog_id>/', ProfileDogView, name='dog_profile'),
     path('profiledog', EditProfileDogView.as_view(), name='dog_edit_profile'),
 
-    # Turns
+     # Turns
     path('askforturn/', AskForTurn, name='askForTurn'),
     path('pendingturns/', ViewPendingTurns, name='pendingTurns'),
     path('acceptedturns/', ViewAcceptedTurns, name='acceptedTurns'),
