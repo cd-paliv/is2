@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %} 
+<body class="form-signin w-100 m-auto">
+    <div class="container py-5 form_width">
+        <h1 class="text-center fw-semibold mb-4">Perros en adopción</h1>
+        <div class="row">
+            <a href="{% url 'register_adoption_dog' %}" class="btn btn-secondary">Registrar perro en adopción</a>
+            <div class="col-md-12">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th><strong>Nombre</strong></th>
+                            <th><strong>Raza</strong></th>
+                            <th><strong>Color</strong></th>
+                            <th><strong>Zona</strong></th> 
+                        </tr>
+                    </thead> 
+                    {% for dog in adoption_list %}
+                        <tr>
+                            <td class="vertical-align-middle">{{dog.name}}</td>
+                            <td class="vertical-align-middle">{{dog.breed}}</td>
+                            <td class="vertical-align-middle">{{dog.color}}</td>
+                            <td class="vertical-align-middle">{{dog.zone}}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}

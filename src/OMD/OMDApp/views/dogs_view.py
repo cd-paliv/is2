@@ -6,15 +6,26 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django.views import View
+from OMDApp.forms.dogs_form import RegisterAdoptionDogForm
 from OMDApp.forms.accounts_form import RegisterDogForm
 from OMDApp.decorators import email_verification_required
 from django.views.decorators.cache import cache_control
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from OMDApp.models import Perro
+from OMDApp.models import Perro, PPEA
 
 logged_decorators = [login_required, email_verification_required, cache_control(max_age=3600, no_store=True)]
+
+def calculate_age(birthDate):
+    today = date.today()
+    age = relativedelta(today, birthDate)
+    if age.years > 0:
+        return f"{age.years} años"
+    elif age.months > 0:
+        return f"{age.months} meses"
+    else:
+        return f"{age.days} días"
 
 # Create your views here
 @method_decorator(logged_decorators, name='dispatch')
@@ -81,12 +92,23 @@ class EditProfileDogView(LoginRequiredMixin, View):
             return redirect(reverse("dog_profile", kwargs={"dog_id" : dog.id}))
         return render(request, self.template_name, {'form': form, 'dog_id' : dog.id})
 
-def calculate_age(birthDate):
-    today = date.today()
-    age = relativedelta(today, birthDate)
-    if age.years > 0:
-        return f"{age.years} años"
-    elif age.months > 0:
-        return f"{age.months} meses"
+def RegisterAdoptionDogView(request):
+    if request.method == "POST":
+        form = RegisterAdoptionDogForm(request.POST)
+        if form.is_valid():
+            dog = form.save(commit=False)
+            dog.state = "A"
+            dog.publisher = request.user
+            dog.save()
+
+            messages.success(request, f'Perro en adopción dado de alta.')
+            return redirect(reverse("home"))
+        else:
+            form.data = form.data.copy()
     else:
-        return f"{age.days} días"
+        form = RegisterAdoptionDogForm()
+    return render(request, "dogs/adoption/register_adoption.html", {'form': form})
+
+def AdoptionDogListView(request):
+    adoption_list = list(PPEA.objects.filter(state="A"))
+    return render(request, "dogs/adoption/view_adoption.html", {'adoption_list': adoption_list})

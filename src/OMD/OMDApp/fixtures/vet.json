@@ -254,6 +254,76 @@
           "solicited_by": 4,
           "accepted_by": null
         }
-      }
+      },
+      {
+        "model": "OMDApp.PPEA",
+        "pk": 1,
+        "fields": {
+            "name": "Max",
+            "breed": "Labrador Retriever",
+            "color": "Golden",
+            "state": "A",
+            "photo": null,
+            "disappeared_date": null,
+            "zone": "Park Avenue",
+            "publisher": 4
+        }
+    },
+    {
+        "model": "OMDApp.PPEA",
+        "pk": 2,
+        "fields": {
+            "name": "Bella",
+            "breed": "Poodle",
+            "color": "White",
+            "state": "A",
+            "photo": null,
+            "disappeared_date": null,
+            "zone": "Downtown",
+            "publisher": 4
+        }
+    },
+    {
+        "model": "OMDApp.PPEA",
+        "pk": 3,
+        "fields": {
+            "name": "Rocky",
+            "breed": "German Shepherd",
+            "color": "Black",
+            "state": "A",
+            "photo": null,
+            "disappeared_date": null,
+            "zone": "Suburbia",
+            "publisher": 4
+        }
+    },
+    {
+        "model": "OMDApp.PPEA",
+        "pk": 4,
+        "fields": {
+            "name": "Luna",
+            "breed": "Siberian Husky",
+            "color": "Gray",
+            "state": "A",
+            "photo": null,
+            "disappeared_date": null,
+            "zone": "Beachfront",
+            "publisher": 4
+        }
+    },
+    {
+        "model": "OMDApp.PPEA",
+        "pk": 5,
+        "fields": {
+            "name": "Charlie",
+            "breed": "Bulldog",
+            "color": "Brown",
+            "state": "A",
+            "photo": null,
+            "disappeared_date": null,
+            "zone": "Rural Area",
+            "publisher": 4
+        }
+    }
     
 ]
