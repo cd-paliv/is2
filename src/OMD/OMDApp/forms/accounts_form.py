@@ -12,6 +12,7 @@ from OMDApp.validators.form_validator import (EmptyFieldValidator, NoNumbersFiel
 # Create your forms here.
 class LoginForm(AuthenticationForm):
     username = forms.CharField(label='Email')
+    password = forms.CharField(label='Contraseña', widget=forms.PasswordInput(attrs={'placeholder':'********','autocomplete': 'off','data-toggle': 'password'}))
     
 
 class RegisterForm(forms.ModelForm):
@@ -100,7 +101,7 @@ class RegisterDogForm(forms.ModelForm):
 
     
 class EditPasswordForm(forms.Form):
-    password = forms.CharField(label='Contraseña actual', widget=forms.PasswordInput())
+    password = forms.CharField(label='Contraseña actual', widget=forms.PasswordInput(attrs={'placeholder':'********','autocomplete': 'off','data-toggle': 'password'}))
     new_password = forms.CharField(label='Nueva contraseña', widget=forms.PasswordInput(),
                                    validators=[
                                        MinimumLengthValidator(),
