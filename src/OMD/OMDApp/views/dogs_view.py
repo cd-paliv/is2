@@ -92,6 +92,9 @@ class EditProfileDogView(LoginRequiredMixin, View):
             return redirect(reverse("dog_profile", kwargs={"dog_id" : dog.id}))
         return render(request, self.template_name, {'form': form, 'dog_id' : dog.id})
 
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
 def RegisterAdoptionDogView(request):
     if request.method == "POST":
         form = RegisterAdoptionDogForm(request.POST)
@@ -109,6 +112,57 @@ def RegisterAdoptionDogView(request):
         form = RegisterAdoptionDogForm()
     return render(request, "dogs/adoption/register_adoption.html", {'form': form})
 
+from django.template.defaulttags import register
+@register.filter
+def filter_adoption_age(self, adoption_dogs):
+    result = adoption_dogs.order_by('age')
+    return result
+
+from django.db.models import F
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
 def AdoptionDogListView(request):
-    adoption_list = list(PPEA.objects.filter(state="A"))
-    return render(request, "dogs/adoption/view_adoption.html", {'adoption_list': adoption_list})
+    dog_list = list(PPEA.objects.filter(state="A"))
+    adoption_list = []
+
+    for dog in dog_list:
+            adoption_list.append({
+                'id' : dog.id,
+                'name': dog.name,
+                'breed': dog.breed,
+                'color': dog.color,
+                'age': calculate_age(dog.birthdate),
+            })
+
+    return render(request, "dogs/adoption/view_adoption.html", {'adoption_list': adoption_list, 't': 'all', 'c': 'asc'})
+
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
+def AdoptionDogListFilteredView(request):
+    type = request.GET.get('typeFilter')
+    criteria = request.GET.get('criteriaFilter')
+    if type == "all" and criteria == "desc":
+        dog_list = list(PPEA.objects.filter(state="A").order_by(F('birthdate').desc()))
+    elif type == "age":
+        dog_list = list(PPEA.objects.filter(state="A").order_by(
+            F('birthdate').asc() if criteria == "desc" else F('birthdate').desc()
+        ))
+    elif type == "breed":
+        dog_list = list(PPEA.objects.filter(state="A").order_by(
+            F('breed').asc() if criteria == "asc" else F('breed').desc()
+        ))
+    else:
+        return redirect(reverse('adoption_dog_list'))
+    
+    adoption_list = []
+    for dog in dog_list:
+            adoption_list.append({
+                'id' : dog.id,
+                'name': dog.name,
+                'breed': dog.breed,
+                'color': dog.color,
+                'age': calculate_age(dog.birthdate),
+            })
+    return render(request, "dogs/adoption/view_adoption.html", {'adoption_list': adoption_list, 't': type, 'c': criteria})

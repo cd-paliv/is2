@@ -263,9 +263,10 @@
             "breed": "Labrador Retriever",
             "color": "Golden",
             "state": "A",
+            "birthdate": "2023-05-18",
             "photo": null,
             "disappeared_date": null,
-            "zone": "Park Avenue",
+            "zone": "",
             "publisher": 4
         }
     },
@@ -277,9 +278,10 @@
             "breed": "Poodle",
             "color": "White",
             "state": "A",
+            "birthdate": "2023-01-01",
             "photo": null,
             "disappeared_date": null,
-            "zone": "Downtown",
+            "zone": "",
             "publisher": 4
         }
     },
@@ -291,9 +293,10 @@
             "breed": "German Shepherd",
             "color": "Black",
             "state": "A",
+            "birthdate": "2020-05-18",
             "photo": null,
             "disappeared_date": null,
-            "zone": "Suburbia",
+            "zone": "",
             "publisher": 4
         }
     },
@@ -305,9 +308,10 @@
             "breed": "Siberian Husky",
             "color": "Gray",
             "state": "A",
+            "birthdate": "2010-05-18",
             "photo": null,
             "disappeared_date": null,
-            "zone": "Beachfront",
+            "zone": "",
             "publisher": 4
         }
     },
@@ -319,9 +323,10 @@
             "breed": "Bulldog",
             "color": "Brown",
             "state": "A",
+            "birthdate": "2017-05-18",
             "photo": null,
             "disappeared_date": null,
-            "zone": "Rural Area",
+            "zone": "",
             "publisher": 4
         }
     }

@@ -1,32 +1,57 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block css %}
+	<link rel="stylesheet" href="{% static 'css/list.css' %}">
+
+{% endblock css %}
 
 {% block content %} 
-<body class="form-signin w-100 m-auto">
-    <div class="container py-5 form_width">
-        <h1 class="text-center fw-semibold mb-4">Perros en adopción</h1>
-        <div class="row">
-            <a href="{% url 'register_adoption_dog' %}" class="btn btn-secondary">Registrar perro en adopción</a>
-            <div class="col-md-12">
-                <table class="table table-sm">
-                    <thead>
-                        <tr>
-                            <th><strong>Nombre</strong></th>
-                            <th><strong>Raza</strong></th>
-                            <th><strong>Color</strong></th>
-                            <th><strong>Zona</strong></th> 
-                        </tr>
-                    </thead> 
+<div class="container py-5 justify-content-center align-items-center"> 
+    <h1 class="text-center fw-semibold mb-4">Perros en adopción</h1>
+    <div class="text-center">
+    </div>
+    <form method="GET" action="{% url 'adoption_dog_list_filtered' %}">
+        <div class="d-grid gap-2 gap-md-4 d-md-flex justify-content-md-center py-2">
+            <select class="form-select" id="type" name="typeFilter">
+                <option value="all" {% if t == "all" %} selected="selected"{% endif %}>Todos</option>
+                <option value="age" {% if t == "age" %} selected="selected"{% endif %}>Edad</option>
+                <option value="breed" {% if t == "breed" %} selected="selected"{% endif %}>Raza</option>
+            </select>
+            <select class="form-select" id="criteria" name="criteriaFilter">
+                <option value="asc" {% if c == "asc" %} selected="selected"{% endif %}>Ascendente</option>
+                <option value="desc" {% if c == "desc" %} selected="selected"{% endif %}>Descendente</option>
+            </select>
+            <input class="btn btn-secondary" type="submit" name="type" value="Filtrar" />
+        </div>
+    </form>
+
+    <div class="row mt-3 mb-2">
+        <div class="col-md-12 table-responsive">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th><strong>Nombre</strong></th>
+                        <th><strong>Raza</strong></th>
+                        <th><strong>Color</strong></th>
+                        <th><strong>Edad</strong></th>
+                    </tr>
+                </thead> 
+                <tbody>
                     {% for dog in adoption_list %}
                         <tr>
-                            <td class="vertical-align-middle">{{dog.name}}</td>
+                            <td class="vertical-align-middle"><strong>{{dog.name}}</strong></td>
                             <td class="vertical-align-middle">{{dog.breed}}</td>
                             <td class="vertical-align-middle">{{dog.color}}</td>
-                            <td class="vertical-align-middle">{{dog.zone}}</td>
+                            <td class="vertical-align-middle">{{dog.age}}</td>
                         </tr>
                     {% endfor %}
-                </table>
-            </div>
+                </tbody>
+            </table>
         </div>
     </div>
-</body>
+    <div class="text-center mt-3">
+        <a href="{% url 'register_adoption_dog' %}" class="btn btn-secondary">Registrar perro en adopción</a>
+    </div>
+
+</div>
 {% endblock %}
