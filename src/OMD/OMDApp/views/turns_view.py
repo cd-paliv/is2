@@ -41,8 +41,16 @@ def AskForTurn(request):
     if request.method == "POST":
         form = AskForTurnForm(request.POST)
         if form.is_valid():
-            form.save()
+            turn = form.save(commit=False)
+            same_date_turns = list(Turno.objects.filter(date=turn.date, hour=turn.hour))
+            if len(same_date_turns) == 20:
+                hours = str(turn_hour_mapping().get(turn.hour)).split(': ')[1]
+                message = 'No quedan turnos disponibles el %s de %s' % (turn.date.strftime('%d/%m/%Y'), hours)
+                messages.error(request, message)
+                return redirect(reverse("askForTurn"))
 
+            turn.solicited_by = request.user
+            turn.save()
             messages.success(request, f'Solicitud de turno exitosa')
             return redirect(reverse("home"))
     else:

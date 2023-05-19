@@ -188,7 +188,7 @@
           "type": "T",
           "hour": "Morning",
           "date": "2023-07-15",
-          "motive": "Emergency case",
+          "motive": "Turno",
           "observations": "",
           "amount": null,
           "solicited_by": 4,
@@ -201,9 +201,9 @@
         "fields": {
           "state": "S",
           "type": "C",
-          "hour": "Afternoon",
-          "date": "2023-08-01",
-          "motive": "Castration",
+          "hour": "Morning",
+          "date": "2023-07-15",
+          "motive": "Castración",
           "observations": "",
           "amount": null,
           "solicited_by": 4,
@@ -217,8 +217,8 @@
           "state": "S",
           "type": "V",
           "hour": "Morning",
-          "date": "2023-09-10",
-          "motive": "Vaccination",
+          "date": "2023-07-15",
+          "motive": "Vacunación",
           "observations": "",
           "amount": null,
           "solicited_by": 4,
@@ -231,9 +231,9 @@
         "fields": {
           "state": "S",
           "type": "O",
-          "hour": "Afternoon",
-          "date": "2023-12-15",
-          "motive": "Other",
+          "hour": "Morning",
+          "date": "2023-07-15",
+          "motive": "Operación",
           "observations": "",
           "amount": null,
           "solicited_by": 4,
@@ -247,13 +247,222 @@
           "state": "S",
           "type": "T",
           "hour": "Morning",
-          "date": "2023-12-31",
-          "motive": "Emergency case",
+          "date": "2023-07-15",
+          "motive": "Turno",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 4,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 6,
+        "fields": {
+          "state": "S",
+          "type": "T",
+          "hour": "Morning",
+          "date": "2023-07-15",
+          "motive": "Turno",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 4,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 7,
+        "fields": {
+          "state": "S",
+          "type": "V",
+          "hour": "Morning",
+          "date": "2023-07-15",
+          "motive": "Vacunación",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 4,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 8,
+        "fields": {
+          "state": "S",
+          "type": "C",
+          "hour": "Morning",
+          "date": "2023-07-15",
+          "motive": "Castración",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 4,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 9,
+        "fields": {
+          "state": "S",
+          "type": "O",
+          "hour": "Morning",
+          "date": "2023-07-15",
+          "motive": "Operación",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 4,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 10,
+        "fields": {
+          "state": "S",
+          "type": "T",
+          "hour": "Morning",
+          "date": "2023-07-15",
+          "motive": "Turno",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 4,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 11,
+        "fields": {
+          "state": "S",
+          "type": "T",
+          "hour": "Morning",
+          "date": "2023-07-15",
+          "motive": "Turno",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 4,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 12,
+        "fields": {
+          "state": "S",
+          "type": "V",
+          "hour": "Morning",
+          "date": "2023-07-15",
+          "motive": "Vacunación",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 4,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 13,
+        "fields": {
+          "state": "S",
+          "type": "C",
+          "hour": "Morning",
+          "date": "2023-07-15",
+          "motive": "Castración",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 4,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 14,
+        "fields": {
+          "state": "S",
+          "type": "O",
+          "hour": "Morning",
+          "date": "2023-07-15",
+          "motive": "Operación",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 4,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 15,
+        "fields": {
+          "state": "S",
+          "type": "T",
+          "hour": "Morning",
+          "date": "2023-07-15",
+          "motive": "Turno",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 4,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 16,
+        "fields": {
+          "state": "S",
+          "type": "V",
+          "hour": "Morning",
+          "date": "2023-07-15",
+          "motive": "Vacunación",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 4,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 17,
+        "fields": {
+          "state": "S",
+          "type": "C",
+          "hour": "Morning",
+          "date": "2023-07-15",
+          "motive": "Castración",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 4,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 18,
+        "fields": {
+          "state": "S",
+          "type": "T",
+          "hour": "Morning",
+          "date": "2023-07-15",
+          "motive": "Turno",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 4,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 19,
+        "fields": {
+          "state": "S",
+          "type": "V",
+          "hour": "Morning",
+          "date": "2023-07-15",
+          "motive": "Vacunación",
           "observations": "",
           "amount": null,
           "solicited_by": 4,
           "accepted_by": null
         }
       }
-    
 ]
