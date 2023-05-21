@@ -100,23 +100,21 @@ def RegisterAdoptionDogView(request):
         form = RegisterAdoptionDogForm(request.POST)
         if form.is_valid():
             dog = form.save(commit=False)
+            if PPEA.objects.filter(name=dog.name, breed=dog.breed, color=dog.color, birthdate=dog.birthdate, state='A').exists():
+                messages.error(request, 'El perro en adopción ya se encuentra registrado')
+                return redirect(reverse("adoption_dog_list"))
+
             dog.state = "A"
             dog.publisher = request.user
             dog.save()
 
             messages.success(request, f'Perro en adopción dado de alta.')
-            return redirect(reverse("home"))
+            return redirect(reverse("adoption_dog_list"))
         else:
             form.data = form.data.copy()
     else:
         form = RegisterAdoptionDogForm()
     return render(request, "dogs/adoption/register_adoption.html", {'form': form})
-
-from django.template.defaulttags import register
-@register.filter
-def filter_adoption_age(self, adoption_dogs):
-    result = adoption_dogs.order_by('age')
-    return result
 
 from django.db.models import F
 @login_required(login_url='/login/')

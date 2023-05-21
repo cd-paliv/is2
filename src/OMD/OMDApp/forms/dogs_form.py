@@ -1,5 +1,5 @@
 from django import forms
-from OMDApp.validators.form_validator import EmptyFieldValidator, NoNumbersFieldValidator
+from OMDApp.validators.form_validator import EmptyFieldValidator, NoNumbersFieldValidator, DogAgeValidator
 from OMDApp.models import Perro, PPEA
 from django.utils.translation import gettext as _
 
@@ -16,11 +16,11 @@ class RegisterAdoptionDogForm(forms.ModelForm):
                             widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputDogColor',
                                                           'placeholder': 'Ingresa el color del perro', 'required': 'True'}),
                                                           validators=[EmptyFieldValidator(), NoNumbersFieldValidator()])
-    zone = forms.CharField(label="Zona donde se encuentra del perro(*)",
-                            widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputDogZone',
-                                                          'placeholder': 'Ingresa la zona del perro', 'required': 'True'}),
-                                                          validators=[EmptyFieldValidator()])
+    birthdate = forms.DateField(label="Fecha de nacimiento estimada del perro(*)",
+                                widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'type': 'date', 'class': 'form-control', 'id': 'inputDogBirthdate',
+                                                              'placeholder': 'Ingresa la fecha de nacimiento estimada del perro',
+                                                              'required': 'True'}), validators=[EmptyFieldValidator(), DogAgeValidator()])
 
     class Meta:
         model = PPEA
-        fields = ("name", "breed", "color", "zone")
+        fields = ("name", "breed", "color", "birthdate")
