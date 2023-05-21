@@ -58,6 +58,7 @@ class CustomUser(AbstractUser, PermissionsMixin):
     birthdate = models.DateField()
     photo = models.TextField(blank=True, null=True)
     email_confirmed = models.BooleanField(default=False)
+    image = models.ImageField(blank=True, null=True, upload_to="accounts/", default="default.png")
 
     class Meta:
         permissions = [

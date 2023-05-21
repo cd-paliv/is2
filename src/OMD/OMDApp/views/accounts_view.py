@@ -60,7 +60,7 @@ def LogOut(request):
 @cache_control(max_age=3600, no_store=True)
 def RegisterView(request):
     if request.method == "POST":
-        form = RegisterForm(request.POST)
+        form = RegisterForm(request.POST, request.FILES)
         if form.is_valid():
 
             user = form.save(commit=False)
@@ -153,15 +153,17 @@ class EditProfileView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         user = request.user
-        form = UserEditForm(request.POST, instance=user)
+        form = UserEditForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             # Update user object with new data
             if form.cleaned_data.get('first_name'):
-                user.first_name = form.cleaned_data['first_name']
+                user.first_name = form.cleaned_data['first_name'].capitalize()
             if form.cleaned_data.get('last_name'):
-                user.last_name = form.cleaned_data['last_name']
+                user.last_name = form.cleaned_data['last_name'].capitalize()
             if form.cleaned_data.get('birthdate'):
                 user.birthdate = form.cleaned_data['birthdate']
+            if request.FILES:
+                user.image = request.FILES['image']
             user.save()
             messages.success(request, f'Datos modificados.')
             return redirect(reverse("profile"))

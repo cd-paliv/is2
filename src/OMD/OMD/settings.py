@@ -128,8 +128,8 @@ STATICFILES_DIR = [
     os.path.join(BASE_DIR, "static")
 ]
 
-#MEDIA_URL='/img/profile_img/'
-#MEDIA_ROOT=os.path.join(BASE_DIR,'OMDApp/static/img/profile_img')
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "OMDApp/media/")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

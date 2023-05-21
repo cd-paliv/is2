@@ -6,7 +6,8 @@ from django.utils.translation import gettext as _
 from OMDApp.validators.password_validation import SymbolValidator, NumberValidator, UppercaseValidator, MinimumLengthValidator
 from OMDApp.validators.form_validator import (EmptyFieldValidator, NoNumbersFieldValidator, 
                                               GreaterThanZeroValidator, UserAgeValidator, DogAgeValidator,
-                                              ExistsEmailValidator, ExistsDNIValidator, NumbersFieldValidator)
+                                              ExistsEmailValidator, ExistsDNIValidator, NumbersFieldValidator,
+                                              ImageFileTypeValidator)
 
 
 # Create your forms here.
@@ -33,20 +34,13 @@ class RegisterForm(forms.ModelForm):
                                                              'placeholder': 'Ingresa tu DNI'}),
                                                              validators=[EmptyFieldValidator(), GreaterThanZeroValidator(), ExistsDNIValidator(), NumbersFieldValidator()])
     birthdate = forms.DateField(label="Fecha de nacimiento(*)",
-                                widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control', 'id': 'inputBirthdate',
+                                widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'type': 'date', 'class': 'form-control', 'id': 'inputBirthdate',
                                                               'placeholder': 'Ingresa tu fecha de nacimiento'}),
                                                               validators=[EmptyFieldValidator(), UserAgeValidator()])
 
     class Meta:
         model = get_user_model()
-        fields = ("first_name", "last_name", "email", "dni", "birthdate")
-        labels = {
-            "email": "Email(*)",
-            "first_name": "Nombre(*)",
-            "last_name": "Apellido(*)",
-            "dni": "DNI(*)",
-            "birthdate": "Fecha de nacimiento(*)"
-        }
+        fields = ("first_name", "last_name", "email", "dni", "birthdate", "image")
 
 
 class UserEditForm(forms.ModelForm):
@@ -57,18 +51,13 @@ class UserEditForm(forms.ModelForm):
                                 widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputLastname',
                                                               'placeholder': 'Ingresa tu apellido'}), validators=[NoNumbersFieldValidator()])
     birthdate = forms.DateField(label="Fecha de nacimiento(*)",
-                                widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control', 'id': 'inputBirthdate',
+                                widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'type': 'date', 'class': 'form-control', 'id': 'inputBirthdate',
                                                               'placeholder': 'Ingresa tu fecha de nacimiento'}
                                                               ), validators=[UserAgeValidator()])
 
     class Meta:
         model = get_user_model()
-        fields = ("first_name", "last_name", "birthdate")
-        labels = {
-            "first_name": "Nombre(*)",
-            "last_name": "Apellido(*)",
-            "birthdate": "Fecha de nacimiento(*)"
-        }
+        fields = ("first_name", "last_name", "birthdate", "image")
 
 
 class RegisterDogForm(forms.ModelForm):
