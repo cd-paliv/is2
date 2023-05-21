@@ -1,0 +1,10 @@
+{% autoescape off %}
+Hola {{ dog.publisher.first_name }} {{ dog.publisher.last_name }},
+
+Se ha solicitado adoptar a {{dog.name}} en OMD. Los datos del solicitante son:
+
+Nombre: {{user.name}}
+Email: {{user.email}}
+Motivo: {{user.motive}}
+
+{% endautoescape %}

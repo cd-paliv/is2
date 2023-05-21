@@ -1,7 +1,9 @@
 from django import forms
-from OMDApp.validators.form_validator import EmptyFieldValidator, NoNumbersFieldValidator, DogAgeValidator
+from OMDApp.validators.form_validator import (EmptyFieldValidator, NoNumbersFieldValidator,
+                                              DogAgeValidator, ExistsEmailValidator)
 from OMDApp.models import Perro, PPEA
 from django.utils.translation import gettext as _
+
 
 class RegisterAdoptionDogForm(forms.ModelForm):
     name = forms.CharField(label="Nombre del perro(*)",
@@ -24,3 +26,18 @@ class RegisterAdoptionDogForm(forms.ModelForm):
     class Meta:
         model = PPEA
         fields = ("name", "breed", "color", "birthdate")
+        
+
+class AdoptionForm(forms.Form):
+    name = forms.CharField(label="Nombre Completo (*)",
+                           widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control','id': 'inputFullName',
+                                                         'placeholder': 'Ingrese su nombre completo', 'required': 'True'}),
+                                                         validators=[EmptyFieldValidator(), NoNumbersFieldValidator()])
+    email = forms.EmailField(label="Email(*)",
+                             widget=forms.EmailInput(attrs={'type': 'email', 'class': 'form-control', 'id': 'inputEmail',
+                                                            'placeholder': 'Ingrese su email'}),
+                                                            validators=[EmptyFieldValidator(), ExistsEmailValidator()])
+    motive = forms.CharField(label="Motivo(*)",
+                           widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control','id': 'inputMotive',
+                                                         'placeholder': 'Ingrese el motivo de la adopcion', 'required': 'True'}),
+                                                         validators=[EmptyFieldValidator(), NoNumbersFieldValidator()])
