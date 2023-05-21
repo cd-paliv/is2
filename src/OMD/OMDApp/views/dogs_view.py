@@ -6,15 +6,28 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django.views import View
+from OMDApp.forms.dogs_form import RegisterAdoptionDogForm, AdoptionForm
 from OMDApp.forms.accounts_form import RegisterDogForm
 from OMDApp.decorators import email_verification_required
 from django.views.decorators.cache import cache_control
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from OMDApp.models import Perro
+from OMDApp.models import Perro, PPEA
+from django.template.loader import render_to_string
+
 
 logged_decorators = [login_required, email_verification_required, cache_control(max_age=3600, no_store=True)]
+
+def calculate_age(birthDate):
+    today = date.today()
+    age = relativedelta(today, birthDate)
+    if age.years > 0:
+        return f"{age.years} años"
+    elif age.months > 0:
+        return f"{age.months} meses"
+    else:
+        return f"{age.days} días"
 
 # Create your views here
 @method_decorator(logged_decorators, name='dispatch')
@@ -81,12 +94,110 @@ class EditProfileDogView(LoginRequiredMixin, View):
             return redirect(reverse("dog_profile", kwargs={"dog_id" : dog.id}))
         return render(request, self.template_name, {'form': form, 'dog_id' : dog.id})
 
-def calculate_age(birthDate):
-    today = date.today()
-    age = relativedelta(today, birthDate)
-    if age.years > 0:
-        return f"{age.years} años"
-    elif age.months > 0:
-        return f"{age.months} meses"
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
+def RegisterAdoptionDogView(request):
+    if request.method == "POST":
+        form = RegisterAdoptionDogForm(request.POST)
+        if form.is_valid():
+            dog = form.save(commit=False)
+            if PPEA.objects.filter(name=dog.name, breed=dog.breed, color=dog.color, birthdate=dog.birthdate, state='A').exists():
+                messages.error(request, 'El perro en adopción ya se encuentra registrado')
+                return redirect(reverse("adoption_dog_list"))
+
+            dog.state = "A"
+            dog.publisher = request.user
+            dog.save()
+
+            messages.success(request, f'Perro en adopción dado de alta.')
+            return redirect(reverse("adoption_dog_list"))
+        else:
+            form.data = form.data.copy()
     else:
-        return f"{age.days} días"
+        form = RegisterAdoptionDogForm()
+    return render(request, "dogs/adoption/register_adoption.html", {'form': form})
+
+from django.db.models import F
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
+def AdoptionDogListView(request):
+    dog_list = list(PPEA.objects.filter(state="A"))
+    adoption_list = []
+
+    for dog in dog_list:
+            adoption_list.append({
+                'id' : dog.id,
+                'name': dog.name,
+                'breed': dog.breed,
+                'color': dog.color,
+                'publisher_id': dog.publisher.id,
+                'age': calculate_age(dog.birthdate),
+            })
+    print(request.user.id)
+    return render(request, "dogs/adoption/view_adoption.html", {'adoption_list': adoption_list, 'user_id': request.user.id,
+                                                                't': 'all', 'c': 'asc'})
+
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
+def AdoptionDogListFilteredView(request):
+    type = request.GET.get('typeFilter')
+    criteria = request.GET.get('criteriaFilter')
+    if type == "all" and criteria == "desc":
+        dog_list = list(PPEA.objects.filter(state="A").order_by(F('birthdate').desc()))
+    elif type == "age":
+        dog_list = list(PPEA.objects.filter(state="A").order_by(
+            F('birthdate').asc() if criteria == "desc" else F('birthdate').desc()
+        ))
+    elif type == "breed":
+        dog_list = list(PPEA.objects.filter(state="A").order_by(
+            F('breed').asc() if criteria == "asc" else F('breed').desc()
+        ))
+    else:
+        return redirect(reverse('adoption_dog_list'))
+    
+    adoption_list = []
+    for dog in dog_list:
+            adoption_list.append({
+                'id' : dog.id,
+                'name': dog.name,
+                'breed': dog.breed,
+                'color': dog.color,
+                'age': calculate_age(dog.birthdate),
+            })
+    return render(request, "dogs/adoption/view_adoption.html", {'adoption_list': adoption_list, 'user_id': request.user.id,
+                                                                't': type, 'c': criteria})
+
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
+def AdoptionDog(request, dog_id):
+    if request.method == "POST":
+        form = AdoptionForm(request.POST)
+        if form.is_valid():
+            usr = { 
+                'name' : form.cleaned_data['name'],
+                'email' : form.cleaned_data['email'],
+                'motive' : form.cleaned_data['motive']
+            }           
+            dog = PPEA.objects.get(id=dog_id)
+            message = render_to_string('dogs/adoption/request_adoption_email.html', { 'dog': dog, 'user': usr })
+            dog.publisher.email_user("Solicitud de Adopcion", message)
+
+            messages.success(request,'Solicitud de Adopcion Enviada')
+            return redirect(reverse('adoption_dog_list'))
+    else:
+        form = AdoptionForm()
+
+    return render(request, "dogs/adoption/request_adoption.html", {'form':form})
+
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
+def DeleteAdoptedDogView(request, dog_id):
+    PPEA.objects.get(id=dog_id).delete()
+
+    messages.success(request, 'Perro marcado como adoptado')
+    return redirect(reverse('adoption_dog_list'))

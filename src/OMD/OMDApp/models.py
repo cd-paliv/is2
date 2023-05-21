@@ -93,6 +93,20 @@ class Perro(models.Model):
     
     REQUIRED_FIELDS = ["name", "breed", "color", "birthdate"]
 
+class PPEA(models.Model):
+    name = models.CharField(max_length=50)
+    breed = models.CharField(max_length=20)
+    color = models.CharField(max_length=10)
+    state = models.CharField(max_length=1)
+    #success = models.BooleanField(default=False)
+    birthdate = models.DateField(blank=True, null=True)
+    photo = models.TextField(blank=True, null=True)
+    disappeared_date = models.DateField(blank=True, null=True)
+    zone = models.CharField(max_length=100, blank=True, null=True)
+    publisher = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+
+    REQUIRED_FIELDS = ["name", "breed", "color", "zone"]
+
 class Turno(models.Model):
     state = models.CharField(max_length=10, default="S") # solicited ^ accepted ^ rejected
     type = models.CharField(max_length=15) # emergency ^ castration ^ turn ^ vacunation ^

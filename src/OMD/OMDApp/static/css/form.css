@@ -2,9 +2,6 @@
     .form_width{
         width: 90%;
     }
-    .button-height-custom{
-        height: 40px !important;
-    }
 }
 
 @media screen and (min-width: 768px){

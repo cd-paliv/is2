@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+	<link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock css %}
+
+{% block content %} 
+<!--Register--> 
+<body class="form-signin w-100 m-auto">
+	<div class="container py-5 form_width">
+		<h1 class="text-center fw-semibold mb-4">Registro de perro en adopción</h1>
+		<form method="POST" novalidate>
+			{% csrf_token %}
+
+			{{ form.as_p }}
+			
+			<div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
+				<button class="btn btn-primary" type="submit">Aceptar</button>
+                <a href="{% url 'adoption_dog_list' %}" class="btn btn-secondary">Cancelar</a>
+			</div>
+		</form>
+	</div>
+</body>
+{% endblock %}

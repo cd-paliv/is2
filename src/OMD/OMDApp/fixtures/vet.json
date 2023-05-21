@@ -64,7 +64,20 @@
             "last_name" : "Trial",
             "dni" : "34567893",
             "birthdate" : "1992-01-01",
-            "email_confirmed": "False"
+            "email_confirmed": "True"
+        }
+    },
+    {
+      "model" : "OMDApp.CustomUser",
+      "pk" : 6,
+      "fields" : {
+          "email" : "user3@gmail.com",
+          "password" : "user",
+          "first_name" : "User",
+          "last_name" : "Trial",
+          "dni" : "34567895",
+          "birthdate" : "1992-01-01",
+          "email_confirmed": "True"
         }
     },
     {
@@ -236,7 +249,7 @@
           "motive": "Operación",
           "observations": "",
           "amount": null,
-          "solicited_by": 4,
+          "solicited_by": 5,
           "accepted_by": null
         }
       },
@@ -251,7 +264,7 @@
           "motive": "Turno",
           "observations": "",
           "amount": null,
-          "solicited_by": 4,
+          "solicited_by": 5,
           "accepted_by": null
         }
       },
@@ -266,7 +279,7 @@
           "motive": "Turno",
           "observations": "",
           "amount": null,
-          "solicited_by": 4,
+          "solicited_by": 5,
           "accepted_by": null
         }
       },
@@ -281,7 +294,7 @@
           "motive": "Vacunación",
           "observations": "",
           "amount": null,
-          "solicited_by": 4,
+          "solicited_by": 5,
           "accepted_by": null
         }
       },
@@ -296,7 +309,7 @@
           "motive": "Castración",
           "observations": "",
           "amount": null,
-          "solicited_by": 4,
+          "solicited_by": 5,
           "accepted_by": null
         }
       },
@@ -311,7 +324,7 @@
           "motive": "Operación",
           "observations": "",
           "amount": null,
-          "solicited_by": 4,
+          "solicited_by": 5,
           "accepted_by": null
         }
       },
@@ -326,7 +339,7 @@
           "motive": "Turno",
           "observations": "",
           "amount": null,
-          "solicited_by": 4,
+          "solicited_by": 5,
           "accepted_by": null
         }
       },
@@ -341,7 +354,7 @@
           "motive": "Turno",
           "observations": "",
           "amount": null,
-          "solicited_by": 4,
+          "solicited_by": 5,
           "accepted_by": null
         }
       },
@@ -356,7 +369,7 @@
           "motive": "Vacunación",
           "observations": "",
           "amount": null,
-          "solicited_by": 4,
+          "solicited_by": 5,
           "accepted_by": null
         }
       },
@@ -371,7 +384,7 @@
           "motive": "Castración",
           "observations": "",
           "amount": null,
-          "solicited_by": 4,
+          "solicited_by": 5,
           "accepted_by": null
         }
       },
@@ -386,7 +399,7 @@
           "motive": "Operación",
           "observations": "",
           "amount": null,
-          "solicited_by": 4,
+          "solicited_by": 5,
           "accepted_by": null
         }
       },
@@ -401,7 +414,7 @@
           "motive": "Turno",
           "observations": "",
           "amount": null,
-          "solicited_by": 4,
+          "solicited_by": 6,
           "accepted_by": null
         }
       },
@@ -416,7 +429,7 @@
           "motive": "Vacunación",
           "observations": "",
           "amount": null,
-          "solicited_by": 4,
+          "solicited_by": 6,
           "accepted_by": null
         }
       },
@@ -431,7 +444,7 @@
           "motive": "Castración",
           "observations": "",
           "amount": null,
-          "solicited_by": 4,
+          "solicited_by": 6,
           "accepted_by": null
         }
       },
@@ -446,7 +459,7 @@
           "motive": "Turno",
           "observations": "",
           "amount": null,
-          "solicited_by": 4,
+          "solicited_by": 6,
           "accepted_by": null
         }
       },
@@ -461,8 +474,84 @@
           "motive": "Vacunación",
           "observations": "",
           "amount": null,
-          "solicited_by": 4,
+          "solicited_by": 6,
           "accepted_by": null
         }
-      }
+      },
+      {
+        "model": "OMDApp.PPEA",
+        "pk": 1,
+        "fields": {
+            "name": "Max",
+            "breed": "Labrador Retriever",
+            "color": "Golden",
+            "state": "A",
+            "birthdate": "2023-05-18",
+            "photo": null,
+            "disappeared_date": null,
+            "zone": "",
+            "publisher": 4
+        }
+    },
+    {
+        "model": "OMDApp.PPEA",
+        "pk": 2,
+        "fields": {
+            "name": "Bella",
+            "breed": "Poodle",
+            "color": "White",
+            "state": "A",
+            "birthdate": "2023-01-01",
+            "photo": null,
+            "disappeared_date": null,
+            "zone": "",
+            "publisher": 4
+        }
+    },
+    {
+        "model": "OMDApp.PPEA",
+        "pk": 3,
+        "fields": {
+            "name": "Rocky",
+            "breed": "German Shepherd",
+            "color": "Black",
+            "state": "A",
+            "birthdate": "2020-05-18",
+            "photo": null,
+            "disappeared_date": null,
+            "zone": "",
+            "publisher": 4
+        }
+    },
+    {
+        "model": "OMDApp.PPEA",
+        "pk": 4,
+        "fields": {
+            "name": "Luna",
+            "breed": "Siberian Husky",
+            "color": "Gray",
+            "state": "A",
+            "birthdate": "2010-05-18",
+            "photo": null,
+            "disappeared_date": null,
+            "zone": "",
+            "publisher": 4
+        }
+    },
+    {
+        "model": "OMDApp.PPEA",
+        "pk": 5,
+        "fields": {
+            "name": "Charlie",
+            "breed": "Bulldog",
+            "color": "Brown",
+            "state": "A",
+            "birthdate": "2017-05-18",
+            "photo": null,
+            "disappeared_date": null,
+            "zone": "",
+            "publisher": 4
+        }
+    }
+    
 ]

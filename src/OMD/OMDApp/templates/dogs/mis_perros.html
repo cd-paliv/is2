@@ -4,7 +4,8 @@
 {% block content %}
 <div class="container d-flex flex-column justify-content-center mt-5 mb-5 align-items-center">
   <h1 class="text-center fw-semibold mb-4">Mis perros</h1>
-  <div class="row justify-content-center mt-3">
+    <a href="{% url 'registerSingleDog' %}" class="btn btn-secondary">Registrar perro</a>
+    <div class="row justify-content-center mt-3">
     {% for dog in dog_list %}
     {% if four_dogs %}
       <div class="col-sm-6 col-md mb-4">
@@ -31,6 +32,5 @@
     </div>
     {% endfor %}
   </div>
-  <a href="{% url 'registerSingleDog' %}" class="btn btn-secondary">Registrar perro</a>
 </div>
 {% endblock %}

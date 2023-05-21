@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+	<link rel="stylesheet" href="{% static 'css/list.css' %}">
+
+{% endblock css %}
+
+{% block content %} 
+<div class="container py-5 justify-content-center align-items-center"> 
+    <h1 class="text-center fw-semibold mb-4">Perros en adopción</h1>
+    <div class="text-center">
+    </div>
+    <form method="GET" action="{% url 'adoption_dog_list_filtered' %}">
+        <div class="d-grid gap-2 gap-md-4 d-md-flex justify-content-md-center py-2">
+            <select class="form-select" id="type" name="typeFilter">
+                <option value="all" {% if t == "all" %} selected="selected"{% endif %}>Todos</option>
+                <option value="age" {% if t == "age" %} selected="selected"{% endif %}>Edad</option>
+                <option value="breed" {% if t == "breed" %} selected="selected"{% endif %}>Raza</option>
+            </select>
+            <select class="form-select" id="criteria" name="criteriaFilter">
+                <option value="asc" {% if c == "asc" %} selected="selected"{% endif %}>Ascendente</option>
+                <option value="desc" {% if c == "desc" %} selected="selected"{% endif %}>Descendente</option>
+            </select>
+            <input class="btn btn-secondary" type="submit" name="type" value="Filtrar" />
+        </div>
+    </form>
+
+    <div class="row mt-3 mb-2">
+        <div class="col-md-12 table-responsive">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th><strong>Nombre</strong></th>
+                        <th><strong>Raza</strong></th>
+                        <th><strong>Color</strong></th>
+                        <th><strong>Edad</strong></th>
+                        <th><strong>Opciones</strong></th>
+                    </tr>
+                </thead> 
+                <tbody>
+                    {% for dog in adoption_list %}
+                        <tr>
+                            <td class="vertical-align-middle"><strong>{{dog.name}}</strong></td>
+                            <td class="vertical-align-middle">{{dog.breed}}</td>
+                            <td class="vertical-align-middle">{{dog.color}}</td>
+                            <td class="vertical-align-middle">{{dog.age}}</td>
+                            <td class="vertical-align-middle">
+                                {% if dog.publisher_id == user_id or perms.OMDApp.is_vet %}
+                                    <a href="{% url 'adopt_dog_switch' dog_id=dog.id %}" class="btn btn-secondary btn-sm">Marcar como adoptado</a>
+                                {% else %}
+                                    <a href="{% url 'adoption_dogs' dog_id=dog.id %}" class="btn btn-secondary btn-sm">Adoptar</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="text-center mt-3">
+        <a href="{% url 'register_adoption_dog' %}" class="btn btn-secondary">Registrar perro en adopción</a>
+    </div>
+
+</div>
+{% endblock %}
