@@ -34,6 +34,7 @@
                         <th><strong>Raza</strong></th>
                         <th><strong>Color</strong></th>
                         <th><strong>Edad</strong></th>
+                        <th><strong>Opciones</strong></th>
                     </tr>
                 </thead> 
                 <tbody>
@@ -43,6 +44,9 @@
                             <td class="vertical-align-middle">{{dog.breed}}</td>
                             <td class="vertical-align-middle">{{dog.color}}</td>
                             <td class="vertical-align-middle">{{dog.age}}</td>
+                            <td class="vertical-align-middle">
+                                <a href="{% url 'adoption_dogs' dog_id=dog.id %}" class="btn btn-secondary">Adoptar</a>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

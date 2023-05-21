@@ -1,7 +1,8 @@
 from django import forms
-from OMDApp.validators.form_validator import EmptyFieldValidator, NoNumbersFieldValidator
+from OMDApp.validators.form_validator import EmptyFieldValidator, NoNumbersFieldValidator, ExistsEmailValidator
 from OMDApp.models import Perro, PPEA
 from django.utils.translation import gettext as _
+
 
 class RegisterAdoptionDogForm(forms.ModelForm):
     name = forms.CharField(label="Nombre del perro(*)",
@@ -16,11 +17,24 @@ class RegisterAdoptionDogForm(forms.ModelForm):
                             widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputDogColor',
                                                           'placeholder': 'Ingresa el color del perro', 'required': 'True'}),
                                                           validators=[EmptyFieldValidator(), NoNumbersFieldValidator()])
-    zone = forms.CharField(label="Zona donde se encuentra del perro(*)",
-                            widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputDogZone',
-                                                          'placeholder': 'Ingresa la zona del perro', 'required': 'True'}),
+    age = forms.CharField(label="Edad del perro(*)",
+                            widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputAgeZone',
+                                                          'placeholder': 'Ingresa la edad del perro', 'required': 'True'}),
                                                           validators=[EmptyFieldValidator()])
-
     class Meta:
         model = PPEA
-        fields = ("name", "breed", "color", "zone")
+        fields = ("name", "breed", "color", "age")
+
+class AdoptionForm(forms.Form):
+    name = forms.CharField(label="Nombre Completo (*)",
+                           widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control','id': 'inputFullName',
+                                                         'placeholder': 'Ingrese su nombre completo', 'required': 'True'}),
+                                                         validators=[EmptyFieldValidator(), NoNumbersFieldValidator()])
+    email = forms.EmailField(label="Email(*)",
+                             widget=forms.EmailInput(attrs={'type': 'email', 'class': 'form-control', 'id': 'inputEmail',
+                                                            'placeholder': 'Ingrese su email'}),
+                                                            validators=[EmptyFieldValidator(), ExistsEmailValidator()])
+    motive = forms.CharField(label="Motivo(*)",
+                           widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control','id': 'inputMotive',
+                                                         'placeholder': 'Ingrese el motivo de la adopcion', 'required': 'True'}),
+                                                         validators=[EmptyFieldValidator(), NoNumbersFieldValidator()])

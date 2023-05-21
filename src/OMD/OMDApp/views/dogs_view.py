@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django.views import View
-from OMDApp.forms.dogs_form import RegisterAdoptionDogForm
+from OMDApp.forms.dogs_form import RegisterAdoptionDogForm, AdoptionForm
 from OMDApp.forms.accounts_form import RegisterDogForm
 from OMDApp.decorators import email_verification_required
 from django.views.decorators.cache import cache_control
@@ -14,6 +14,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from OMDApp.models import Perro, PPEA
+from django.template.loader import render_to_string
+
 
 logged_decorators = [login_required, email_verification_required, cache_control(max_age=3600, no_store=True)]
 
@@ -166,3 +168,26 @@ def AdoptionDogListFilteredView(request):
                 'age': calculate_age(dog.birthdate),
             })
     return render(request, "dogs/adoption/view_adoption.html", {'adoption_list': adoption_list, 't': type, 'c': criteria})
+
+def AdoptionDog(request, dog_id):
+    if request.method == "POST" :
+
+        form = AdoptionForm(request.POST)
+
+        if form.is_valid():
+            usr = { 
+                'name' : form.cleaned_data['name'],
+                'email' : form.cleaned_data['email'],
+                'motive' : form.cleaned_data['motive']
+            }           
+            dog = PPEA.objects.get(id=dog_id)
+            message = render_to_string('dogs/adoption/request_adoption_email.html', { 'dog': dog, 'user': usr })
+            dog.publisher.email_user("Solicitud de Adopcion", message)
+
+            messages.success(request,'Solicitud de Adopcion Enviada')
+            return redirect(reverse('adoption_dog_list'))
+    else:
+        form = AdoptionForm()
+
+    return render(request, "dogs/adoption/request_adoption.html", {'form':form})
+
