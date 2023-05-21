@@ -88,7 +88,7 @@ def RegisterView(request):
 @cache_control(max_age=3600, no_store=True)
 def RegisterDogView(request, owner_id):
     if request.method == "POST":
-        form = RegisterDogForm(request.POST)
+        form = RegisterDogForm(request.POST, request.FILES)
         if form.is_valid():
             dog = form.save(commit=False)
             dog.name = dog.name.capitalize()
@@ -112,18 +112,21 @@ def RegisterDogView(request, owner_id):
 @cache_control(max_age=3600, no_store=True)
 def RegisterSingleDogView(request):
     if request.method == "POST":
-        form = RegisterDogForm(request.POST)
+        form = RegisterDogForm(request.POST, request.FILES)
         if form.is_valid():
             owner = get_user_model().objects.get(email=request.session['email'])
-            name = form.cleaned_data['name']
-            breed = form.cleaned_data['breed']
-            color = form.cleaned_data['color']
+            name = form.cleaned_data['name'].capitalize()
+            breed = form.cleaned_data['breed'].capitalize()
+            color = form.cleaned_data['color'].capitalize()
             birthdate = form.cleaned_data['birthdate']
             if Perro.objects.filter(name=name, breed=breed, color=color, birthdate=birthdate, owner=owner).exists():
                 messages.error(request, 'El perro ya se encuentra registrado')
                 return redirect(reverse("registerSingleDog"))
             
             dog = form.save(commit=False)
+            dog.name = dog.name.capitalize()
+            dog.breed = dog.breed.capitalize()
+            dog.color = dog.color.capitalize()
             dog.owner = owner
             dog.save()
 
@@ -162,7 +165,7 @@ class EditProfileView(LoginRequiredMixin, View):
                 user.last_name = form.cleaned_data['last_name'].capitalize()
             if form.cleaned_data.get('birthdate'):
                 user.birthdate = form.cleaned_data['birthdate']
-            if request.FILES:
+            if 'image' in request.FILES:
                 user.image = request.FILES['image']
             user.save()
             messages.success(request, f'Datos modificados.')

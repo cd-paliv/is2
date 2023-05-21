@@ -10,7 +10,7 @@
 <div class="container py-5 form_width mb-5">
   <h1 class="text-center fw-semibold mb-4">Perfil de {{ user.last_name }}</h1>
 
-  {% if user.image and perms.OMDApp.is_client %}
+  {% if perms.OMDApp.is_client %}
     <div class="mb-3 text-center">
       <img id="responsive-img rounded-circle" src="{{ user.image.url }}" alt="Foto de perfil de usuario" width=250 >
     </div>

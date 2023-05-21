@@ -1,5 +1,23 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block css %}
+<style>
+  .image-wrapper {
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 100%; /* Set the aspect ratio (e.g., square aspect ratio) */
+  }
+  
+  .image-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure the image covers the entire container */
+  }
+</style>
+{% endblock css %}
 
 {% block content %}
 <div class="container d-flex flex-column justify-content-center mt-5 mb-5 align-items-center">
@@ -13,7 +31,11 @@
       <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
     {% endif %}
       <div class="card h-100">
-        <img class="card-img-top img-fluid" src="{{ dog.photo }}" alt="Foto de {{ dog.name }}">
+        {% if dog.image %}
+        <div class="image-wrapper">
+          <img src="{{ dog.image }}" class="card-img-top rounded-circle" alt="Foto de perfil de perro">
+        </div>
+        {% endif %}
         <div class="card-body">
           <h5 class="card-title text-center"><strong>{{ dog.name }}</strong></h5>
           <div class="card-text">

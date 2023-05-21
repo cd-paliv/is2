@@ -80,13 +80,7 @@ class RegisterDogForm(forms.ModelForm):
 
     class Meta:
         model = Perro
-        fields = ("name", "breed", "color", "birthdate")
-        labels = {
-            "name": "Nombre del perro",
-            "breed": "Raza del perro",
-            "color": "Color del perro",
-            "birthdate": "Fecha de nacimiento estimada del perro"
-        }
+        fields = ("name", "breed", "color", "birthdate", "image")
 
     
 class EditPasswordForm(forms.Form):

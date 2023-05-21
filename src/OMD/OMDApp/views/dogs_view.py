@@ -46,7 +46,7 @@ class DogListView(LoginRequiredMixin, ListView):
                 'id' : dog.id,
                 'name': dog.name,
                 'breed': dog.breed,
-                'photo': dog.photo or None,
+                'image': dog.image.url if dog.image else None,
                 'age': calculate_age(dog.birthdate),
             })
         context['dog_list'] = dog_list
@@ -88,6 +88,8 @@ class EditProfileDogView(LoginRequiredMixin, View):
                 dog.birthdate = form.cleaned_data['birthdate']
             if form.cleaned_data.get('observations'):
                 dog.observations = form.cleaned_data['observations']
+            if 'image' in request.FILES:
+                dog.image = request.FILES['image']
 
             dog.save()
             messages.success(request, f'Datos modificados.')

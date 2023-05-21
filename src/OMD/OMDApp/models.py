@@ -91,6 +91,7 @@ class Perro(models.Model):
     observations = models.TextField(blank=True, null=True)
     photo = models.TextField(blank=True, null=True)
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    image = models.ImageField(blank=True, null=True, upload_to="dogs/", default="default.png")
     
     REQUIRED_FIELDS = ["name", "breed", "color", "birthdate"]
 
@@ -105,6 +106,7 @@ class PPEA(models.Model):
     disappeared_date = models.DateField(blank=True, null=True)
     zone = models.CharField(max_length=100, blank=True, null=True)
     publisher = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    image = models.ImageField(blank=True, null=True, upload_to="ppea/", default="default.png")
 
     REQUIRED_FIELDS = ["name", "breed", "color", "zone"]
 
