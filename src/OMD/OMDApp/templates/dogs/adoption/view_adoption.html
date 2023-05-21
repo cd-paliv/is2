@@ -45,7 +45,11 @@
                             <td class="vertical-align-middle">{{dog.color}}</td>
                             <td class="vertical-align-middle">{{dog.age}}</td>
                             <td class="vertical-align-middle">
-                                <a href="{% url 'adoption_dogs' dog_id=dog.id %}" class="btn btn-secondary">Adoptar</a>
+                                {% if dog.publisher_id == user_id or perms.OMDApp.is_vet %}
+                                    <a href="{% url 'adopt_dog_switch' dog_id=dog.id %}" class="btn btn-secondary btn-sm">Marcar como adoptado</a>
+                                {% else %}
+                                    <a href="{% url 'adoption_dogs' dog_id=dog.id %}" class="btn btn-secondary btn-sm">Adoptar</a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

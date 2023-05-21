@@ -132,10 +132,12 @@ def AdoptionDogListView(request):
                 'name': dog.name,
                 'breed': dog.breed,
                 'color': dog.color,
+                'publisher_id': dog.publisher.id,
                 'age': calculate_age(dog.birthdate),
             })
-
-    return render(request, "dogs/adoption/view_adoption.html", {'adoption_list': adoption_list, 't': 'all', 'c': 'asc'})
+    print(request.user.id)
+    return render(request, "dogs/adoption/view_adoption.html", {'adoption_list': adoption_list, 'user_id': request.user.id,
+                                                                't': 'all', 'c': 'asc'})
 
 @login_required(login_url='/login/')
 @email_verification_required
@@ -165,13 +167,15 @@ def AdoptionDogListFilteredView(request):
                 'color': dog.color,
                 'age': calculate_age(dog.birthdate),
             })
-    return render(request, "dogs/adoption/view_adoption.html", {'adoption_list': adoption_list, 't': type, 'c': criteria})
+    return render(request, "dogs/adoption/view_adoption.html", {'adoption_list': adoption_list, 'user_id': request.user.id,
+                                                                't': type, 'c': criteria})
 
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
 def AdoptionDog(request, dog_id):
-    if request.method == "POST" :
-
+    if request.method == "POST":
         form = AdoptionForm(request.POST)
-
         if form.is_valid():
             usr = { 
                 'name' : form.cleaned_data['name'],
@@ -189,3 +193,11 @@ def AdoptionDog(request, dog_id):
 
     return render(request, "dogs/adoption/request_adoption.html", {'form':form})
 
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
+def DeleteAdoptedDogView(request, dog_id):
+    PPEA.objects.get(id=dog_id).delete()
+
+    messages.success(request, 'Perro marcado como adoptado')
+    return redirect(reverse('adoption_dog_list'))
