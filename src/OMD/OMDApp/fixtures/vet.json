@@ -123,7 +123,7 @@
         "fields": {
             "name": "Emma",
             "breed": "Caniche",
-            "color": "Blanco y negro",
+            "color": "B&W",
             "birthdate": "2022-02-04",
             "owner": 4
         }

@@ -25,9 +25,9 @@ def calculate_age(birthDate):
     if age.years > 0:
         return f"{age.years} años"
     elif age.months > 0:
-        return f"{age.months} meses"
+        return f"Menos de un año"
     else:
-        return f"{age.days} días"
+        return f"Menos de un mes"
 
 # Create your views here
 @method_decorator(logged_decorators, name='dispatch')
@@ -125,7 +125,7 @@ from django.db.models import F
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
 def AdoptionDogListView(request):
-    dog_list = list(PPEA.objects.filter(state="A"))
+    dog_list = list(PPEA.objects.filter(state="A", success=False))
     adoption_list = []
 
     for dog in dog_list:
@@ -148,13 +148,13 @@ def AdoptionDogListFilteredView(request):
     type = request.GET.get('typeFilter')
     criteria = request.GET.get('criteriaFilter')
     if type == "all" and criteria == "desc":
-        dog_list = list(PPEA.objects.filter(state="A").order_by(F('birthdate').desc()))
+        dog_list = list(PPEA.objects.filter(state="A", success=False).order_by(F('birthdate').desc()))
     elif type == "age":
-        dog_list = list(PPEA.objects.filter(state="A").order_by(
+        dog_list = list(PPEA.objects.filter(state="A", success=False).order_by(
             F('birthdate').asc() if criteria == "desc" else F('birthdate').desc()
         ))
     elif type == "breed":
-        dog_list = list(PPEA.objects.filter(state="A").order_by(
+        dog_list = list(PPEA.objects.filter(state="A", success=False).order_by(
             F('breed').asc() if criteria == "asc" else F('breed').desc()
         ))
     else:
@@ -167,6 +167,7 @@ def AdoptionDogListFilteredView(request):
                 'name': dog.name,
                 'breed': dog.breed,
                 'color': dog.color,
+                'publisher_id': dog.publisher.id,
                 'age': calculate_age(dog.birthdate),
             })
     return render(request, "dogs/adoption/view_adoption.html", {'adoption_list': adoption_list, 'user_id': request.user.id,
@@ -198,8 +199,10 @@ def AdoptionDog(request, dog_id):
 @login_required(login_url='/login/')
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
-def DeleteAdoptedDogView(request, dog_id):
-    PPEA.objects.get(id=dog_id).delete()
+def SwitchAdoptedDogView(request, dog_id):
+    dog = PPEA.objects.get(id=dog_id)
+    dog.success = True
+    dog.save()
 
     messages.success(request, 'Perro marcado como adoptado')
     return redirect(reverse('adoption_dog_list'))

@@ -21,7 +21,7 @@ from django.views.generic.base import TemplateView
 from OMDApp.views.accounts_view import (LoginView, LogOut, RegisterView, RegisterDogView, RegisterSingleDogView,
                                         ProfileView, EditProfileView, EditPasswordView)
 from OMDApp.views.dogs_view import (DogListView, ProfileDogView, EditProfileDogView, RegisterAdoptionDogView,
-                                    AdoptionDogListView, AdoptionDogListFilteredView, AdoptionDog, DeleteAdoptedDogView)
+                                    AdoptionDogListView, AdoptionDogListFilteredView, AdoptionDog, SwitchAdoptedDogView)
 from OMDApp.views.turns_view import (AskForTurn, ViewAcceptedTurns, ViewPendingTurns, AcceptTurn, RejectTurn,
                                      ViewMyTurns, CancelTurn)
 
@@ -49,7 +49,7 @@ urlpatterns = [
     path('adoptiondoglist/', AdoptionDogListView, name='adoption_dog_list'),
     path('adoptiondoglistfiltered/', AdoptionDogListFilteredView, name='adoption_dog_list_filtered'),
     path('adoptiondog/<int:dog_id>/', AdoptionDog, name='adoption_dogs'),
-    path('adoptdogswitch/<int:dog_id>/', DeleteAdoptedDogView, name='adopt_dog_switch'),
+    path('adoptdogswitch/<int:dog_id>/', SwitchAdoptedDogView, name='adopt_dog_switch'),
 
     # Turns
     path('askforturn/', AskForTurn, name='askForTurn'),
