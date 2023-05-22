@@ -93,7 +93,7 @@ class ExistsEmailValidator:
     
 class ExistsDNIValidator:
     def __call__(self, dni):
-        if get_user_model().objects.filter(email=dni).exists():
+        if get_user_model().objects.filter(dni=dni).exists():
             raise ValidationError(_(f"El DNI ya se encuentra registrado."))
 
     def get_help_text(self):
