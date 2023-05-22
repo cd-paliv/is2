@@ -57,7 +57,7 @@ coverage.xml
 *.pyc
 __pycache__
 db.sqlite3
-migrations
+migrations/
 
 # Flask stuff:
 instance/
@@ -108,8 +108,6 @@ venv.bak/
 
 # Exclude collected Django static files
 static_collected
-media/accounts/
-media/dogs/
 
 # Exclude machine-specific vs code settings
 .vscode
