@@ -67,7 +67,7 @@ class TurnDateBetweenValidator:
         end_of_year = date(2023, 12, 31)
 
         if field < tomorrow or field > end_of_year:
-            return ValidationError(_(f"El campo debe ser una fecha válida en este año"))
+            raise ValidationError(_(f"El campo debe ser una fecha válida en este año"))
 
     def get_help_text(self):
         return _("Este campo debe ser una fecha válida, Mañana-31/12/2023.")
@@ -77,7 +77,7 @@ class TurnDateTodayValidator:
         today = date.today()
 
         if field == today:
-            return ValidationError(_(f"No se puede sacar turno en el dia"))
+            raise ValidationError(_(f"No se puede sacar turno en el dia"))
 
     def get_help_text(self):
         return _("No se puede sacar turno en el dia.")
