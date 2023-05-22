@@ -33,7 +33,7 @@ class LoginView(views.LoginView):
         user = authenticate(request, email=email, password=password)
         
         if user is None:
-            messages.error(self.request, 'El email no se encuentra registrado.')
+            messages.error(self.request, 'El email y/o contraseña no válidos.')
             return HttpResponseRedirect(reverse("login"))
         
         if check_password(password, user.password):
@@ -47,7 +47,7 @@ class LoginView(views.LoginView):
             messages.success(request, 'Inicio de sesión exitoso')
             return HttpResponseRedirect(reverse("home"))
         else:
-            messages.error(self.request, 'Contraseña incorrecta')
+            messages.error(self.request, 'El email y/o contraseña no válidos.')
             return HttpResponseRedirect(reverse("login"))
 
 @login_required(login_url='/login/')
