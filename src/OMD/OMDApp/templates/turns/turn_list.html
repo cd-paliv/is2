@@ -24,8 +24,6 @@
                   {% if turns == "P" %}
                     <a href="{% url 'acceptTurn' turn_id=turn.id %}" class="btn btn-primary-custom">Aceptar</a>
                     <a href="{% url 'rejectTurn' turn_id=turn.id %}" class="btn btn-secondary">Rechazar</a>
-                  {% elif turns == "A" and turn.state != "AC" %}
-                    <a href="/" class="btn btn-primary-custom">Atender</a>
                   {% elif turns == "U" %}
                   <a href="{% url 'cancelTurn' turn_id=turn.id %}" class="btn btn-primary-custom">Cancelar</a>
                   {% endif %}
