@@ -36,8 +36,8 @@ class AdoptionForm(forms.Form):
     email = forms.EmailField(label="Email(*)",
                              widget=forms.EmailInput(attrs={'type': 'email', 'class': 'form-control', 'id': 'inputEmail',
                                                             'placeholder': 'Ingrese su email'}),
-                                                            validators=[EmptyFieldValidator(), ExistsEmailValidator()])
+                                                            validators=[EmptyFieldValidator()])
     motive = forms.CharField(label="Motivo(*)",
                            widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control','id': 'inputMotive',
                                                          'placeholder': 'Ingrese el motivo de la adopcion', 'required': 'True'}),
-                                                         validators=[EmptyFieldValidator(), NoNumbersFieldValidator()])
+                                                         validators=[EmptyFieldValidator()])

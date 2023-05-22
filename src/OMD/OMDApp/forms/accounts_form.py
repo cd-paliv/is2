@@ -46,14 +46,14 @@ class RegisterForm(forms.ModelForm):
 class UserEditForm(forms.ModelForm):
     first_name = forms.CharField(label="Nombre(*)",
                                  widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputName',
-                                                               'placeholder': 'Ingresa tu nombre'}), validators=[NoNumbersFieldValidator()])
+                                                               'placeholder': 'Ingresa tu nombre'}), validators=[EmptyFieldValidator(), NoNumbersFieldValidator()])
     last_name = forms.CharField(label="Apellido(*)",
                                 widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputLastname',
-                                                              'placeholder': 'Ingresa tu apellido'}), validators=[NoNumbersFieldValidator()])
+                                                              'placeholder': 'Ingresa tu apellido'}), validators=[EmptyFieldValidator(), NoNumbersFieldValidator()])
     birthdate = forms.DateField(label="Fecha de nacimiento(*)",
                                 widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'type': 'date', 'class': 'form-control', 'id': 'inputBirthdate',
                                                               'placeholder': 'Ingresa tu fecha de nacimiento'}
-                                                              ), validators=[UserAgeValidator()])
+                                                              ), validators=[EmptyFieldValidator(), UserAgeValidator()])
 
     class Meta:
         model = get_user_model()

@@ -139,7 +139,7 @@ def AdoptionDogListView(request):
             })
     print(request.user.id)
     return render(request, "dogs/adoption/view_adoption.html", {'adoption_list': adoption_list, 'user_id': request.user.id,
-                                                                't': 'all', 'c': 'asc'})
+                                                                't': 'all', 'c': 'asc', 'adoption': True})
 
 @login_required(login_url='/login/')
 @email_verification_required
@@ -171,7 +171,26 @@ def AdoptionDogListFilteredView(request):
                 'age': calculate_age(dog.birthdate),
             })
     return render(request, "dogs/adoption/view_adoption.html", {'adoption_list': adoption_list, 'user_id': request.user.id,
-                                                                't': type, 'c': criteria})
+                                                                't': type, 'c': criteria, 'adoption': True})
+
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
+def AdoptedDogListView(request):
+    dog_list = list(PPEA.objects.filter(state="A", success=True))
+    adoption_list = []
+
+    for dog in dog_list:
+            adoption_list.append({
+                'id' : dog.id,
+                'name': dog.name,
+                'breed': dog.breed,
+                'color': dog.color,
+                'publisher_id': dog.publisher.id,
+                'age': calculate_age(dog.birthdate),
+            })
+    print(request.user.id)
+    return render(request, "dogs/adoption/view_adoption.html", {'adoption_list': adoption_list, 'adoption': False})
 
 @login_required(login_url='/login/')
 @email_verification_required
