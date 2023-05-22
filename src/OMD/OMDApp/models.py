@@ -58,6 +58,7 @@ class CustomUser(AbstractUser, PermissionsMixin):
     birthdate = models.DateField()
     photo = models.TextField(blank=True, null=True)
     email_confirmed = models.BooleanField(default=False)
+    image = models.ImageField(blank=True, null=True, upload_to="accounts/", default="default.png")
 
     class Meta:
         permissions = [
@@ -90,6 +91,7 @@ class Perro(models.Model):
     observations = models.TextField(blank=True, null=True)
     photo = models.TextField(blank=True, null=True)
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    image = models.ImageField(blank=True, null=True, upload_to="dogs/", default="default.png")
     
     REQUIRED_FIELDS = ["name", "breed", "color", "birthdate"]
 
@@ -98,12 +100,13 @@ class PPEA(models.Model):
     breed = models.CharField(max_length=20)
     color = models.CharField(max_length=10)
     state = models.CharField(max_length=1)
-    #success = models.BooleanField(default=False)
+    success = models.BooleanField(default=False)
     birthdate = models.DateField(blank=True, null=True)
     photo = models.TextField(blank=True, null=True)
     disappeared_date = models.DateField(blank=True, null=True)
     zone = models.CharField(max_length=100, blank=True, null=True)
     publisher = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    image = models.ImageField(blank=True, null=True, upload_to="ppea/", default="default.png")
 
     REQUIRED_FIELDS = ["name", "breed", "color", "zone"]
 

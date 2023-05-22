@@ -98,3 +98,14 @@ class ExistsDNIValidator:
 
     def get_help_text(self):
         return _("El DNI ya se encuentra registrado.")
+    
+class ImageFileTypeValidator:
+    def __init__(self, allowed_types=('image/jpeg', 'image/png')):
+        self.allowed_types = allowed_types
+
+    def __call__(self, value):
+        if value.content_type not in self.allowed_types:
+            raise ValidationError("Sólo se permiten archivos JPG, JPEG o PNG.")
+    
+    def get_help_text(self):
+        return _("Sólo se permiten archivos JPG, JPEG o PNG.")

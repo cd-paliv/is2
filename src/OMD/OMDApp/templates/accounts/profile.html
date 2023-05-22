@@ -9,6 +9,12 @@
 {% block content %}
 <div class="container py-5 form_width mb-5">
   <h1 class="text-center fw-semibold mb-4">Perfil de {{ user.last_name }}</h1>
+
+  {% if perms.OMDApp.is_client %}
+    <div class="mb-3 text-center">
+      <img id="responsive-img rounded-circle" src="{{ user.image.url }}" alt="Foto de perfil de usuario" width=250 >
+    </div>
+  {% endif %}
   <div class="mb-3">
     <label for="first_name" class="form-label">Nombre:</label>
     <input type="text" class="form-control" id="first_name" value="{{ user.first_name }}" disabled>
@@ -28,7 +34,7 @@
     </div>
     <div class="mb-3">
       <label for="birthdate" class="form-label">Fecha de nacimiento:</label>
-      <input type="text" class="form-control" id="birthdate" value="{{ user.birthdate }}" disabled>
+      <input type="text" class="form-control" id="birthdate" value="{{ user.birthdate|date:'d/m/Y' }}" disabled>
     </div>
   {% endif %}
   <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
