@@ -90,6 +90,10 @@ class EditProfileDogView(LoginRequiredMixin, View):
                 dog.observations = form.cleaned_data['observations']
             if 'image' in request.FILES:
                 dog.image = request.FILES['image']
+            
+            if Perro.objects.filter(name=dog.name, breed=dog.breed, color=dog.color, birthdate=dog.birthdate, owner=dog.owner).exists():
+                messages.error(request, 'El perro ya se encuentra registrado')
+                return redirect(reverse("my_dogs"))
 
             dog.save()
             messages.success(request, f'Datos modificados.')
