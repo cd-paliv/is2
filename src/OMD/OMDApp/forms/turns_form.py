@@ -16,7 +16,7 @@ class AskForTurnForm(forms.ModelForm):
                              widget=forms.Select(attrs={'class': 'form-control','id': 'inputHour',
                                                         'placeholder': 'Seleccione el horario del turno'}))
     date = forms.DateField(label="Fecha(*)",
-                            widget=forms.DateInput(format="%d/%m/%Y", attrs={'type': 'date', 'class': 'form-control', 'id': 'inputDate',
+                            widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'type': 'date', 'class': 'form-control', 'id': 'inputDate',
                                                             'placeholder': 'Ingrese la fecha en la que quiera pedir el turno'}),
                                                             validators=[EmptyFieldValidator(), TurnDateBetweenValidator(), TurnDateTodayValidator()])
     motive = forms.CharField(label="Razon(*)",

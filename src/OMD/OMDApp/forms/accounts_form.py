@@ -34,7 +34,7 @@ class RegisterForm(forms.ModelForm):
                                                              'placeholder': 'Ingresa tu DNI'}),
                                                              validators=[EmptyFieldValidator(), GreaterThanZeroValidator(), ExistsDNIValidator(), NumbersFieldValidator()])
     birthdate = forms.DateField(label="Fecha de nacimiento(*)",
-                                widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'type': 'date', 'class': 'form-control', 'id': 'inputBirthdate',
+                                widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'type': 'date', 'class': 'form-control', 'id': 'birthdate',
                                                               'placeholder': 'Ingresa tu fecha de nacimiento'}),
                                                               validators=[EmptyFieldValidator(), UserAgeValidator()])
 
@@ -51,7 +51,7 @@ class UserEditForm(forms.ModelForm):
                                 widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputLastname',
                                                               'placeholder': 'Ingresa tu apellido'}), validators=[EmptyFieldValidator(), NoNumbersFieldValidator()])
     birthdate = forms.DateField(label="Fecha de nacimiento(*)",
-                                widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'type': 'date', 'class': 'form-control', 'id': 'inputBirthdate',
+                                widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'type': 'date', 'class': 'form-control', 'id': 'birthdate',
                                                               'placeholder': 'Ingresa tu fecha de nacimiento'}
                                                               ), validators=[EmptyFieldValidator(), UserAgeValidator()])
 
@@ -74,7 +74,7 @@ class RegisterDogForm(forms.ModelForm):
                                                           'placeholder': 'Ingresa el color del perro', 'required': 'True'}),
                                                           validators=[EmptyFieldValidator(), NoNumbersFieldValidator()])
     birthdate = forms.DateField(label="Fecha de nacimiento estimada del perro(*)",
-                                widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'type': 'date', 'class': 'form-control', 'id': 'inputDogBirthdate',
+                                widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'type': 'date', 'class': 'form-control', 'id': 'birthdate',
                                                               'placeholder': 'Ingresa la fecha de nacimiento estimada del perro',
                                                               'required': 'True'}), validators=[EmptyFieldValidator(), DogAgeValidator()])
 

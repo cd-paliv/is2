@@ -215,7 +215,10 @@ def AdoptionDog(request, dog_id):
             messages.success(request,'Solicitud de Adopcion Enviada')
             return redirect(reverse('adoption_dog_list'))
     else:
-        form = AdoptionForm()
+        user = request.user
+        name = user.first_name + " " + user.last_name
+        email = user.email
+        form = AdoptionForm(initial={'name': name, 'email': email})
 
     return render(request, "dogs/adoption/request_adoption.html", {'form':form})
 
