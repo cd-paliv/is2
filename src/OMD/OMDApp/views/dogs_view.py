@@ -13,7 +13,7 @@ from django.views.decorators.cache import cache_control
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from OMDApp.models import Perro, PPEA
+from OMDApp.models import Perro, PPEA, UserAdoption
 from django.template.loader import render_to_string
 
 
@@ -200,6 +200,12 @@ def AdoptedDogListView(request):
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
 def AdoptionDog(request, dog_id):
+    dog = PPEA.objects.get(id=dog_id)
+    user = request.user
+    if UserAdoption.objects.filter(user=user, dog=dog).exists():
+        messages.error(request, 'Ya ha solicitado adoptar este perro. El dueño se comunicará a la brevedad.')
+        return redirect(reverse('adoption_dog_list'))
+
     if request.method == "POST":
         form = AdoptionForm(request.POST)
         if form.is_valid():
@@ -208,11 +214,17 @@ def AdoptionDog(request, dog_id):
                 'email' : form.cleaned_data['email'],
                 'motive' : form.cleaned_data['motive']
             }           
-            dog = PPEA.objects.get(id=dog_id)
+            #dog = PPEA.objects.get(id=dog_id)
             message = render_to_string('dogs/adoption/request_adoption_email.html', { 'dog': dog, 'user': usr })
             dog.publisher.email_user("Solicitud de Adopcion", message)
 
-            messages.success(request,'Solicitud de Adopcion Enviada')
+            user_data = {
+                'user' : user,
+                'dog' : dog,
+            }
+            UserAdoption.objects.create(**user_data)
+
+            messages.success(request, 'Solicitud de adopcion enviada')
             return redirect(reverse('adoption_dog_list'))
     else:
         user = request.user

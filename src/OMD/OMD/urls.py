@@ -32,7 +32,7 @@ urlpatterns = [
     
     # Accounts
     path('register/', RegisterView, name='register'),
-    path('registerdog/<int:owner_id>/', RegisterDogView, name='registerDog'),
+    path('registerdog/', RegisterDogView, name='registerDog'),
     path('registersingledog', RegisterSingleDogView, name='registerSingleDog'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogOut, name='logout'),

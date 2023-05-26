@@ -64,16 +64,10 @@ def RegisterView(request):
         if form.is_valid():
 
             user_data = form.cleaned_data
-
-            # Convert the date object to a string representation
-            #if 'birthdate' in user_data:
             user_data['birthdate'] = user_data['birthdate'].isoformat()
-
-            # Store the validated form data in the session
             request.session['user_data'] = user_data
-            
-            #request.session['message'] = render_to_string('accounts/account_activation_email.html', { 'user': user, 'password': actual_password })
-            return redirect(reverse("registerDog", kwargs={"owner_id" : 1}))
+
+            return redirect(reverse("registerDog"))
         else:
             form.data = form.data.copy()
     else:
@@ -83,7 +77,7 @@ def RegisterView(request):
 @login_required(login_url='/login/')
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
-def RegisterDogView(request, owner_id):
+def RegisterDogView(request):
     if request.method == "POST":
         form = RegisterDogForm(request.POST, request.FILES)
         if form.is_valid():

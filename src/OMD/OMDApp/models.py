@@ -122,3 +122,8 @@ class Turno(models.Model):
     accepted_by = models.ForeignKey(Veterinario, on_delete=models.CASCADE, blank=True, null=True)
 
     REQUIRED_FIELDS = ["type", "hour", "date", "motive"]
+
+class UserAdoption(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    dog = models.ForeignKey(PPEA, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
