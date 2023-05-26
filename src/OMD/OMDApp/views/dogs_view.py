@@ -213,8 +213,7 @@ def AdoptionDog(request, dog_id):
                 'name' : form.cleaned_data['name'],
                 'email' : form.cleaned_data['email'],
                 'motive' : form.cleaned_data['motive']
-            }           
-            #dog = PPEA.objects.get(id=dog_id)
+            }
             message = render_to_string('dogs/adoption/request_adoption_email.html', { 'dog': dog, 'user': usr })
             dog.publisher.email_user("Solicitud de Adopcion", message)
 
