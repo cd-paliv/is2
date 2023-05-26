@@ -79,17 +79,21 @@ class EditProfileDogView(LoginRequiredMixin, View):
         if form.is_valid():
             # Update user object with new data
             if form.cleaned_data.get('name'):
-                dog.name = form.cleaned_data['name']
+                dog.name = form.cleaned_data['name'].capitalize()
             if form.cleaned_data.get('breed'):
-                dog.breed = form.cleaned_data['breed']
+                dog.breed = form.cleaned_data['breed'].capitalize()
             if form.cleaned_data.get('color'):
-                dog.color = form.cleaned_data['color']
+                dog.color = form.cleaned_data['color'].capitalize()
             if form.cleaned_data.get('birthdate'):
                 dog.birthdate = form.cleaned_data['birthdate']
             if form.cleaned_data.get('observations'):
                 dog.observations = form.cleaned_data['observations']
             if 'image' in request.FILES:
                 dog.image = request.FILES['image']
+
+            if Perro.objects.filter(name=dog.name, breed=dog.breed, color=dog.color, birthdate=dog.birthdate).exists():
+                messages.error(request, 'El perro ya se encuentra registrado')
+                return redirect(reverse("dog_edit_profile"))
 
             dog.save()
             messages.success(request, f'Datos modificados.')
