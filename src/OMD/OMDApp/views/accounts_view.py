@@ -63,20 +63,17 @@ def RegisterView(request):
         form = RegisterForm(request.POST, request.FILES)
         if form.is_valid():
 
-            user = form.save(commit=False)
-            user.is_active = False
-            user.first_name = user.first_name.capitalize()
-            user.last_name = user.last_name.capitalize()
-            user.is_active = True
-            actual_password = get_user_model().objects.make_random_password(length=20)
-            user.password = make_password(actual_password)
+            user_data = form.cleaned_data
+
+            # Convert the date object to a string representation
+            #if 'birthdate' in user_data:
+            user_data['birthdate'] = user_data['birthdate'].isoformat()
+
+            # Store the validated form data in the session
+            request.session['user_data'] = user_data
             
-            user.save()
-            client_perm = Permission.objects.get(codename='is_client')
-            user.user_permissions.add(client_perm)
-            
-            request.session['message'] = render_to_string('accounts/account_activation_email.html', { 'user': user, 'password': actual_password })
-            return redirect(reverse("registerDog", kwargs={"owner_id" : user.id}))
+            #request.session['message'] = render_to_string('accounts/account_activation_email.html', { 'user': user, 'password': actual_password })
+            return redirect(reverse("registerDog", kwargs={"owner_id" : 1}))
         else:
             form.data = form.data.copy()
     else:
@@ -90,18 +87,34 @@ def RegisterDogView(request, owner_id):
     if request.method == "POST":
         form = RegisterDogForm(request.POST, request.FILES)
         if form.is_valid():
+            # Create user
+            user_data = request.session.get('user_data')
+            user = get_user_model().objects.create(**user_data)
+            del request.session['user_data']
+
+            # Change data & create password
+            user.first_name = user.first_name.capitalize()
+            user.last_name = user.last_name.capitalize()
+            user.is_active = True
+            actual_password = get_user_model().objects.make_random_password(length=20)
+            user.password = make_password(actual_password)
+
+            user.save()
+            client_perm = Permission.objects.get(codename='is_client')
+            user.user_permissions.add(client_perm)
+            message = render_to_string('accounts/account_activation_email.html', { 'user': user, 'password': actual_password })
+
             dog = form.save(commit=False)
             dog.name = dog.name.capitalize()
             dog.breed = dog.breed.capitalize()
             dog.color = dog.color.capitalize()
-            owner = get_user_model().objects.get(id=owner_id)
-            dog.owner = owner
+            dog.owner = user
             dog.save()
 
             subject = 'Activa tu cuenta en OhMyDog'
-            owner.email_user(subject, request.session.get('message'))
+            user.email_user(subject, message)
 
-            messages.success(request, f'Registro exitoso. Por favor, diríjase a {owner.email} para activar su cuenta y completar el registro.')
+            messages.success(request, f'Registro exitoso. Por favor, diríjase a {user.email} para activar su cuenta y completar el registro.')
             return redirect(reverse("home"))
     else:
         form = RegisterDogForm
