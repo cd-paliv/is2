@@ -29,6 +29,17 @@ class NumbersFieldValidator:
 
     def get_help_text(self, field):
         return _(f"Este campo sólo puede contener números.")
+
+class FloatFieldValidator:
+    def __call__(self, field):
+        try:
+            field = float(field)
+        except ValueError:
+            raise ValidationError('El valor ingresado debe ser un número válido.')  # Display a validation error
+        return field
+
+    def get_help_text(self):
+        return _(f"El valor ingresado debe ser un número válido.")
     
 class GreaterThanZeroValidator:
     def __call__(self, field):

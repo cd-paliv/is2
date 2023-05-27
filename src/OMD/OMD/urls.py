@@ -24,7 +24,7 @@ from OMDApp.views.dogs_view import (DogListView, ProfileDogView, EditProfileDogV
                                     AdoptionDogListView, AdoptionDogListFilteredView, AdoptionDog, SwitchAdoptedDogView,
                                     AdoptedDogListView)
 from OMDApp.views.turns_view import (AskForTurn, ViewAcceptedTurns, ViewPendingTurns, AcceptTurn, RejectTurn,
-                                     ViewMyTurns, CancelTurn)
+                                     ViewMyTurns, CancelTurn, AttendTurnView)
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
@@ -61,5 +61,6 @@ urlpatterns = [
     path('acceptingTurn/<int:turn_id>/', AcceptTurn, name='acceptTurn'),
     path('rejectingTurn/<int:turn_id>/', RejectTurn, name='rejectTurn'),
     path('cancelingTurn/<int:turn_id>/', CancelTurn, name='cancelTurn'),
+    path('attendTurnView/<int:turn_id>/', AttendTurnView, name='attendTurnView'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

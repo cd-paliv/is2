@@ -3,9 +3,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from OMDApp.models import Turno, Veterinario
+from OMDApp.models import Turno, Veterinario, Perro
 from OMDApp.decorators import email_verification_required
-from OMDApp.forms.turns_form import (AskForTurnForm)
+from OMDApp.forms.turns_form import (AskForTurnForm, AttendTurnForm)
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_control
 from django.db.models import Q
@@ -16,7 +16,8 @@ def turn_type_mapping():
     map = {
         'T': 'Turno normal',
         'C': 'Castración',
-        'V': 'Vacunación',
+        'VA': 'Vacunación - Tipo A',
+        'VB': 'Vacunacion - Tipo B',
         'O': 'Operacion',
     }
     return map
@@ -129,3 +130,26 @@ def CancelTurn(request, turn_id):
 
     messages.success(request, "Turno cancelado")
     return redirect(reverse("myTurns"))
+
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
+def AttendTurnView(request, turn_id):
+    turn = Turno.objects.get(id=turn_id)
+    dog = turn.solicited_by
+    if request.method == "POST":
+        form = AttendTurnForm(request.POST)
+        if form.is_valid():
+            weight = form.cleaned_data['weight']
+            Perro.objects.filter(id=dog.id).update(weight=weight)
+
+            observations = form.cleaned_data['observations']
+            amount = form.cleaned_data['amount']
+            Turno.objects.filter(id=turn_id).update(observations=observations, amount=amount, state='F')
+
+            return redirect(reverse('home'))
+        else:
+            form.data = form.data.copy()
+    else:
+        form = AttendTurnForm(initial={'weight': dog.weight})
+    return render(request, "turns/attend_turn.html", {'form': form, 'dog': dog})

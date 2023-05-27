@@ -90,6 +90,7 @@ class Perro(models.Model):
     birthdate = models.DateField()
     observations = models.TextField(blank=True, null=True)
     photo = models.TextField(blank=True, null=True)
+    weight = models.FloatField(default=0.0)
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     image = models.ImageField(blank=True, null=True, upload_to="dogs/", default="default.png")
     
@@ -118,7 +119,7 @@ class Turno(models.Model):
     motive = models.TextField()
     observations = models.TextField(blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    solicited_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    solicited_by = models.ForeignKey(Perro, on_delete=models.CASCADE)
     accepted_by = models.ForeignKey(Veterinario, on_delete=models.CASCADE, blank=True, null=True)
 
     REQUIRED_FIELDS = ["type", "hour", "date", "motive"]

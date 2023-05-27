@@ -2,12 +2,13 @@ from django import forms
 from django.contrib.auth import get_user_model
 from OMDApp.models import Turno
 from django.utils.translation import gettext as _
-from OMDApp.validators.form_validator import (EmptyFieldValidator, NoNumbersFieldValidator, 
-                                                NumbersFieldValidator, TurnDateBetweenValidator, TurnDateTodayValidator)
+from OMDApp.validators.form_validator import (EmptyFieldValidator, FloatFieldValidator, 
+                                                NumbersFieldValidator, TurnDateBetweenValidator, TurnDateTodayValidator,
+                                                GreaterThanZeroValidator)
 
 
 class AskForTurnForm(forms.ModelForm):
-    typeChoices = (('T', 'Turno normal'), ('C', 'Castracion'), ('V', 'Vacunacion'), ('O', 'Operacion'))
+    typeChoices = (('T', 'Turno normal'), ('C', 'Castracion'), ('VA', 'Vacunacion - Tipo A'), ('VB', 'Vacunacion - Tipo B'), ('O', 'Operacion'))
     type = forms.ChoiceField(label="Tipo(*)", choices=typeChoices,
                              widget=forms.Select(attrs={'class': 'form-control','id': 'inputType',
                                                         'placeholder': 'Seleccione el tipo de turno'}))
@@ -33,4 +34,16 @@ class AskForTurnForm(forms.ModelForm):
             "date": "Fecha(*)",
             "motive": "Razon(*)",
         }
-    
+
+class AttendTurnForm(forms.Form):
+    weight = forms.FloatField(label="Peso",
+                               widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputPeso',
+                                                             'placeholder': 'Ingrese el peso del perro'}),
+                                                             validators=[FloatFieldValidator()])
+    observations = forms.CharField(label="Observaciones",
+                               widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputObservaciones',
+                                                             'placeholder': 'Ingrese observaciones sobre la atención'}))
+    amount = forms.FloatField(label="Costo(*)",
+                               widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputCosto',
+                                                             'placeholder': 'Ingrese el costo de la atención'}),
+                                                             validators=[EmptyFieldValidator(), GreaterThanZeroValidator(), FloatFieldValidator()])
