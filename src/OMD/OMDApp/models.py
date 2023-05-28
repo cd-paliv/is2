@@ -91,7 +91,6 @@ class Perro(models.Model):
     observations = models.TextField(blank=True, null=True)
     photo = models.TextField(blank=True, null=True)
     weight = models.FloatField(default=0.01)
-    #health_book = models.ForeignKey(Libreta, on_delete=models.CASCADE)
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     image = models.ImageField(blank=True, null=True, upload_to="dogs/", default="default.png")
     
@@ -128,15 +127,17 @@ class Turno(models.Model):
     REQUIRED_FIELDS = ["type", "hour", "date", "motive"]
 
     def add_to_health_book(self):
-        Libreta.objects.create(finalized=self)
+        Libreta.objects.create(dog=self.solicited_by, finalized=self)
 
     def add_to_clinic_history(self):
-        Historial.objects.create(finalized=self)
+        Historial.objects.create(dog=self.solicited_by, finalized=self)
 
 class Libreta(models.Model):
+    dog = models.ForeignKey(Perro, on_delete=models.CASCADE)
     finalized = models.ForeignKey(Turno, on_delete=models.CASCADE)
 
 class Historial(models.Model):
+    dog = models.ForeignKey(Perro, on_delete=models.CASCADE)
     finalized = models.ForeignKey(Turno, on_delete=models.CASCADE)
 
 class UserAdoption(models.Model):

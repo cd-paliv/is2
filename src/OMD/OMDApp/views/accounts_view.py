@@ -13,7 +13,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_control
 from django.views import View
 from OMDApp.models import Perro
-from OMDApp.decorators import email_verification_required
+from OMDApp.decorators import email_verification_required, vet_required
 from django.contrib.auth import authenticate
 from OMDApp.forms.accounts_form import (EditPasswordForm, LoginForm,
                                         RegisterDogForm, RegisterForm,

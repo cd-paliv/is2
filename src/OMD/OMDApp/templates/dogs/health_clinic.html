@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+	<link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock css %}
+
+{% block title %}Libreta sanitaria{% endblock title %}
+{% block content %}
+{% if turns %}
+  <div class="container py-5 form_width mb-5">
+      <h1 class="text-center fw-semibold mb-4 pb-3">{% if type == 'HB' %}Libreta sanitaria{% else %}Historial clínico{% endif %} de {{ name }}</h1>
+      <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
+        <a href="{% url 'dog_profile' dog_id=dog_id %}" class="btn btn-secondary">Atrás</a>
+      </div>
+        {% for turn in turns %}
+          <div class="card mt-3 border-secondary">
+            <h5 class="card-header text-center"><strong>{{ turn_type_mapping|get_item:turn.finalized.type }}</strong></h5>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-auto">
+                  <h6 class="card-title"><strong>Fecha:</strong> {{ turn.finalized.date|date:'d/m/Y' }}</h6>
+                  <p class="card-text mt-3"><strong>Horario:</strong> {{ turn_hour_mapping|get_item:turn.finalized.hour }} </p>
+                  {% if turn.finalized.motive %}<p class="card-text"><strong>Motivo:</strong> {{ turn.finalized.motive }} </p>{% endif %}
+                  <p class="card-text"><strong>Costo:</strong> {{ turn.finalized.amount }} </p>
+                  <p class="card-text"><strong>Veterinario a cargo:</strong> {{ turn.finalized.accepted_by.user.first_name }} {{ turn.finalized.accepted_by.user.last_name }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+    </div>
+{% else %}
+  <h1 class="text-center fw-semibold mb-5">Todavía no existe una {% if type == 'HB' %}libreta sanitaria{% else %}historia clínica{% endif %} para este perro.</h1>
+{% endif %}
+{% endblock content %}

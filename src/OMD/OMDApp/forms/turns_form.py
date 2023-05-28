@@ -25,15 +25,18 @@ class AskForTurnForm(forms.ModelForm):
                                                          'placeholder': 'Ingrese la razon por la cual quiere su turno'}),
                                                          validators=[EmptyFieldValidator()])
     
+    def __init__(self, *args, **kwargs):
+        user_dogs = kwargs.pop('user_dogs', None)
+        super().__init__(*args, **kwargs)
+        if user_dogs:
+            dog_choices = [(dog.id, dog.name) for dog in user_dogs]
+            self.fields['solicited_by'] = forms.ChoiceField(label="Perro(*)", choices=dog_choices,
+                                                    widget=forms.Select(attrs={'class': 'form-control', 'id': 'inputDog', 'placeholder': 'Seleccione el perro a atender'})
+            )
+
     class Meta:
         model = Turno
-        fields = ("type", "hour", "date", "motive")
-        labels = {
-            "type": "Tipo(*)",
-            "hour": "Horario(*)",
-            "date": "Fecha(*)",
-            "motive": "Razon(*)",
-        }
+        fields = ("type", "hour", "date", "motive", "solicited_by")
 
 class AttendTurnForm(forms.Form):
     weight = forms.FloatField(label="Peso", localize=True, 

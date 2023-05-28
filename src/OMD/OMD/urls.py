@@ -22,7 +22,7 @@ from OMDApp.views.accounts_view import (LoginView, LogOut, RegisterView, Registe
                                         ProfileView, EditProfileView, EditPasswordView)
 from OMDApp.views.dogs_view import (DogListView, ProfileDogView, EditProfileDogView, RegisterAdoptionDogView,
                                     AdoptionDogListView, AdoptionDogListFilteredView, AdoptionDog, SwitchAdoptedDogView,
-                                    AdoptedDogListView)
+                                    AdoptedDogListView, HealthBookDogView, ClinicHistoryDogView)
 from OMDApp.views.turns_view import (AskForTurn, ViewAcceptedTurns, ViewPendingTurns, AcceptTurn, RejectTurn,
                                      ViewMyTurns, CancelTurn, AttendTurnView)
 
@@ -44,6 +44,8 @@ urlpatterns = [
     path('mydogs/', DogListView.as_view(), name='my_dogs'),
     path('dog/<int:dog_id>/', ProfileDogView, name='dog_profile'),
     path('profiledog', EditProfileDogView.as_view(), name='dog_edit_profile'),
+    path('healthbookdog/<int:dog_id>/', HealthBookDogView, name='dog_health_book'),
+    path('clinichistorydog/<int:dog_id>/', ClinicHistoryDogView, name='dog_clinic_history'),
     
     # Dogs - Adoption
     path('registeradoptiondog/', RegisterAdoptionDogView, name='register_adoption_dog'),
@@ -62,5 +64,6 @@ urlpatterns = [
     path('rejectingTurn/<int:turn_id>/', RejectTurn, name='rejectTurn'),
     path('cancelingTurn/<int:turn_id>/', CancelTurn, name='cancelTurn'),
     path('attendTurnView/<int:turn_id>/', AttendTurnView, name='attendTurnView'),
+    
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

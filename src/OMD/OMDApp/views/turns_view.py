@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from OMDApp.models import Turno, Veterinario, Perro
-from OMDApp.decorators import email_verification_required
+from OMDApp.decorators import email_verification_required, vet_required
 from OMDApp.forms.turns_form import (AskForTurnForm, AttendTurnForm)
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_control
@@ -43,6 +43,7 @@ def AskForTurn(request):
         form = AskForTurnForm(request.POST)
         if form.is_valid():
             turn = form.save(commit=False)
+
             same_date_turns = list(Turno.objects.filter(date=turn.date, hour=turn.hour))
             if len(same_date_turns) == 20:
                 hours = str(turn_hour_mapping().get(turn.hour)).split(': ')[1]
@@ -50,12 +51,11 @@ def AskForTurn(request):
                 messages.error(request, message)
                 return redirect(reverse("askForTurn"))
 
-            turn.solicited_by = request.user
             turn.save()
             messages.success(request, f'Solicitud de turno exitosa')
             return redirect(reverse("home"))
-    else:
-        form = AskForTurnForm()
+    user_dogs = Perro.objects.filter(owner=request.user)
+    form = AskForTurnForm(user_dogs=user_dogs)
     return render(request, 'turns/ask_for_turn.html', {'form': form})
 
 @login_required(login_url='/login/')
@@ -109,7 +109,9 @@ def RejectTurn(request, turn_id):
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
 def ViewMyTurns(request):
-    turnos = list(Turno.objects.filter(solicited_by=request.user).order_by('state', 'date', '-hour').exclude(state="AC"))
+    user = request.user
+    dogs = Perro.objects.filter(owner=user)
+    turnos = list(Turno.objects.filter(solicited_by__in=dogs).order_by('state', 'date', '-hour').exclude(state="AC"))
     return render(request, "turns/turn_list.html", {"turn_list" : turnos, "turns" : "U",
                                                     'turn_type_mapping': turn_type_mapping(), 'turn_hour_mapping': turn_hour_mapping()})
 

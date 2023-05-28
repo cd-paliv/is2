@@ -15,7 +15,7 @@
     <title>{% block title %} Oh My Dog {% endblock title %}</title>
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
     {% block navbar %}
     {% include 'navbar.html' %}
     {% endblock navbar %}
@@ -34,7 +34,9 @@
     </main>
 
     {% block footer %}
-    {% include "footer.html" %}
+    <div class="w-100 mt-auto">
+        {% include "footer.html" %}
+    </div>
     {% endblock footer %}
 
     <script type="javascript" src="{% static 'js/jquery.min.js' %}"></script>

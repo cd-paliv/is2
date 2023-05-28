@@ -35,13 +35,11 @@
       <label for="birthdate" class="form-label">Observaciones:</label>
       <input type="text" class="form-control" id="observations" value="{{ dog.observations }}" disabled>
     </div>
-  {% endif %}<!--
-  {% if dog.photo %}
-    <div class="mb-3">
-      <label for="birthdate" class="form-label">Foto:</label>
-      <input type="text" class="form-control" id="birthdate" value="{{ dog.photo }}" disabled>
-    </div>
-  {% endif %}-->
+  {% endif %}
+  <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
+    <a href="{% url 'dog_health_book' dog_id=dog.id %}" class="btn btn-primary">Libreta sanitaria</a>
+    <a href="{% url 'dog_clinic_history' dog_id=dog.id %}" class="btn btn-primary">Historial clínico</a>
+  </div>
   <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
     <a href="{% url 'dog_edit_profile' %}" class="btn btn-primary">Editar</a>
     <a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>

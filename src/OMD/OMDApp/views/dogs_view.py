@@ -13,8 +13,9 @@ from django.views.decorators.cache import cache_control
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from OMDApp.models import Perro, PPEA, UserAdoption
+from OMDApp.models import Perro, PPEA, UserAdoption, Libreta, Historial
 from django.template.loader import render_to_string
+from OMDApp.views.turns_view import turn_type_mapping, turn_hour_mapping
 
 
 logged_decorators = [login_required, email_verification_required, cache_control(max_age=3600, no_store=True)]
@@ -247,3 +248,23 @@ def SwitchAdoptedDogView(request, dog_id):
 
     messages.success(request, 'Perro marcado como adoptado')
     return redirect(reverse('adoption_dog_list'))
+
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
+def HealthBookDogView(request, dog_id):
+    dog = Perro.objects.get(id=dog_id)
+    health_book_turns = list(Libreta.objects.filter(dog=dog).select_related('finalized'))
+    
+    return render(request, "dogs/health_clinic.html", {"turns" : health_book_turns, 'name': dog.name, 'dog_id': dog.id, 'type': 'HB',
+                                                     'turn_type_mapping': turn_type_mapping(), 'turn_hour_mapping': turn_hour_mapping()})
+
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
+def ClinicHistoryDogView(request, dog_id):
+    dog = Perro.objects.get(id=dog_id)
+    clinic_history_turns = list(Historial.objects.filter(dog=dog).select_related('finalized'))
+    
+    return render(request, "dogs/health_clinic.html", {"turns" : clinic_history_turns, 'name': dog.name, 'dog_id': dog.id, 'type': 'CH',
+                                                     'turn_type_mapping': turn_type_mapping(), 'turn_hour_mapping': turn_hour_mapping()})

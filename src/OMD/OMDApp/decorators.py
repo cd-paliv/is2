@@ -18,3 +18,11 @@ def email_verification_required(view_func, verification_url="editpassword"):
         messages.error(request, 'Por favor, modifique la contraseña para acceder al sitio.')
         return redirect(reverse("editPassword"))
     return wrapper
+
+def vet_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        if not request.user.has_perm('is_vet'):
+            messages.error(request, 'No tiene los permisos necesarios para ingresar a la sección')
+            return redirect('home')
+        return view_func(request, *args, **kwargs)
+    return wrapper
