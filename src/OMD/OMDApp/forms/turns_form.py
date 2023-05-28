@@ -8,7 +8,7 @@ from OMDApp.validators.form_validator import (EmptyFieldValidator, FloatFieldVal
 
 
 class AskForTurnForm(forms.ModelForm):
-    typeChoices = (('T', 'Turno normal'), ('C', 'Castracion'), ('VA', 'Vacunacion - Tipo A'), ('VB', 'Vacunacion - Tipo B'), ('O', 'Operacion'))
+    typeChoices = (('T', 'Turno normal'), ('C', 'Castración'), ('VA', 'Vacunacion - Tipo A'), ('VB', 'Vacunacion - Tipo B'))
     type = forms.ChoiceField(label="Tipo(*)", choices=typeChoices,
                              widget=forms.Select(attrs={'class': 'form-control','id': 'inputType',
                                                         'placeholder': 'Seleccione el tipo de turno'}))
@@ -36,7 +36,7 @@ class AskForTurnForm(forms.ModelForm):
         }
 
 class AttendTurnForm(forms.Form):
-    weight = forms.FloatField(label="Peso",
+    weight = forms.FloatField(label="Peso", localize=True, 
                                widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputPeso',
                                                              'placeholder': 'Ingrese el peso del perro'}),
                                                              validators=[FloatFieldValidator()])

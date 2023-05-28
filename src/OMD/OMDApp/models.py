@@ -90,7 +90,8 @@ class Perro(models.Model):
     birthdate = models.DateField()
     observations = models.TextField(blank=True, null=True)
     photo = models.TextField(blank=True, null=True)
-    weight = models.FloatField(default=0.0)
+    weight = models.FloatField(default=0.01)
+    #health_book = models.ForeignKey(Libreta, on_delete=models.CASCADE)
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     image = models.ImageField(blank=True, null=True, upload_to="dogs/", default="default.png")
     
@@ -119,10 +120,24 @@ class Turno(models.Model):
     motive = models.TextField()
     observations = models.TextField(blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    castrated = models.BooleanField(blank=True, null=True)
     solicited_by = models.ForeignKey(Perro, on_delete=models.CASCADE)
     accepted_by = models.ForeignKey(Veterinario, on_delete=models.CASCADE, blank=True, null=True)
+    finalized_at = models.DateField(blank=True, null=True)
 
     REQUIRED_FIELDS = ["type", "hour", "date", "motive"]
+
+    def add_to_health_book(self):
+        Libreta.objects.create(finalized=self)
+
+    def add_to_clinic_history(self):
+        Historial.objects.create(finalized=self)
+
+class Libreta(models.Model):
+    finalized = models.ForeignKey(Turno, on_delete=models.CASCADE)
+
+class Historial(models.Model):
+    finalized = models.ForeignKey(Turno, on_delete=models.CASCADE)
 
 class UserAdoption(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)

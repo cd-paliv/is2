@@ -18,7 +18,7 @@ def turn_type_mapping():
         'C': 'Castración',
         'VA': 'Vacunación - Tipo A',
         'VB': 'Vacunacion - Tipo B',
-        'O': 'Operacion',
+        'U': 'Urgencia',
     }
     return map
 
@@ -131,6 +131,22 @@ def CancelTurn(request, turn_id):
     messages.success(request, "Turno cancelado")
     return redirect(reverse("myTurns"))
 
+from datetime import date, timedelta
+
+def generate_date(today, birthdate, type):
+    if type == 'A':
+        months_diff = (today.year - birthdate.year) * 12 + (today.month - birthdate.month)
+    else:
+        months_diff = 4 # default 365 days for type B
+
+    if months_diff < 4:
+        future_date = today + timedelta(days=21)
+    else:
+        future_date = today + timedelta(days=365)
+
+    return future_date
+
+
 @login_required(login_url='/login/')
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
@@ -143,10 +159,28 @@ def AttendTurnView(request, turn_id):
             weight = form.cleaned_data['weight']
             Perro.objects.filter(id=dog.id).update(weight=weight)
 
-            observations = form.cleaned_data['observations']
-            amount = form.cleaned_data['amount']
-            Turno.objects.filter(id=turn_id).update(observations=observations, amount=amount, state='F')
+            turn.observations = form.cleaned_data['observations']
+            turn.amount = form.cleaned_data['amount']
+            turn.state = 'F'
+            turn.finalized_at = date.today()
 
+            if turn.type == 'VA' or turn.type == 'VB':
+                turn.add_to_health_book()
+
+                # Generación automática de nuevo turno para vacunación
+                new_date = generate_date(turn.date, dog.birthdate, type=turn.type)
+                motive = f"Generación automática de turno para vacunación tipo {'A' if turn.type == 'VA' else 'B'}"
+                Turno.objects.create(state='S', type=turn.type, hour=turn.hour, date=new_date, motive=motive, solicited_by=dog)
+
+            elif turn.type == 'C':
+                turn.castrated = True
+                turn.add_to_health_book()
+                
+            elif turn.type == 'U':
+                turn.add_to_health_book()
+            
+            turn.save()
+            turn.add_to_clinic_history()
             return redirect(reverse('home'))
         else:
             form.data = form.data.copy()
