@@ -31,5 +31,8 @@
     </div>
 {% else %}
   <h1 class="text-center fw-semibold mb-5">Todavía no existe una {% if type == 'HB' %}libreta sanitaria{% else %}historia clínica{% endif %} para este perro.</h1>
+  <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
+    <a href="{% url 'dog_profile' dog_id=dog_id %}" class="btn btn-secondary">Atrás</a>
+  </div>
 {% endif %}
 {% endblock content %}

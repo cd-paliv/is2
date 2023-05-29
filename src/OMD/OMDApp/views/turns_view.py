@@ -111,7 +111,7 @@ def RejectTurn(request, turn_id):
 def ViewMyTurns(request):
     user = request.user
     dogs = Perro.objects.filter(owner=user)
-    turnos = list(Turno.objects.filter(solicited_by__in=dogs).order_by('state', 'date', '-hour').exclude(state="AC"))
+    turnos = list(Turno.objects.filter(solicited_by__in=dogs).order_by('state', 'date', '-hour').exclude(Q(state="F") | Q(state="AC")))
     return render(request, "turns/turn_list.html", {"turn_list" : turnos, "turns" : "U",
                                                     'turn_type_mapping': turn_type_mapping(), 'turn_hour_mapping': turn_hour_mapping()})
 
@@ -136,7 +136,7 @@ def CancelTurn(request, turn_id):
 from datetime import date, timedelta
 
 def generate_date(today, birthdate, type):
-    if type == 'A':
+    if type == 'VA':
         months_diff = (today.year - birthdate.year) * 12 + (today.month - birthdate.month)
     else:
         months_diff = 4 # default 365 days for type B

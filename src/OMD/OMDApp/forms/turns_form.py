@@ -30,7 +30,7 @@ class AskForTurnForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if user_dogs:
             dog_choices = [(dog.id, dog.name) for dog in user_dogs]
-            self.fields['solicited_by'] = forms.ChoiceField(label="Perro(*)", choices=dog_choices,
+            self.fields['solicited_by'] = forms.ChoiceField(label="Perro a atender(*)", choices=dog_choices,
                                                     widget=forms.Select(attrs={'class': 'form-control', 'id': 'inputDog', 'placeholder': 'Seleccione el perro a atender'})
             )
 
