@@ -88,9 +88,11 @@ class Perro(models.Model):
     breed = models.CharField(max_length=20)
     color = models.CharField(max_length=10)
     birthdate = models.DateField()
+    gender = models.CharField(max_length=1) # F ^ M
     observations = models.TextField(blank=True, null=True)
     photo = models.TextField(blank=True, null=True)
     weight = models.FloatField(default=0.01)
+    castrated = models.BooleanField(blank=True, null=True)
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     image = models.ImageField(blank=True, null=True, upload_to="dogs/", default="default.png")
     
@@ -112,14 +114,13 @@ class PPEA(models.Model):
     REQUIRED_FIELDS = ["name", "breed", "color", "zone"]
 
 class Turno(models.Model):
-    state = models.CharField(max_length=10, default="S") # solicited ^ accepted ^ rejected
-    type = models.CharField(max_length=15) # emergency ^ castration ^ turn ^ vacunation ^
+    state = models.CharField(max_length=10, default="S") # solicited ^ accepted ^ rejected ^ finished
+    type = models.CharField(max_length=15) # emergency ^ castration ^ turn ^ vacunation a ^ vacunation b
     hour = models.CharField(max_length=50)
     date = models.DateField()
     motive = models.TextField()
     observations = models.TextField(blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    castrated = models.BooleanField(blank=True, null=True)
     solicited_by = models.ForeignKey(Perro, on_delete=models.CASCADE)
     accepted_by = models.ForeignKey(Veterinario, on_delete=models.CASCADE, blank=True, null=True)
     finalized_at = models.DateField(blank=True, null=True)

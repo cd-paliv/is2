@@ -255,8 +255,8 @@ def SwitchAdoptedDogView(request, dog_id):
 def HealthBookDogView(request, dog_id):
     dog = Perro.objects.get(id=dog_id)
     health_book_turns = list(Libreta.objects.filter(dog=dog).select_related('finalized'))
-    
-    return render(request, "dogs/health_clinic.html", {"turns" : health_book_turns, 'name': dog.name, 'dog_id': dog.id, 'type': 'HB',
+    # TERMINAR LIBRRETA SANITARIA HTML NO EXISTE
+    return render(request, "dogs/history_clinic.html", {"turns" : health_book_turns, 'name': dog.name, 'dog_id': dog.id,
                                                      'turn_type_mapping': turn_type_mapping(), 'turn_hour_mapping': turn_hour_mapping()})
 
 @login_required(login_url='/login/')
@@ -266,5 +266,5 @@ def ClinicHistoryDogView(request, dog_id):
     dog = Perro.objects.get(id=dog_id)
     clinic_history_turns = list(Historial.objects.filter(dog=dog).select_related('finalized'))
     
-    return render(request, "dogs/health_clinic.html", {"turns" : clinic_history_turns, 'name': dog.name, 'dog_id': dog.id, 'type': 'CH',
+    return render(request, "dogs/history_clinic.html", {"turns" : clinic_history_turns, 'name': dog.name, 'dog_id': dog.id,
                                                      'turn_type_mapping': turn_type_mapping(), 'turn_hour_mapping': turn_hour_mapping()})
