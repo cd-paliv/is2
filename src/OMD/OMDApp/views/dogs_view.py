@@ -1,6 +1,4 @@
-from datetime import date
-
-from dateutil.relativedelta import relativedelta
+from OMDApp.views.helpers import calculate_age
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
@@ -20,15 +18,6 @@ from OMDApp.views.turns_view import turn_type_mapping, turn_hour_mapping
 
 logged_decorators = [login_required, email_verification_required, cache_control(max_age=3600, no_store=True)]
 
-def calculate_age(birthDate):
-    today = date.today()
-    age = relativedelta(today, birthDate)
-    if age.years > 0:
-        return f"{age.years} años"
-    elif age.months > 0:
-        return f"Menos de un año"
-    else:
-        return f"Menos de un mes"
 
 # Create your views here
 @method_decorator(logged_decorators, name='dispatch')

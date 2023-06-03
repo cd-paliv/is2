@@ -1,10 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login, logout, views
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Permission
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
@@ -13,7 +12,8 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_control
 from django.views import View
 from OMDApp.models import Perro
-from OMDApp.decorators import email_verification_required, vet_required
+from django.db.models import Q
+from OMDApp.decorators import email_verification_required
 from django.contrib.auth import authenticate
 from OMDApp.forms.accounts_form import (EditPasswordForm, LoginForm,
                                         RegisterDogForm, RegisterForm,
@@ -220,3 +220,20 @@ class EditPasswordView(LoginRequiredMixin, View):
                 messages.error(self.request, 'Contraseña actual incorrecta')
                 return redirect(reverse("editPassword"))
         return render(request, self.template_name, {'form': form, 'confirmed': user.email_confirmed})
+
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
+def UserListView(request):
+    users = get_user_model().objects.all().exclude(Q(id=1) | Q(id=2) | Q(id=3))
+
+    return render(request, "accounts/user_list.html", {'model_list': users, 'is_user': 1})
+
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
+def UsersDogsListView(request, user_id):
+    user = get_user_model().objects.get(id=user_id)
+    dogs = Perro.objects.filter(owner=user)
+
+    return render(request, "accounts/user_list.html", {'model_list': dogs, 'is_user': 0})

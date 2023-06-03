@@ -37,10 +37,10 @@
         {% if type == 'U' %}
         <div class="container my-4">
             <div class="row">
-                <div class="col-md-12 d-flex justify-content-center">
-                    <a href="/" class="btn btn-secondary mx-4">Vacuna Tipo A</a>
-                    <a href="/" class="btn btn-secondary mx-4">Vacuna Tipo B</a>
-                    <a href="/" class="btn btn-secondary mx-4">Castración</a>
+                <div class="col-md-12 d-flex justify-content-center addIntervention">
+                    <a href="{% url 'addIntervention' turn_id=turn_id opt='VB' %}" class="btn btn-secondary mx-4">Vacuna Tipo A</a>
+                    <a href="{% url 'addIntervention' turn_id=turn_id opt='VA' %}" class="btn btn-secondary mx-4">Vacuna Tipo B</a>
+                    {% if not dog.castrated %}<a href="{% url 'addIntervention' turn_id=turn_id opt='C' %}" class="btn btn-secondary mx-4">Castración</a>{% endif %}
                 </div>
             </div>
         </div>

@@ -19,12 +19,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic.base import TemplateView
 from OMDApp.views.accounts_view import (LoginView, LogOut, RegisterView, RegisterDogView, RegisterSingleDogView,
-                                        ProfileView, EditProfileView, EditPasswordView)
+                                        ProfileView, EditProfileView, EditPasswordView, UserListView, UsersDogsListView)
 from OMDApp.views.dogs_view import (DogListView, ProfileDogView, EditProfileDogView, RegisterAdoptionDogView,
                                     AdoptionDogListView, AdoptionDogListFilteredView, AdoptionDog, SwitchAdoptedDogView,
                                     AdoptedDogListView, HealthBookDogView, ClinicHistoryDogView)
 from OMDApp.views.turns_view import (AskForTurn, ViewAcceptedTurns, ViewPendingTurns, AcceptTurn, RejectTurn,
-                                     ViewMyTurns, CancelTurn, AttendTurnView, GenerateUrgencyView, AttendUrgencyView)
+                                     ViewMyTurns, CancelTurn, AttendTurnView, GenerateUrgencyView, AttendUrgencyView,
+                                     GenerateTurnForUrgencyView)
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
@@ -67,10 +68,13 @@ urlpatterns = [
 
     # Turns - Urgency
     path('selectUrgency/', TemplateView.as_view(template_name="turns/select_urgency.html"), name='selectUrgency'),
+    path('selectUser/', UserListView, name='selectUser'),
+    path('selectUsersDog/<int:user_id>', UsersDogsListView, name='selectUsersDog'),
     path('register/<int:urgency>/', RegisterView, name='register'),
     path('registerdog/<int:urgency>/', RegisterDogView, name='registerDog'),
     path('generateUrgency/<int:dog_id>/', GenerateUrgencyView, name='generateUrgency'),
     path('attendUrgency/<int:turn_id>/', AttendUrgencyView, name='attendUrgency'),
+    path('addIntervention/<int:turn_id>/<str:opt>/', GenerateTurnForUrgencyView, name='addIntervention'),
     
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

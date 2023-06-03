@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager, Permission, PermissionsMixin
 from django.utils.translation import gettext as _
+import json
 
 # Create your models here.
 # Accounts
@@ -124,7 +125,7 @@ class Turno(models.Model):
     solicited_by = models.ForeignKey(Perro, on_delete=models.CASCADE)
     accepted_by = models.ForeignKey(Veterinario, on_delete=models.CASCADE, blank=True, null=True)
     finalized_at = models.DateField(blank=True, null=True)
-    urgency_turns = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='child_turns')
+    urgency_turns = models.TextField(blank=True, null=True)
 
     REQUIRED_FIELDS = ["type", "hour", "date", "motive"]
 

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+	<link rel="stylesheet" href="{% static 'css/list.css' %}">
+
+{% endblock css %}
+
+{% block content %} 
+<div class="container py-5 justify-content-center align-items-center"> 
+    <h1 class="text-center fw-semibold mb-4">Listado de usuarios</h1>
+
+    {% if model_list %}
+    <form method="GET" action="{% url 'adoption_dog_list_filtered' %}">
+        <div class="d-grid gap-2 gap-md-4 d-md-flex justify-content-md-center py-2">
+            <select class="form-select" id="type" name="typeFilter">
+                <option value="all" {% if t == "all" %} selected="selected"{% endif %}>Todos</option>
+                <option value="age" {% if t == "age" %} selected="selected"{% endif %}>Edad</option>
+                <option value="breed" {% if t == "breed" %} selected="selected"{% endif %}>Raza</option>
+            </select>
+            <select class="form-select" id="criteria" name="criteriaFilter">
+                <option value="asc" {% if c == "asc" %} selected="selected"{% endif %}>Ascendente</option>
+                <option value="desc" {% if c == "desc" %} selected="selected"{% endif %}>Descendente</option>
+            </select>
+            <input class="btn btn-secondary" type="submit" name="type" value="Filtrar" />
+        </div>
+    </form>
+
+    <div class="row mt-3 mb-2">
+        <div class="col-md-12 table-responsive">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th><strong>#</strong></th>
+                        <th><strong>Nombre</strong></th>
+                        {% if is_user %}
+                            <th><strong>DNI</strong></th>
+                        {% else %}
+                            <th><strong>Raza</strong></th>
+                        {% endif %}
+                        <th><strong>Opciones</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for model in model_list %}
+                        <tr>
+                            <td class="vertical-align-middle"><strong>{{model.id}}</strong></td>
+                            <td class="vertical-align-middle">{% if is_user %}{{model.first_name}} {{model.last_name}}{% else %}{{model.name}}{% endif %}</td>
+                            <td class="vertical-align-middle">{% if is_user %}{{model.dni}}{% else %}{{model.breed}}{% endif %}</td>
+                            <td class="vertical-align-middle">
+                                {% if is_user %}
+                                    <a href="{% url 'selectUsersDog' user_id=model.id %}" class="btn btn-secondary btn-sm">Seleccionar</a>
+                                {% else %}
+                                    <a href="{% url 'generateUrgency' dog_id=model.id %}" class="btn btn-secondary btn-sm">Seleccionar</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <h1 class="text-center fw-semibold mb-4">No hay usuarios registrados</h1>
+    {% endif %}
+
+</div>
+{% endblock %}
