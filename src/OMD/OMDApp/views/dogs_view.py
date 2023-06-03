@@ -13,7 +13,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from OMDApp.models import Perro, PPEA, UserAdoption, Libreta, Historial
 from django.template.loader import render_to_string
-from OMDApp.views.turns_view import turn_type_mapping, turn_hour_mapping
+from OMDApp.views.helpers import turn_hour_mapping, turn_type_mapping, turn_type_mapping_with_urgency
 
 
 logged_decorators = [login_required, email_verification_required, cache_control(max_age=3600, no_store=True)]
@@ -238,13 +238,23 @@ def SwitchAdoptedDogView(request, dog_id):
     messages.success(request, 'Perro marcado como adoptado')
     return redirect(reverse('adoption_dog_list'))
 
+
+from django.template.defaulttags import register
+import json
+@register.filter
+def json_to_list(value):
+    try:
+        return json.loads(value)
+    except (json.JSONDecodeError, TypeError):
+        return []
+    
 @login_required(login_url='/login/')
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
 def HealthBookDogView(request, dog_id):
     dog = Perro.objects.get(id=dog_id)
-    vacunas = list(Libreta.objects.filter(dog=dog, finalized__type__in=['VA', 'VB']).select_related('finalized'))
-    operaciones = Libreta.objects.filter(dog=dog).exclude(finalized__type__in=['VA', 'VB']).select_related('finalized')
+    vacunas = Libreta.objects.filter(dog=dog, finalized__type__in=['VA', 'VB']).select_related('finalized')
+    operaciones = Libreta.objects.filter(dog=dog).exclude(finalized__type__in=['VA', 'VB', 'T']).select_related('finalized')
 
     # TERMINAR LIBRRETA SANITARIA HTML NO EXISTE
     return render(request, "dogs/health_book.html", {"vacunas" : vacunas, 'operaciones':operaciones, 'dog': dog, 'dog_age': calculate_age(dog.birthdate),
@@ -258,4 +268,4 @@ def ClinicHistoryDogView(request, dog_id):
     clinic_history_turns = list(Historial.objects.filter(dog=dog).select_related('finalized'))
     
     return render(request, "dogs/history_clinic.html", {"turns" : clinic_history_turns, 'name': dog.name, 'dog_id': dog.id,
-                                                     'turn_type_mapping': turn_type_mapping(), 'turn_hour_mapping': turn_hour_mapping()})
+                                                     'turn_type_mapping': turn_type_mapping_with_urgency(), 'turn_hour_mapping': turn_hour_mapping()})

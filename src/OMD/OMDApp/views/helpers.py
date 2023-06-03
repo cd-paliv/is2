@@ -29,6 +29,16 @@ def turn_type_mapping():
     }
     return map
 
+def turn_type_mapping_with_urgency():
+    map = {
+        'T': 'Turno normal',
+        'C': 'Castración',
+        'VA': 'Vacunación - Tipo A',
+        'VB': 'Vacunacion - Tipo B',
+        'U': 'Urgencia',
+    }
+    return map
+
 def turn_hour_mapping():
     map = {
         'Morning': 'Tanda mañana: 08:00 a 13:00hs',

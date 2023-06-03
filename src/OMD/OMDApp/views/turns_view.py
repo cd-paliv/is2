@@ -4,14 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from OMDApp.models import Turno, Veterinario, Perro
-from OMDApp.decorators import email_verification_required, vet_required
+from OMDApp.decorators import email_verification_required
 from OMDApp.forms.turns_form import (AskForTurnForm, AttendTurnForm)
-from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_control
 from django.db.models import Q
 from datetime import date
 import json
-from OMDApp.forms.accounts_form import RegisterDogForm, RegisterForm
 from OMDApp.views.helpers import (turn_type_mapping, turn_hour_mapping, actual_turn_hour_check,
                                     generate_date, append_data)
 
@@ -174,7 +172,7 @@ def AttendTurnView(request, turn_id, urgency=False):
 def GenerateUrgencyView(request, dog_id):
     dog = Perro.objects.get(id=dog_id)
     turn = Turno.objects.create(type='U', hour=actual_turn_hour_check(), date=date.today(), motive='Urgencia',
-                                solicited_by=dog, urgency_turns=json.dumps([]))
+                                solicited_by=dog, urgency_turns=json.dumps([]), accepted_by=Veterinario.objects.get(user=request.user))
 
     return redirect(reverse("attendUrgency", kwargs={"turn_id": turn.id}))
 
@@ -211,12 +209,22 @@ def GenerateTurnForUrgencyView(request, turn_id, opt):
     turn = Turno.objects.get(id=turn_id)
     dog = turn.solicited_by
     if opt == 'VA' or opt == 'VB':
+        # Generate vacunation turn
+        motive = f"Vacunación tipo {'A' if opt == 'VA' else 'B'} inyectada en urgencia"
+        vacc_turn = Turno.objects.create(state='F', type=opt, hour=turn.hour, date=turn.date, motive=motive, solicited_by=dog)
+        vacc_turn.add_to_health_book()
+
         # Automatic new vacunation turn ?
         new_date = generate_date(turn.date, dog.birthdate, type=turn.type)
         motive = f"Generación automática de turno para vacunación tipo {'A' if opt == 'VA' else 'B'} en urgencia"
-        Turno.objects.create(state='S', type=turn.type, hour=turn.hour, date=new_date, motive=motive, solicited_by=dog)
+        Turno.objects.create(state='S', type=opt, hour=turn.hour, date=new_date, motive=motive, solicited_by=dog)
 
     elif opt == 'C':
+        # Generate castration turn
+        motive = f"Castración realizada en urgencia"
+        cast_turn = Turno.objects.create(state='F', type=opt, hour=turn.hour, date=turn.date, motive=motive, solicited_by=dog)
+        cast_turn.add_to_health_book()
+
         # Update dog
         Perro.objects.filter(id=dog.id).update(castrated=True)
 
