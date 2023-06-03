@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock css %}
+
+{% block title %}Libreta Sanitaria de {{ dog.name }}{% endblock title %}
+
+{% block content %}
+    <div class="container pt-5 justify-content-center">
+        <h1 class="text-center fw-semibold mb-4 pb-3">Libreta Sanitaria de {{ dog.name }}</h1>
+
+        <div class="card border-secondary">
+            <div class="card-header text-center">
+                <h5 class="fw-bold">Información</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-md-auto mb-3 mt-2">
+                            <span class="fw-bold fs-5">Sexo:</span> <span class="fs-5">{% if dog.gender == 'F' %}Femenino{% else %}Masculino{% endif %}</span>
+                        </div>
+                        <div class="col-md-auto mb-3">
+                            <span class="fw-bold fs-5">Edad:</span> <span class="fs-5">{{ dog_age }}</span>
+                        </div>
+                        <div class="col-md-auto mb-3">
+                            <span class="fw-bold fs-5">Peso:</span> <span class="fs-5">{{ dog.weight }}</span>
+                        </div>
+                        <div class="col-md-auto mb-3">
+                            <span class="fw-bold fs-5">Castrado:</span> <span class="fs-5">{% if dog.castrated %}Si{% else %}No{% endif %}</span>
+                        </div>
+                    </div>
+                      
+                    <div class="col-md-6 text-md-end">
+                        <img src="{{ dog.image.url }}" alt="Imagen del perro" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mt-4 border-secondary">
+                    <div class="card-header text-center">
+                        <h5 class="fw-bold">Vacunas aplicadas</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Fecha de aplicación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for vacuna in vacunas %}
+                                <tr>
+                                    <td>{% if vacuna.finalized.type == 'VA' %}Tipo A{% else %}Tipo B{% endif %}</td>
+                                    <td>{{ vacuna.finalized.date|date:'d/m/Y' }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="2" class="text-center">No se encontraron vacunas aplicadas.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+                
+            <div class="col-md-6">
+                <div class="card mt-4 border-secondary">
+                    <div class="card-header text-center">
+                        <h5 class="fw-bold">Intervenciones</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for operacion in operaciones %}
+                                <tr>
+                                    <td>{{ turn_type_mapping|get_item:operacion.finalized.type }}</td>
+                                    <td>{{ operacion.finalized.date|date:'d/m/Y' }}</td>
+                                </tr>
+                                    {% if operacion.finalized.type == 'U' and operacion.finalized.urgency_turns %}
+                                        {% for o in operacion.finalized.urgency_turns %}
+                                        <tr>
+                                            <td>{{ turn_type_mapping|get_item:operacion.finalized.type }}</td>
+                                            <td>{{ o.finalized.date|date:'d/m/Y' }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% empty %}
+                                <tr>
+                                    <td colspan="2" class="text-center">No se encontraron operaciones.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+            <a href="{% url 'dog_profile' dog_id=dog.id %}" class="btn btn-secondary">Atrás</a>
+        </div>
+    </div>
+{% endblock content %}

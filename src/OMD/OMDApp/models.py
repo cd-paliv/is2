@@ -124,6 +124,7 @@ class Turno(models.Model):
     solicited_by = models.ForeignKey(Perro, on_delete=models.CASCADE)
     accepted_by = models.ForeignKey(Veterinario, on_delete=models.CASCADE, blank=True, null=True)
     finalized_at = models.DateField(blank=True, null=True)
+    urgency_turns = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='child_turns')
 
     REQUIRED_FIELDS = ["type", "hour", "date", "motive"]
 

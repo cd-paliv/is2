@@ -205,7 +205,7 @@
           "motive": "Turno",
           "observations": "",
           "amount": null,
-          "solicited_by": 1,
+          "solicited_by": 2,
           "accepted_by": null
         }
       },
@@ -220,7 +220,7 @@
           "motive": "Castración",
           "observations": "",
           "amount": null,
-          "solicited_by": 4,
+          "solicited_by": 2,
           "accepted_by": null
         }
       },
