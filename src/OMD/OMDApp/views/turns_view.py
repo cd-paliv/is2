@@ -61,8 +61,8 @@ def ViewPendingTurns(request):
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
 def ViewAcceptedTurns(request):
-    turnos = list(Turno.objects.filter(Q(state="A") | Q(state="AC")).order_by('-hour', 'date')) # accepted
-    return render(request, "turns/turn_list.html", {"turn_list" : turnos, "turns" : "A",
+    turnos = list(Turno.objects.filter(state="A").order_by('-hour', 'date')) # accepted
+    return render(request, "turns/turn_list.html", {"turn_list" : turnos, "turns" : "A", "todays_date": date.today(),
                                                     'turn_type_mapping': turn_type_mapping(), 'turn_hour_mapping': turn_hour_mapping()})
 
 @login_required(login_url='/login/')
@@ -102,7 +102,7 @@ def RejectTurn(request, turn_id):
 def ViewMyTurns(request):
     user = request.user
     dogs = Perro.objects.filter(owner=user)
-    turnos = list(Turno.objects.filter(solicited_by__in=dogs).order_by('state', 'date', '-hour').exclude(Q(state="F") | Q(state="AC")))
+    turnos = list(Turno.objects.filter(solicited_by__in=dogs).order_by('state', 'date', '-hour').exclude(state="F"))
     return render(request, "turns/turn_list.html", {"turn_list" : turnos, "turns" : "U",
                                                     'turn_type_mapping': turn_type_mapping(), 'turn_hour_mapping': turn_hour_mapping()})
 
@@ -110,16 +110,15 @@ def ViewMyTurns(request):
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
 def CancelTurn(request, turn_id):
-    turn = Turno.objects.get(id=turn_id)
-    if turn.state == "A":
-        turn.state = "AC"
-        turn.save()
-    else:
-        turn.delete()
+    turn = Turno.objects.get(id=turn_id).delete()
 
     soliciter = get_user_model().objects.get(id=turn.solicited_by.id)
     message = 'Usted ha cancelado su turno del %s en Oh My Dog' % turn.date.strftime('%d/%m/%Y')
     soliciter.email_user('Cambio en estado de turno', message)
+
+    vet = request.user
+    message = 'Se ha cancelado un turno del %s en Oh My Dog' % turn.date.strftime('%d/%m/%Y')
+    vet.email_user('Cambio en estado de turno', message)
 
     messages.success(request, "Turno cancelado")
     return redirect(reverse("myTurns"))
@@ -211,8 +210,10 @@ def GenerateTurnForUrgencyView(request, turn_id, opt):
     if opt == 'VA' or opt == 'VB':
         # Generate vacunation turn
         motive = f"Vacunación tipo {'A' if opt == 'VA' else 'B'} inyectada en urgencia"
-        vacc_turn = Turno.objects.create(state='F', type=opt, hour=turn.hour, date=turn.date, motive=motive, solicited_by=dog)
+        vacc_turn = Turno.objects.create(state='F', type=opt, hour=turn.hour, date=turn.date, motive=motive, solicited_by=dog,
+                                         accepted_by=Veterinario.objects.get(user=request.user), amount=0.0)
         vacc_turn.add_to_health_book()
+        vacc_turn.add_to_clinic_history()
 
         # Automatic new vacunation turn ?
         new_date = generate_date(turn.date, dog.birthdate, type=turn.type)
@@ -222,8 +223,10 @@ def GenerateTurnForUrgencyView(request, turn_id, opt):
     elif opt == 'C':
         # Generate castration turn
         motive = f"Castración realizada en urgencia"
-        cast_turn = Turno.objects.create(state='F', type=opt, hour=turn.hour, date=turn.date, motive=motive, solicited_by=dog)
+        cast_turn = Turno.objects.create(state='F', type=opt, hour=turn.hour, date=turn.date, motive=motive, solicited_by=dog,
+                                         accepted_by=Veterinario.objects.get(user=request.user), amount=0.0)
         cast_turn.add_to_health_book()
+        cast_turn.add_to_clinic_history()
 
         # Update dog
         Perro.objects.filter(id=dog.id).update(castrated=True)
