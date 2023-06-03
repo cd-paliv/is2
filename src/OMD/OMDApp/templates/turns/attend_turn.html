@@ -34,12 +34,26 @@
             </div>  
         </div>
 
+        {% if type == 'U' %}
+        <div class="container my-4">
+            <div class="row">
+                <div class="col-md-12 d-flex justify-content-center">
+                    <a href="/" class="btn btn-secondary mx-4">Vacuna Tipo A</a>
+                    <a href="/" class="btn btn-secondary mx-4">Vacuna Tipo B</a>
+                    <a href="/" class="btn btn-secondary mx-4">Castración</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+          
+          
+
         <form method="POST">
 			{% csrf_token %}
 
 			{% for field in form %}
             <div class="mb-3">
-                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}:</label>
                 {% if field.field.widget.input_type == 'number' %}
                     <input type="number" class="form-control {% if field.errors %}is-invalid{% endif %}" id="{{ field.id_for_label }}"
                             name="{{ field.html_name }}" placeholder="{{ field.field.widget.attrs.placeholder }}"

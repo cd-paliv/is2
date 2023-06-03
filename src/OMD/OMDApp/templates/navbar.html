@@ -49,6 +49,7 @@
                 <li><a class="dropdown-item" href="{% url 'myTurns' %}">Mis turnos</a></li>
               {% endif %}
               {% if perms.OMDApp.is_vet %}
+                <li><a class="dropdown-item" href="{% url 'selectUrgency' %}">Nueva urgencia</a></li>
                 <li><a class="dropdown-item" href="{% url 'pendingTurns' %}">Turnos pendientes</a></li>
                 <li><a class="dropdown-item" href="{% url 'acceptedTurns' %}">Turnos aceptados</a></li>
               {% endif %}

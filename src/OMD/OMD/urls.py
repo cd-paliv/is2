@@ -24,7 +24,7 @@ from OMDApp.views.dogs_view import (DogListView, ProfileDogView, EditProfileDogV
                                     AdoptionDogListView, AdoptionDogListFilteredView, AdoptionDog, SwitchAdoptedDogView,
                                     AdoptedDogListView, HealthBookDogView, ClinicHistoryDogView)
 from OMDApp.views.turns_view import (AskForTurn, ViewAcceptedTurns, ViewPendingTurns, AcceptTurn, RejectTurn,
-                                     ViewMyTurns, CancelTurn, AttendTurnView)
+                                     ViewMyTurns, CancelTurn, AttendTurnView, GenerateUrgencyView, AttendUrgencyView)
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
@@ -64,6 +64,13 @@ urlpatterns = [
     path('rejectingTurn/<int:turn_id>/', RejectTurn, name='rejectTurn'),
     path('cancelingTurn/<int:turn_id>/', CancelTurn, name='cancelTurn'),
     path('attendTurnView/<int:turn_id>/', AttendTurnView, name='attendTurnView'),
+
+    # Turns - Urgency
+    path('selectUrgency/', TemplateView.as_view(template_name="turns/select_urgency.html"), name='selectUrgency'),
+    path('register/<int:urgency>/', RegisterView, name='register'),
+    path('registerdog/<int:urgency>/', RegisterDogView, name='registerDog'),
+    path('generateUrgency/<int:dog_id>/', GenerateUrgencyView, name='generateUrgency'),
+    path('attendUrgency/<int:turn_id>/', AttendUrgencyView, name='attendUrgency'),
     
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

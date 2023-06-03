@@ -58,7 +58,7 @@ def LogOut(request):
 @login_required(login_url='/login/')
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
-def RegisterView(request):
+def RegisterView(request, urgency=False):
     if request.method == "POST":
         form = RegisterForm(request.POST, request.FILES)
         if form.is_valid():
@@ -66,7 +66,9 @@ def RegisterView(request):
             user_data = form.cleaned_data
             user_data['birthdate'] = user_data['birthdate'].isoformat()
             request.session['user_data'] = user_data
-
+            
+            if bool(urgency):
+                return redirect(reverse("registerDog", kwargs={'urgency': 1}))
             return redirect(reverse("registerDog"))
         else:
             form.data = form.data.copy()
@@ -77,7 +79,7 @@ def RegisterView(request):
 @login_required(login_url='/login/')
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
-def RegisterDogView(request):
+def RegisterDogView(request, urgency=False):
     if request.method == "POST":
         form = RegisterDogForm(request.POST, request.FILES)
         if form.is_valid():
@@ -104,6 +106,9 @@ def RegisterDogView(request):
             dog.color = dog.color.capitalize()
             dog.owner = user
             dog.save()
+
+            if bool(urgency):
+                return redirect(reverse("generateUrgency", kwargs={'dog_id': dog.id}))
 
             subject = 'Activa tu cuenta en OhMyDog'
             user.email_user(subject, message)

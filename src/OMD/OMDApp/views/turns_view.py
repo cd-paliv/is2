@@ -9,6 +9,7 @@ from OMDApp.forms.turns_form import (AskForTurnForm, AttendTurnForm)
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_control
 from django.db.models import Q
+from OMDApp.forms.accounts_form import RegisterDogForm, RegisterForm
 
 
 # Create your views here
@@ -18,7 +19,6 @@ def turn_type_mapping():
         'C': 'Castración',
         'VA': 'Vacunación - Tipo A',
         'VB': 'Vacunacion - Tipo B',
-        'U': 'Urgencia',
     }
     return map
 
@@ -152,7 +152,7 @@ def generate_date(today, birthdate, type):
 @login_required(login_url='/login/')
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
-def AttendTurnView(request, turn_id):
+def AttendTurnView(request, turn_id, urgency=False):
     turn = Turno.objects.get(id=turn_id)
     dog = turn.solicited_by
     if request.method == "POST":
@@ -183,9 +183,45 @@ def AttendTurnView(request, turn_id):
             
             turn.save()
             turn.add_to_clinic_history()
+
+            messages.success(request, "Turno finalizado")
             return redirect(reverse('home'))
         else:
             form.data = form.data.copy()
     else:
         form = AttendTurnForm(initial={'weight': dog.weight})
     return render(request, "turns/attend_turn.html", {'form': form, 'dog': dog})
+
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
+def GenerateUrgencyView(request, dog_id):
+    dog = Perro.objects.get(id=dog_id)
+    turn = Turno.objects.create(type='U', date=date.today(), motive='Urgencia', solicited_by=dog)
+
+    return redirect(reverse("attendUrgency", kwargs={"turn_id": turn.id}))
+
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
+def AttendUrgencyView(request, turn_id):
+    turn = Turno.objects.get(id=turn_id)
+    dog = turn.solicited_by
+    if request.method == "POST":
+        form = AttendTurnForm(request.POST)
+        if form.is_valid():
+            weight = form.cleaned_data['weight']
+            Perro.objects.filter(id=dog.id).update(weight=weight)
+
+            turn.observations = form.cleaned_data['observations']
+            turn.amount = form.cleaned_data['amount']
+            turn.state = 'F'
+
+            turn.save()
+            turn.add_to_clinic_history()
+            return redirect(reverse('home'))
+        else:
+            form.data = form.data.copy()
+    else:
+        form = AttendTurnForm(initial={'weight': dog.weight})
+    return render(request, "turns/attend_turn.html", {'form': form, 'dog': dog, 'type': 'U'})
