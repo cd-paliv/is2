@@ -77,10 +77,14 @@ class RegisterDogForm(forms.ModelForm):
                                 widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'type': 'date', 'class': 'form-control', 'id': 'birthdate',
                                                               'placeholder': 'Ingresa la fecha de nacimiento estimada del perro',
                                                               'required': 'True'}), validators=[EmptyFieldValidator(), DogAgeValidator()])
+    bool_options = {(1, 'Si'), (0, 'No')}
+    castrated = forms.ChoiceField(label="¿Está castrado/a?(*)", choices=bool_options, widget=forms.RadioSelect(attrs={'type': 'radio'}))
+    gender_options = {('F', 'Femenino'), ('M', 'Masculino')}
+    gender = forms.ChoiceField(label="Sexo(*)", choices=gender_options, widget=forms.RadioSelect(attrs={'type': 'radio'}))
 
     class Meta:
         model = Perro
-        fields = ("name", "breed", "color", "birthdate", "image")
+        fields = ("name", "breed", "color", "birthdate", "castrated", "gender", "image")
 
     
 class EditPasswordForm(forms.Form):

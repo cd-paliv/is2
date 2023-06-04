@@ -7,6 +7,17 @@
                     {% if field.value %} value="{{ field.value|date:'Y-m-d' }}" {% endif %}>
         {% elif field.field.widget.input_type == 'select' %}
             {{ field }}
+        {% elif field.field.widget.input_type == 'radio' %}
+            <div class="form-check form-check-inline">
+                {% for choice_value, choice_label in field.field.choices %}
+                    <div class="form-check form-check-inline">  <!-- Add the form-check-inline class to display radio options side by side -->
+                        <input class="form-check-input radio-inline" type="radio" name="{{ field.html_name }}" id="{{ field.id_for_label }}_{{ forloop.counter0 }}"
+                                value="{{ choice_value }}"
+                                {% if field.value|stringformat:"s" == choice_value|stringformat:"s" %} checked {% endif %}>
+                        <label class="form-check-label" for="{{ field.id_for_label }}_{{ forloop.counter0 }}">{{ choice_label }}</label>
+                    </div>
+                {% endfor %}
+            </div>
         {% else %}
             <input type="{{ field.field.widget.input_type }}" class="form-control {% if field.errors %}is-invalid{% endif %}" id="{{ field.id_for_label }}"
                 name="{{ field.html_name }}" placeholder="{{ field.field.widget.attrs.placeholder }}"

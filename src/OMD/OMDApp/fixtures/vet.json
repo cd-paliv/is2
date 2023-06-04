@@ -102,6 +102,8 @@
             "breed": "Perro",
             "color": "Negro",
             "birthdate": "2014-11-04",
+            "castrated": 0,
+            "gender": "F",
             "owner": 4,
             "image": "dogs/AA023.jpg"
         }
@@ -114,6 +116,8 @@
             "breed": "Doberman",
             "color": "Marron",
             "birthdate": "2023-05-19",
+            "castrated": 0,
+            "gender": "M",
             "owner": 4
         }
     },
@@ -125,6 +129,8 @@
             "breed": "Caniche",
             "color": "B&W",
             "birthdate": "2022-02-04",
+            "castrated": 1,
+            "gender": "F",
             "owner": 4
         }
     },
@@ -136,6 +142,8 @@
             "breed": "Shih-tzu",
             "color": "Marron",
             "birthdate": "2012-02-29",
+            "castrated": 0,
+            "gender": "F",
             "owner": 4
         }
     },
@@ -147,6 +155,8 @@
             "breed": "Caniche",
             "color": "Dorado",
             "birthdate": "2021-05-31",
+            "castrated": 1,
+            "gender": "M",
             "owner": 4
         }
     },
@@ -158,6 +168,8 @@
             "breed": "Perro",
             "color": "Tricolor",
             "birthdate": "2020-10-10",
+            "castrated": 0,
+            "gender": "F",
             "owner": 4
         }
     },
@@ -169,6 +181,8 @@
             "breed": "Perro",
             "color": "Tricolor",
             "birthdate": "2015-10-10",
+            "castrated": 1,
+            "gender": "F",
             "owner": 4
         }
     },
