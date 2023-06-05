@@ -74,8 +74,10 @@ def AcceptTurn(request, turn_id):
     turn.accepted_by = Veterinario.objects.get(user=request.user)
     turn.save()
 
-    soliciter = get_user_model().objects.get(id=turn.solicited_by.id)
-    message = 'Se ha aceptado su turno del %s en Oh My Dog' % turn.date.strftime('%d/%m/%Y')
+    soliciter = get_user_model().objects.get(id=turn.solicited_by.owner.id)
+    hours = str(turn_hour_mapping().get(turn.hour)).split(': ')[1]
+    turn_type = str(turn_type_mapping().get(turn.type))
+    message = 'Se ha aceptado su turno de %s del %s a las %s en Oh My Dog' % (turn_type, turn.date.strftime('%d/%m/%Y'), hours)
     soliciter.email_user('Cambio en estado de turno', message)
 
     messages.success(request, "Turno aceptado")
@@ -87,8 +89,10 @@ def AcceptTurn(request, turn_id):
 def RejectTurn(request, turn_id):
     turn = Turno.objects.get(id=turn_id)
 
-    soliciter = get_user_model().objects.get(id=turn.solicited_by.id)
-    message = 'Se ha rechazado su turno del %s en Oh My Dog' % turn.date.strftime('%d/%m/%Y')
+    soliciter = get_user_model().objects.get(id=turn.solicited_by.owner.id)
+    hours = str(turn_hour_mapping().get(turn.hour)).split(': ')[1]
+    turn_type = str(turn_type_mapping().get(turn.type))
+    message = 'Se ha rechazado su turno de %s del %s a las %s en Oh My Dog' % (turn_type, turn.date.strftime('%d/%m/%Y'), hours)
     soliciter.email_user('Cambio en estado de turno', message)
 
     turn.delete()
@@ -110,15 +114,20 @@ def ViewMyTurns(request):
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
 def CancelTurn(request, turn_id):
-    turn = Turno.objects.get(id=turn_id).delete()
+    turn = Turno.objects.get(id=turn_id)
 
-    soliciter = get_user_model().objects.get(id=turn.solicited_by.id)
-    message = 'Usted ha cancelado su turno del %s en Oh My Dog' % turn.date.strftime('%d/%m/%Y')
+    soliciter = get_user_model().objects.get(id=turn.solicited_by.owner.id)
+    hours = str(turn_hour_mapping().get(turn.hour)).split(': ')[1]
+    turn_type = str(turn_type_mapping().get(turn.type))
+    message = 'Usted ha cancelado su turno de \'%s\' del %s a las %s en Oh My Dog' % (turn_type, turn.date.strftime('%d/%m/%Y'), hours)
     soliciter.email_user('Cambio en estado de turno', message)
 
-    vet = request.user
-    message = 'Se ha cancelado un turno del %s en Oh My Dog' % turn.date.strftime('%d/%m/%Y')
-    vet.email_user('Cambio en estado de turno', message)
+    if turn.accepted_by is not None:
+        vet = Veterinario.objects.get(id=turn.accepted_by.id)
+        message_vet = 'Se ha cancelado un turno de "%s" del %s a las %s en Oh My Dog' % (turn_type, turn.date.strftime('%d/%m/%Y'), hours)
+        vet.email_user('Cambio en estado de turno', message_vet)
+
+    turn.delete()
 
     messages.success(request, "Turno cancelado")
     return redirect(reverse("myTurns"))
