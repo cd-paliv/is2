@@ -11,7 +11,8 @@ from django.db.models import Q
 from datetime import date
 import json
 from OMDApp.views.helpers import (turn_type_mapping, turn_hour_mapping, actual_turn_hour_check,
-                                    generate_date, append_data)
+                                    generate_date, append_data, delete_unwanted_next_turns, get_filtered_interventions)
+from datetime import datetime
 
 
 # Create your views here
@@ -31,7 +32,7 @@ def AskForTurn(request):
         if form.is_valid():
             turn = form.save(commit=False)
 
-            if turn.solicited_by.castrated:
+            if turn.type == 'C' and turn.solicited_by.castrated:
                 messages.error(request, "No puede solicitar un turno de castración para un perro castrado")
                 return redirect(reverse("askForTurn"))
 
@@ -43,6 +44,8 @@ def AskForTurn(request):
                 return redirect(reverse("askForTurn"))
 
             turn.save()
+            delete_unwanted_next_turns(turn.solicited_by, turn.type)
+
             messages.success(request, f'Solicitud de turno exitosa')
             return redirect(reverse("home"))
     user_dogs = Perro.objects.filter(owner=request.user)
@@ -154,7 +157,7 @@ def AttendTurnView(request, turn_id, urgency=False):
                 turn.add_to_health_book()
 
                 # Automatic new vacunation turn
-                new_date = generate_date(turn.date, dog.birthdate, type=turn.type)
+                new_date = generate_date(dog.birthdate, type=turn.type)
                 motive = f"Generación automática de turno para vacunación tipo {'A' if turn.type == 'VA' else 'B'}"
                 Turno.objects.create(state='S', type=turn.type, hour=turn.hour, date=new_date, motive=motive, solicited_by=dog)
 
@@ -173,6 +176,15 @@ def AttendTurnView(request, turn_id, urgency=False):
         form = AttendTurnForm(initial={'weight': dog.weight})
     return render(request, "turns/attend_turn.html", {'form': form, 'dog': dog})
 
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
+def NewUrgencyButtonView(request):
+    #if actual_turn_hour_check() is None:
+    #    messages.error(request, 'No puede generar una nueva urgencia fuera de horario de atencion')
+    #    return redirect(reverse('home'))
+    
+    return render(request, 'turns/select_urgency.html')
 
 @login_required(login_url='/login/')
 @email_verification_required
@@ -190,8 +202,9 @@ def GenerateUrgencyView(request, dog_id):
 def AttendUrgencyView(request, turn_id):
     turn = Turno.objects.get(id=turn_id)
     dog = turn.solicited_by
+    urgency_choices = get_filtered_interventions(dog)
     if request.method == "POST":
-        form = AttendTurnForm(request.POST)
+        form = AttendTurnForm(data=request.POST, urgency_choices=urgency_choices)
         if form.is_valid():
             weight = form.cleaned_data['weight']
             Perro.objects.filter(id=dog.id).update(weight=weight)
@@ -203,45 +216,53 @@ def AttendUrgencyView(request, turn_id):
             turn.save()
             turn.add_to_health_book()
             turn.add_to_clinic_history()
+
+            # Add urgency interventions
+            allowed_choices = request.POST.getlist('urgency')
+            print(allowed_choices)
+            for key in allowed_choices:
+                GenerateTurnForUrgencyView(turn.id, request.user, turn.solicited_by, key)
+
+            # Delete turns
+            for intervention in turn.urgency_turns:
+                delete_unwanted_next_turns(turn.solicited_by, intervention)
+
             return redirect(reverse('home'))
         else:
             form.data = form.data.copy()
     else:
-        form = AttendTurnForm(initial={'weight': dog.weight})
-    return render(request, "turns/attend_turn.html", {'form': form, 'dog': dog, 'type': 'U', 'turn_id': turn.id})
+        form = AttendTurnForm(urgency_choices=urgency_choices, initial={'weight': dog.weight})
+        #form = AttendTurnForm(initial={'weight': dog.weight})
+    return render(request, "turns/attend_turn.html", {'form': form, 'dog': dog, 'type': 'U', 'turn_id': turn.id,
+                                                      'urgency_choices': get_filtered_interventions(dog)})
 
-@login_required(login_url='/login/')
-@email_verification_required
-@cache_control(max_age=3600, no_store=True)
-def GenerateTurnForUrgencyView(request, turn_id, opt):
+def GenerateTurnForUrgencyView(turn_id, vet, dog, opt):
+    print(opt)
     turn = Turno.objects.get(id=turn_id)
-    dog = turn.solicited_by
     if opt == 'VA' or opt == 'VB':
         # Generate vacunation turn
-        motive = f"Vacunación tipo {'A' if opt == 'VA' else 'B'} inyectada en urgencia"
-        vacc_turn = Turno.objects.create(state='F', type=opt, hour=turn.hour, date=turn.date, motive=motive, solicited_by=dog,
-                                         accepted_by=Veterinario.objects.get(user=request.user), amount=0.0)
+        motive = f"Vacunación tipo {'A' if opt == 'VA' else 'B'} realizada en urgencia"
+        vacc_turn = Turno.objects.create(state='F', type=opt, hour=datetime.now().time(), date=turn.date, motive=motive, solicited_by=dog,
+                                         accepted_by=Veterinario.objects.get(user=vet), amount=0.0)
         vacc_turn.add_to_health_book()
-        vacc_turn.add_to_clinic_history()
-
-        # Automatic new vacunation turn ?
-        new_date = generate_date(turn.date, dog.birthdate, type=turn.type)
-        motive = f"Generación automática de turno para vacunación tipo {'A' if opt == 'VA' else 'B'} en urgencia"
-        Turno.objects.create(state='S', type=opt, hour=turn.hour, date=new_date, motive=motive, solicited_by=dog)
+        #vacc_turn.add_to_clinic_history()
 
     elif opt == 'C':
         # Generate castration turn
         motive = f"Castración realizada en urgencia"
-        cast_turn = Turno.objects.create(state='F', type=opt, hour=turn.hour, date=turn.date, motive=motive, solicited_by=dog,
-                                         accepted_by=Veterinario.objects.get(user=request.user), amount=0.0)
+        cast_turn = Turno.objects.create(state='F', type=opt, hour=datetime.now().time(), date=turn.date, motive=motive, solicited_by=dog,
+                                         accepted_by=Veterinario.objects.get(user=vet), amount=0.0)
         cast_turn.add_to_health_book()
-        cast_turn.add_to_clinic_history()
+        #cast_turn.add_to_clinic_history()
 
         # Update dog
         Perro.objects.filter(id=dog.id).update(castrated=True)
+    
+    elif opt == 'D':
+        motive = f"Desparasitación realizada en urgencia"
+        desp_turn = Turno.objects.create(state='F', type=opt, hour=datetime.now().time(), date=turn.date, motive=motive, solicited_by=dog,
+                                         accepted_by=Veterinario.objects.get(user=vet), amount=0.0)
+        desp_turn.add_to_health_book()
 
     # Add new intervention to urgency
     append_data(turn, opt)
-
-    messages.success(request, "Intervención agregada")
-    return redirect(reverse('attendUrgency', kwargs={"turn_id": turn.id}))

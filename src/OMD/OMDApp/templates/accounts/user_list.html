@@ -30,7 +30,6 @@
             <table class="table table-sm">
                 <thead>
                     <tr>
-                        <th><strong>#</strong></th>
                         <th><strong>Nombre</strong></th>
                         {% if is_user %}
                             <th><strong>DNI</strong></th>
@@ -43,12 +42,11 @@
                 <tbody>
                     {% for model in model_list %}
                         <tr>
-                            <td class="vertical-align-middle"><strong>{{model.id}}</strong></td>
                             <td class="vertical-align-middle">{% if is_user %}{{model.first_name}} {{model.last_name}}{% else %}{{model.name}}{% endif %}</td>
                             <td class="vertical-align-middle">{% if is_user %}{{model.dni}}{% else %}{{model.breed}}{% endif %}</td>
                             <td class="vertical-align-middle">
                                 {% if is_user %}
-                                    <a href="{% url 'selectUsersDog' user_id=model.id %}" class="btn btn-secondary btn-sm">Seleccionar</a>
+                                    <a href="{% url 'selectUsersDog' user_id=model.id %}" class="btn btn-secondary btn-sm">Seleccionar perro</a>
                                 {% else %}
                                     <a href="{% url 'generateUrgency' dog_id=model.id %}" class="btn btn-secondary btn-sm">Seleccionar</a>
                                 {% endif %}

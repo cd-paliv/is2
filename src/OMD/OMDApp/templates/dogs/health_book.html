@@ -54,8 +54,8 @@
                             <tbody>
                                 {% for vacuna in vacunas %}
                                 <tr>
-                                    <td>{% if vacuna.finalized.type == 'VA' %}Tipo A{% else %}Tipo B{% endif %}</td>
-                                    <td>{{ vacuna.finalized.date|date:'d/m/Y' }}</td>
+                                    <td>{% if vacuna.type == 'VA' %}Tipo A{% else %}Tipo B{% endif %}</td>
+                                    <td>{{ vacuna.date|date:'d/m/Y' }}</td>
                                 </tr>
                                 {% empty %}
                                 <tr>
@@ -84,12 +84,12 @@
                             <tbody>
                                 {% for operacion in operaciones %}
                                     </tr>
-                                        {% if operacion.finalized.type == 'U' %}
+                                        {% if operacion.type == 'U' %}
                                             <td>Urgencia</td>
                                         {% else %}
-                                            <td>{{ turn_type_mapping|get_item:operacion.finalized.type }}</td>
+                                            <td>{{ turn_type_mapping|get_item:operacion.type }}</td>
                                         {% endif %}
-                                        <td>{{ operacion.finalized.date|date:'d/m/Y' }}</td>
+                                        <td>{{ operacion.date|date:'d/m/Y' }}</td>
                                     </tr>
                                 {% empty %}
                                     <td colspan="2" class="text-center">No se encontraron intervenciones.</td>

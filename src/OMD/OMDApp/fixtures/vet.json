@@ -215,11 +215,9 @@
           "state": "S",
           "type": "T",
           "hour": "Morning",
-          "date": "2023-07-15",
+          "date": "2023-11-15",
           "motive": "Turno",
-          "observations": "",
-          "amount": null,
-          "solicited_by": 3,
+          "solicited_by": 1,
           "accepted_by": null
         }
       },
@@ -230,11 +228,11 @@
           "state": "S",
           "type": "C",
           "hour": "Morning",
-          "date": "2023-07-15",
+          "date": "2023-08-15",
           "motive": "Castración",
           "observations": "",
           "amount": null,
-          "solicited_by": 3,
+          "solicited_by": 1,
           "accepted_by": null
         }
       },
@@ -242,15 +240,16 @@
         "model": "OMDApp.turno",
         "pk": 3,
         "fields": {
-          "state": "S",
+          "state": "F",
           "type": "VA",
           "hour": "Morning",
-          "date": "2023-07-15",
+          "date": "2023-03-15",
           "motive": "Vacunación",
-          "observations": "",
-          "amount": null,
-          "solicited_by": 3,
-          "accepted_by": null
+          "observations": "Anterior",
+          "amount": 2345.9,
+          "finalized_at": "2023-03-15",
+          "solicited_by": 1,
+          "accepted_by": 2
         }
       },
       {

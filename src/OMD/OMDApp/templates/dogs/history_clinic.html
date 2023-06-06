@@ -14,19 +14,19 @@
       </div>
         {% for turn in turns %}
           <div class="card mt-3 border-secondary">
-            <h5 class="card-header text-center"><strong>{{ turn_type_mapping|get_item:turn.finalized.type }}</strong></h5>
+            <h5 class="card-header text-center"><strong>{{ turn_type_mapping|get_item:turn.type }}</strong></h5>
             <div class="card-body">
               <div class="row">
                 <div class="col-md-auto">
-                  <p class="card-title"><strong>Fecha:</strong> {{ turn.finalized.date|date:'d/m/Y' }}</p>
-                  <p class="card-text mt-3"><strong>Horario:</strong> {{ turn_hour_mapping|get_item:turn.finalized.hour }} </p>
-                  {% if turn.finalized.motive %}<p class="card-text"><strong>Motivo:</strong> {{ turn.finalized.motive }} </p>{% endif %}
-                  <p class="card-text"><strong>Costo:</strong> {{ turn.finalized.amount }} </p>
-                  <p class="card-text"><strong>Veterinario a cargo:</strong> {{ turn.finalized.accepted_by.user.first_name }} {{ turn.finalized.accepted_by.user.last_name }}</p>
-                  {% if turn.finalized.type == 'U' %}
+                  <p class="card-title"><strong>Fecha:</strong> {{ turn.date|date:'d/m/Y' }}</p>
+                  <p class="card-text mt-3"><strong>Horario:</strong> {{ turn_hour_mapping|get_item:turn.hour }} </p>
+                  {% if turn.motive %}<p class="card-text"><strong>Motivo:</strong> {{ turn.motive }} </p>{% endif %}
+                  <p class="card-text"><strong>Costo:</strong> {{ turn.amount }} </p>
+                  <p class="card-text"><strong>Veterinario a cargo:</strong> {{ turn.accepted_by.user.first_name }} {{ turn.accepted_by.user.last_name }}</p>
+                  {% if turn.type == 'U' %}
                     <p class="card-text">
                       <strong>Intervenciones:</strong>
-                      {% for operacion in turn.finalized.urgency_turns|json_to_list %}
+                      {% for operacion in turn.urgency_turns|json_to_list %}
                         {% if forloop.last %}
                           {{ turn_type_mapping|get_item:operacion }}.
                         {% else %}

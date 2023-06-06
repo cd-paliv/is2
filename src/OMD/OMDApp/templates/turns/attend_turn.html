@@ -34,20 +34,6 @@
             </div>  
         </div>
 
-        {% if type == 'U' %}
-        <div class="container my-4">
-            <div class="row">
-                <div class="col-md-12 d-flex justify-content-center addIntervention">
-                    <a href="{% url 'addIntervention' turn_id=turn_id opt='VB' %}" class="btn btn-secondary mx-4">Vacuna Tipo A</a>
-                    <a href="{% url 'addIntervention' turn_id=turn_id opt='VA' %}" class="btn btn-secondary mx-4">Vacuna Tipo B</a>
-                    {% if not dog.castrated %}<a href="{% url 'addIntervention' turn_id=turn_id opt='C' %}" class="btn btn-secondary mx-4">Castración</a>{% endif %}
-                </div>
-            </div>
-        </div>
-        {% endif %}
-          
-          
-
         <form method="POST">
 			{% csrf_token %}
 
@@ -58,6 +44,15 @@
                     <input type="number" class="form-control {% if field.errors %}is-invalid{% endif %}" id="{{ field.id_for_label }}"
                             name="{{ field.html_name }}" placeholder="{{ field.field.widget.attrs.placeholder }}"
                             {% if field.value %} value="{{ field.value|stringformat:'.2f' }}" {% endif %}>
+                {% elif field.field.widget.input_type == 'checkbox' %}
+                    {% for choice_value, choice_label in urgency_choices.items %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="urgency" id="urgency_{{ forloop.counter0 }}"
+                                value="{{ choice_value }}"
+                                {% if choice_value in selected_urgency %} checked {% endif %}>
+                            <label class="form-check-label" for="urgency_{{ forloop.counter0 }}">{{ choice_label }}</label>
+                        </div>
+                    {% endfor %}
                 {% else %}
                     <input type="{{ field.field.widget.input_type }}" class="form-control {% if field.errors %}is-invalid{% endif %}" id="{{ field.id_for_label }}"
                         name="{{ field.html_name }}" placeholder="{{ field.field.widget.attrs.placeholder }}"

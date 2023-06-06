@@ -11,9 +11,10 @@ from django.views.decorators.cache import cache_control
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from OMDApp.models import Perro, PPEA, UserAdoption, Libreta, Historial
+from OMDApp.models import Perro, PPEA, UserAdoption, Libreta, Turno
 from django.template.loader import render_to_string
 from OMDApp.views.helpers import turn_hour_mapping, turn_type_mapping, turn_type_mapping_with_urgency
+from django.db.models import Q
 
 
 logged_decorators = [login_required, email_verification_required, cache_control(max_age=3600, no_store=True)]
@@ -253,10 +254,11 @@ def json_to_list(value):
 @cache_control(max_age=3600, no_store=True)
 def HealthBookDogView(request, dog_id):
     dog = Perro.objects.get(id=dog_id)
-    vacunas = Libreta.objects.filter(dog=dog, finalized__type__in=['VA', 'VB']).select_related('finalized')
-    operaciones = Libreta.objects.filter(dog=dog).exclude(finalized__type__in=['VA', 'VB', 'T']).select_related('finalized')
+    vacunas = Turno.objects.filter(historial__dog=dog).filter(Q(type='VA') | Q(type='VB')).filter(state='F')
+    #Libreta.objects.filter(dog=dog, finalized__type__in=['VA', 'VB']).select_related('finalized')
+    operaciones = Turno.objects.filter(historial__dog=dog).exclude(Q(type='VA') | Q(type='VB') | Q(type='T') | Q(type='U')).filter(state='F')
+    #Libreta.objects.filter(dog=dog).exclude(finalized__type__in=['VA', 'VB', 'T', 'U']).select_related('finalized')
 
-    # TERMINAR LIBRRETA SANITARIA HTML NO EXISTE
     return render(request, "dogs/health_book.html", {"vacunas" : vacunas, 'operaciones':operaciones, 'dog': dog, 'dog_age': calculate_age(dog.birthdate),
                                                      'turn_type_mapping': turn_type_mapping(), 'turn_hour_mapping': turn_hour_mapping()})
 
@@ -265,7 +267,9 @@ def HealthBookDogView(request, dog_id):
 @cache_control(max_age=3600, no_store=True)
 def ClinicHistoryDogView(request, dog_id):
     dog = Perro.objects.get(id=dog_id)
-    clinic_history_turns = list(Historial.objects.filter(dog=dog).select_related('finalized'))
+    #clinic_history_turns = list(Historial.objects.filter(dog=dog).select_related('finalized'))
+    clinic_history_turns = Turno.objects.filter(historial__dog=dog).exclude(motive__icontains='realizada en urgencia').filter(state='F')
+
     
     return render(request, "dogs/history_clinic.html", {"turns" : clinic_history_turns, 'name': dog.name, 'dog_id': dog.id,
                                                      'turn_type_mapping': turn_type_mapping_with_urgency(), 'turn_hour_mapping': turn_hour_mapping()})

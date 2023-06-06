@@ -50,3 +50,13 @@ class AttendTurnForm(forms.Form):
                                widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputCosto',
                                                              'placeholder': 'Ingrese el costo de la atención'}),
                                                              validators=[EmptyFieldValidator(), GreaterThanZeroValidator(), FloatFieldValidator()])
+
+    def __init__(self, urgency_choices=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if urgency_choices:
+            self.fields['urgency_choices'] = forms.MultipleChoiceField(
+                label="Intervenciones permitidas",
+                choices=urgency_choices.items(),
+                widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+                required=False
+            )

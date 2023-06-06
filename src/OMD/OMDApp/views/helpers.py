@@ -1,5 +1,6 @@
 from datetime import date, datetime, time, timedelta
 from dateutil.relativedelta import relativedelta
+from OMDApp.models import Turno
 import json
 
 
@@ -49,34 +50,73 @@ def turn_hour_mapping():
 def actual_turn_hour_check():
     current_time = datetime.now().time()
 
+    morning_start = time(8, 0)
+    morning_end = time(13, 0)
     afternoon_start = time(15, 0)  # 15:00
     afternoon_end = time(20, 0)  # 20:00
     
     if afternoon_start <= current_time <= afternoon_end:
         return 'Afternoon'
+    #elif morning_start <= current_time <= morning_end:
+    #    return 'Morning'
     else:
+    #    return 'None'
         return 'Morning'
 
-def generate_date(today, birthdate, type):
-    if type == 'VA':
-        months_diff = (today.year - birthdate.year) * 12 + (today.month - birthdate.month)
-    else:
-        months_diff = 4 # default 365 days for type B
+def generate_date(birthdate, type):
+    today = date.today()
 
-    if months_diff < 4:
-        future_date = today + timedelta(days=21)
-    else:
-        future_date = today + timedelta(days=365)
+    if type != 'D':
+        if type == 'VA':
+            months_diff = (today.year - birthdate.year) * 12 + (today.month - birthdate.month)
+        else:
+            months_diff = 4 # default 365 days for type B
 
-    return future_date
+        if months_diff < 4:
+            future_date = today + timedelta(days=21)
+        else:
+            future_date = today + timedelta(days=365)
+
+        return future_date
+    return today + timedelta(days=1)
 
 def append_data(model_instance, new_data):
-    # Retrieve the existing data
     existing_data = json.loads(model_instance.urgency_turns)
 
-    # Append the new data
     existing_data.append(new_data)
 
-    # Save the updated data
     model_instance.urgency_turns = json.dumps(existing_data)
     model_instance.save()
+
+def delete_unwanted_next_turns(dog, turn_type):
+    next_allowed_date = generate_date(dog.birthdate, turn_type)
+
+    start_date = date.today() + timedelta(days=1)
+    end_date = next_allowed_date - timedelta(days=1)
+
+    turns =  Turno.objects.filter(solicited_by=dog, type=turn_type, date__range=(start_date, end_date))
+
+    if turns is not None:
+        for turn in turns:
+            turn.delete()
+
+def get_filtered_interventions(dog):
+    today = date.today()
+
+    choices = (('D', 'Desparasitacion'), ('C', 'Castración'), ('VA', 'Vacunacion - Tipo A'), ('VB', 'Vacunacion - Tipo B'))
+    filtered_choices = {}
+    for choice_label, choice_value in choices:
+        if choice_label == 'C' and dog.castrated:
+            continue
+        most_recent_turn = Turno.objects.filter(solicited_by=dog, type=choice_label, state='F').order_by('-date').first()
+        if most_recent_turn is not None:
+            days_difference = (today - most_recent_turn.date).days # Days from the las intervention
+            max_days = (generate_date(dog.birthdate, choice_label) - today).days # Necessary days to implement that intervention again
+            if days_difference >= max_days:
+                filtered_choices[choice_label] = choice_value
+        else:
+            filtered_choices[choice_label] = choice_value
+            
+    return filtered_choices
+
+    
