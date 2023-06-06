@@ -25,6 +25,7 @@ def turn_type_mapping():
     map = {
         'T': 'Turno normal',
         'C': 'Castración',
+        'D': 'Desparasitacion',
         'VA': 'Vacunación - Tipo A',
         'VB': 'Vacunacion - Tipo B',
     }
@@ -108,6 +109,13 @@ def get_filtered_interventions(dog):
     for choice_label, choice_value in choices:
         if choice_label == 'C' and dog.castrated:
             continue
+        if choice_label == 'D':
+            dog_age = calculate_age(dog.birthdate)
+            if "Menos de" not in dog_age:
+                continue
+            has_desp_turn = lambda: True if Turno.objects.filter(date=date.today(), type='D').exists() else False
+            if has_desp_turn:
+                continue
         most_recent_turn = Turno.objects.filter(solicited_by=dog, type=choice_label, state='F').order_by('-date').first()
         if most_recent_turn is not None:
             days_difference = (today - most_recent_turn.date).days # Days from the las intervention

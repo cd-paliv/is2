@@ -24,7 +24,7 @@
                             <span class="fw-bold fs-5">Edad:</span> <span class="fs-5">{{ dog_age }}</span>
                         </div>
                         <div class="col-md-auto mb-3">
-                            <span class="fw-bold fs-5">Peso:</span> <span class="fs-5">{{ dog.weight }}</span>
+                            <span class="fw-bold fs-5">Peso:</span> <span class="fs-5">{{ dog.weight }} kg</span>
                         </div>
                         <div class="col-md-auto mb-3">
                             <span class="fw-bold fs-5">Castrado:</span> <span class="fs-5">{% if dog.castrated %}Si{% else %}No{% endif %}</span>
@@ -54,7 +54,7 @@
                             <tbody>
                                 {% for vacuna in vacunas %}
                                 <tr>
-                                    <td>{% if vacuna.type == 'VA' %}Tipo A{% else %}Tipo B{% endif %}</td>
+                                    <td>{% if vacuna.type == 'VA' %}A{% else %}B{% endif %}</td>
                                     <td>{{ vacuna.date|date:'d/m/Y' }}</td>
                                 </tr>
                                 {% empty %}

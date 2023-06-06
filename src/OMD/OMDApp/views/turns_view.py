@@ -10,7 +10,7 @@ from django.views.decorators.cache import cache_control
 from django.db.models import Q
 from datetime import date
 import json
-from OMDApp.views.helpers import (turn_type_mapping, turn_hour_mapping, actual_turn_hour_check,
+from OMDApp.views.helpers import (turn_type_mapping, turn_hour_mapping, actual_turn_hour_check, calculate_age,
                                     generate_date, append_data, delete_unwanted_next_turns, get_filtered_interventions)
 from datetime import datetime
 
@@ -35,6 +35,16 @@ def AskForTurn(request):
             if turn.type == 'C' and turn.solicited_by.castrated:
                 messages.error(request, "No puede solicitar un turno de castración para un perro castrado")
                 return redirect(reverse("askForTurn"))
+            
+            if turn.type == 'D':
+                has_desp_turn = lambda: True if Turno.objects.filter(date=date.today(), type='D').exists() else False
+                if has_desp_turn:
+                    messages.error(request, "No puede solicitar mas de un turno de desparasitacion por dia para el mismo perro")
+                    return redirect(reverse("askForTurn"))
+                dog_age = calculate_age(turn.solicited_by.birthdate)
+                if "Menos de" not in dog_age:
+                    messages.error(request, "No puede desaparasitar un perro mayor a un año")
+                    return redirect(reverse("askForTurn"))
 
             same_date_turns = list(Turno.objects.filter(date=turn.date, hour=turn.hour))
             if len(same_date_turns) == 20:
@@ -219,7 +229,6 @@ def AttendUrgencyView(request, turn_id):
 
             # Add urgency interventions
             allowed_choices = request.POST.getlist('urgency')
-            print(allowed_choices)
             for key in allowed_choices:
                 GenerateTurnForUrgencyView(turn.id, request.user, turn.solicited_by, key)
 

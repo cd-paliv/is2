@@ -21,3 +21,7 @@ class Command(BaseCommand):
                 user.user_permissions.add(client_perm)
             user.set_password(user.password)
             user.save()
+
+        for turn in Turno.objects.filter(state='F'):
+            turn.add_to_clinic_history()
+            turn.add_to_health_book()

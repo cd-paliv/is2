@@ -254,9 +254,9 @@ def json_to_list(value):
 @cache_control(max_age=3600, no_store=True)
 def HealthBookDogView(request, dog_id):
     dog = Perro.objects.get(id=dog_id)
-    vacunas = Turno.objects.filter(historial__dog=dog).filter(Q(type='VA') | Q(type='VB')).filter(state='F')
+    vacunas = Turno.objects.filter(libreta__dog=dog).filter(Q(type='VA') | Q(type='VB'))
     #Libreta.objects.filter(dog=dog, finalized__type__in=['VA', 'VB']).select_related('finalized')
-    operaciones = Turno.objects.filter(historial__dog=dog).exclude(Q(type='VA') | Q(type='VB') | Q(type='T') | Q(type='U')).filter(state='F')
+    operaciones = Turno.objects.filter(libreta__dog=dog).exclude(Q(type='VA') | Q(type='VB') | Q(type='T') | Q(type='U'))
     #Libreta.objects.filter(dog=dog).exclude(finalized__type__in=['VA', 'VB', 'T', 'U']).select_related('finalized')
 
     return render(request, "dogs/health_book.html", {"vacunas" : vacunas, 'operaciones':operaciones, 'dog': dog, 'dog_age': calculate_age(dog.birthdate),
@@ -268,7 +268,7 @@ def HealthBookDogView(request, dog_id):
 def ClinicHistoryDogView(request, dog_id):
     dog = Perro.objects.get(id=dog_id)
     #clinic_history_turns = list(Historial.objects.filter(dog=dog).select_related('finalized'))
-    clinic_history_turns = Turno.objects.filter(historial__dog=dog).exclude(motive__icontains='realizada en urgencia').filter(state='F')
+    clinic_history_turns = Turno.objects.filter(historial__dog=dog).exclude(motive__icontains='realizada en urgencia')
 
     
     return render(request, "dogs/history_clinic.html", {"turns" : clinic_history_turns, 'name': dog.name, 'dog_id': dog.id,
