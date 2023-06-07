@@ -90,41 +90,58 @@ def append_data(model_instance, new_data):
     model_instance.save()
 
 def delete_unwanted_next_turns(dog, turn_type):
-    next_allowed_date = generate_date(dog.birthdate, turn_type)
-
     start_date = date.today() + timedelta(days=1)
-    end_date = next_allowed_date - timedelta(days=1)
+    end_date = get_days_until_next_turn(dog, turn_type)
 
-    turns =  Turno.objects.filter(solicited_by=dog, type=turn_type, date__range=(start_date, end_date))
+    turns = Turno.objects.filter(solicited_by=dog, type=turn_type, date__range=(start_date, end_date)).exclude(state='F')
 
     if turns is not None:
         for turn in turns:
             turn.delete()
 
 def get_filtered_interventions(dog):
-    today = date.today()
-
     choices = (('D', 'Desparasitacion'), ('C', 'Castración'), ('VA', 'Vacunacion - Tipo A'), ('VB', 'Vacunacion - Tipo B'))
     filtered_choices = {}
     for choice_label, choice_value in choices:
+
         if choice_label == 'C' and dog.castrated:
             continue
+
         if choice_label == 'D':
             dog_age = calculate_age(dog.birthdate)
             if "Menos de" not in dog_age:
                 continue
-            has_desp_turn = lambda: True if Turno.objects.filter(date=date.today(), type='D').exists() else False
-            if has_desp_turn:
+            if Turno.objects.filter(date=date.today(), type='D').exists():
                 continue
+
         most_recent_turn = Turno.objects.filter(solicited_by=dog, type=choice_label, state='F').order_by('-date').first()
         if most_recent_turn is not None:
-            days_difference = (today - most_recent_turn.date).days # Days from the las intervention
-            max_days = (generate_date(dog.birthdate, choice_label) - today).days # Necessary days to implement that intervention again
-            if days_difference >= max_days:
-                filtered_choices[choice_label] = choice_value
-        else:
-            filtered_choices[choice_label] = choice_value
+            if get_days_until_next_turn(dog, choice_label) is not None:
+                continue
+
+        filtered_choices[choice_label] = choice_value
             
     return filtered_choices
 
-    
+def get_days_until_next_turn(dog, turn_type):
+    today = date.today()
+
+    last_turn = Turno.objects.filter(solicited_by=dog, type=turn_type, state='F').order_by('-finalized_at').first()
+    if last_turn:
+        last_given_date = last_turn.finalized_at
+        days_difference = (today - last_given_date).days
+
+        if turn_type == 'VB':
+            waiting_period = 365
+        elif turn_type == 'VA':
+            if (today - dog.birthdate).days < 120:  # Dog's age is less than 4 months (120 days)
+                waiting_period = 21
+            else:
+                waiting_period = 365
+        elif turn_type == 'D':
+            waiting_period = 1
+
+        days_left = waiting_period - days_difference
+        return days_left if days_left > 0 else None
+
+    return None

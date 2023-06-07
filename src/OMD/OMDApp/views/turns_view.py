@@ -11,7 +11,8 @@ from django.db.models import Q
 from datetime import date
 import json
 from OMDApp.views.helpers import (turn_type_mapping, turn_hour_mapping, actual_turn_hour_check, calculate_age,
-                                    generate_date, append_data, delete_unwanted_next_turns, get_filtered_interventions)
+                                    generate_date, append_data, delete_unwanted_next_turns, get_filtered_interventions,
+                                    get_days_until_next_turn)
 from datetime import datetime
 
 
@@ -32,19 +33,27 @@ def AskForTurn(request):
         if form.is_valid():
             turn = form.save(commit=False)
 
-            if turn.type == 'C' and turn.solicited_by.castrated:
-                messages.error(request, "No puede solicitar un turno de castración para un perro castrado")
-                return redirect(reverse("askForTurn"))
-            
-            if turn.type == 'D':
-                has_desp_turn = lambda: True if Turno.objects.filter(date=date.today(), type='D').exists() else False
-                if has_desp_turn:
-                    messages.error(request, "No puede solicitar mas de un turno de desparasitacion por dia para el mismo perro")
+            if turn.type not in get_filtered_interventions(turn.solicited_by):
+                if turn.type == 'C':
+                    messages.error(request, "No puede solicitar un turno de castración para un perro castrado")
                     return redirect(reverse("askForTurn"))
-                dog_age = calculate_age(turn.solicited_by.birthdate)
-                if "Menos de" not in dog_age:
-                    messages.error(request, "No puede desaparasitar un perro mayor a un año")
-                    return redirect(reverse("askForTurn"))
+                
+                if turn.type == 'D':
+                    has_desp_turn = lambda: True if Turno.objects.filter(date=date.today(), type='D').exists() else False
+                    if has_desp_turn:
+                        messages.error(request, "No puede solicitar mas de un turno de desparasitacion por dia para el mismo perro")
+                        return redirect(reverse("askForTurn"))
+                    dog_age = calculate_age(turn.solicited_by.birthdate)
+                    if "Menos de" not in dog_age:
+                        messages.error(request, "No puede desaparasitar un perro mayor a un año")
+                        return redirect(reverse("askForTurn"))
+                
+                if turn.type == 'VA' or turn.type == 'VB':
+                    time = get_days_until_next_turn(turn.solicited_by, turn.type)
+                    if time is not None:
+                        turn_type = str(turn_type_mapping().get(turn.type))
+                        messages.error(request, "El perro debe esperar %s días para volver a recibir una %s" % (time, turn_type))
+                        return redirect(reverse("askForTurn"))
 
             same_date_turns = list(Turno.objects.filter(date=turn.date, hour=turn.hour))
             if len(same_date_turns) == 20:
@@ -54,12 +63,16 @@ def AskForTurn(request):
                 return redirect(reverse("askForTurn"))
 
             turn.save()
-            delete_unwanted_next_turns(turn.solicited_by, turn.type)
+            if turn.type != 'T':
+                delete_unwanted_next_turns(turn.solicited_by, turn.type)
 
             messages.success(request, f'Solicitud de turno exitosa')
             return redirect(reverse("home"))
-    user_dogs = Perro.objects.filter(owner=request.user)
-    form = AskForTurnForm(user_dogs=user_dogs)
+        else:
+            form.data = form.data.copy()
+    else:
+        user_dogs = Perro.objects.filter(owner=request.user)
+        form = AskForTurnForm(user_dogs=user_dogs)
     return render(request, 'turns/ask_for_turn.html', {'form': form})
 
 @login_required(login_url='/login/')
