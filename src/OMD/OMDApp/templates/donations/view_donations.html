@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+	<link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock css %}
+
+{% block title %} Campañas de Donaciones{% endblock title %}
+{% block content %}
+{% if view_donations %}
+    <h1 class="text-center fw-semibold mb-4">Campañas de donacion</h1>
+    {% if perms.OMDApp.is_vet %}
+        <a href="{% url 'registerEvent' %}" class="btn btn-primary">Crear Campaña</a>
+    {% endif %}
+    {% if perms.OMDApp.is_client %}
+        <a href="{% url 'myDonations' %}" class="btn btn-primary">Mis donaciones</a>
+    {% endif %}
+    <div class="row mt-3 mb-2">
+        <div class="col-md-12 table-responsive">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th><strong>Nombre</strong></th>
+                        <th><strong>Monto estimado</strong></th>
+                        <th><strong>Fecha comienzo</strong></th>
+                        <th><strong>Fecha final</strong></th>
+                    </tr>
+                </thead> 
+                <tbody>
+                    {% for campana in view_donations %}
+                        <tr>
+                            <td class="vertical-align-middle"><strong>{{campana.name}}</strong></td>
+                            <td class="vertical-align-middle">{{campana.estimated_amount}}</td>
+                            <td class="vertical-align-middle">{{campana.date_in}}</td>
+                            <td class="vertical-align-middle">{{campana.date_out}}</td>
+                            {% if campana %}
+                                <td class="vertical-align-middle">
+                                    {% if perms.OMDApp.is_vet %} 
+                                        <a href="{% url  'listDonations' %}" class="btn btn-secondary btn-sm">Ver donaciones</a>
+                                    {% else %}
+                                        <a href="{% url 'registerDonation' %}" class="btn btn-secondary btn-sm">Donar</a>
+                                    {% endif %}
+                            </td>
+                        {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% else %}
+    <h1 class="text-center fw-semibold mb-4">No hay campañas de donacion</h1>
+{% endif %}
+{% endblock content %}

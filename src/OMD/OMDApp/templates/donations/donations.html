@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+	<link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock css %}
+
+
+{% block title %} {% if perms.OMDApp.is_client %} Mis {% endif %}Donaciones{% if perms.OMDApp.is_vet  %} hechas {% endif %}{% endblock title %}
+{% block content %}
+    <div class="container py-5 form_width mb-5">
+        <h1 class="text-center fw-semibold mb-4 pb-3">{% if perms.OMDApp.is_client %} Mis {% endif %}Donaciones{% if perms.OMDApp.is_vet  %} hechas {% endif %}</h1>
+{% endblock content %}

@@ -326,6 +326,26 @@
             "zone": "",
             "publisher": 6
         }
+    },
+    {
+        "model": "OMDApp.Campana",
+        "pk":1,
+        "fields":{
+            "name":"Una monedita para los perritos",
+            "estimated_amount": 50000, 
+            "date_in": "2023-06-07", 
+            "date_out": "2023-06-21"
+        }
+    },
+    {
+        "model": "OMDApp.Campana",
+        "pk":2,
+        "fields":{
+            "name":"Perro baleado",
+            "estimated_amount": 20000, 
+            "date_in": "2023-06-08", 
+            "date_out": "2023-12-31"
+        }
     }
     
 ]

@@ -27,6 +27,8 @@ from OMDApp.views.turns_view import (AskForTurn, ViewAcceptedTurns, ViewPendingT
                                      ViewMyTurns, CancelTurn, AttendTurnView, GenerateUrgencyView, AttendUrgencyView,
                                      NewUrgencyButtonView)
 
+from OMDApp.views.donations_view import (RegisterDonation , ViewCampaigns, RegisterEvent , InsertCardView, ViewMyDonations,AllDonations)
+
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
@@ -74,6 +76,14 @@ urlpatterns = [
     path('registerdog/<int:urgency>/', RegisterDogView, name='registerDog'),
     path('generateUrgency/<int:dog_id>/', GenerateUrgencyView, name='generateUrgency'),
     path('attendUrgency/<int:turn_id>/', AttendUrgencyView, name='attendUrgency'),
+
+    # Donations
+    path('registerdonation/<int:campana_id>',RegisterDonation,name='registerDonation'), #esta es la donacion
+    path('viewcampaigns/',ViewCampaigns,name='viewCampaigns'),
+    path('registerevent/',RegisterEvent,name='registerEvent'),
+    path('mydonations/',ViewMyDonations, name='myDonations'),
+    path('listdonations/',AllDonations, name='listDonations'),
+    path('introcard/', InsertCardView , name='insertCard')
     
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

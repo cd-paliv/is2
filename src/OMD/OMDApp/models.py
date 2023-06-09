@@ -147,3 +147,21 @@ class UserAdoption(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     dog = models.ForeignKey(PPEA, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
+class Campana(models.Model):
+    name = models.CharField(max_length=50)
+    estimated_amount = models.FloatField(max_length=10, blank=True, null=True)
+    date_in = models.DateField()
+    date_out = models.DateField()
+
+class Donacion(models.Model):
+    name = models.CharField(max_length=50)
+    email = models.EmailField(_('email address') )
+    amount = models.FloatField(max_length=10, blank=True, null=True)
+    message = models.CharField(blank=True,null=True, max_length=50)
+    campana = models.ForeignKey(Campana, on_delete=models.CASCADE)
+    
+class Tarjeta(models.Model):
+    card_number = models.IntegerField()
+    card_number_security = models.IntegerField()
+    from_donation = models.OneToOneField(Donacion, on_delete=models.CASCADE, primary_key=True) 

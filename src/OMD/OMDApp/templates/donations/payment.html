@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+	<link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock css %}
+
+{% block title %} Pago donacion {% endblock title %}
+
+{% block content %}
+<body class="form-signin w-100 m-auto">
+	<div class="container py-5 form_width">
+		<h1 class="text-center fw-semibold mb-4">Ingrese los datos de su tarjeta</h1>
+		<form method="POST">
+			{% csrf_token %}
+
+            {% include 'form_iterator.html' with form=form %}
+			
+			<div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
+				<button class="btn btn-primary" type="submit">Pagar</button>
+				<a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>
+			</div>
+		</form>
+	</div>
+</body>
+{% endblock content %}
