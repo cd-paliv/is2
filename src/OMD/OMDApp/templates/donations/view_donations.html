@@ -7,13 +7,20 @@
 {% block title %} Campañas de Donaciones{% endblock title %}
 {% block content %}
 {% if view_donations %}
-    <h1 class="text-center fw-semibold mb-4">Campañas de donacion</h1>
-    {% if perms.OMDApp.is_vet %}
-        <a href="{% url 'registerEvent' %}" class="btn btn-primary">Crear Campaña</a>
-    {% endif %}
-    {% if perms.OMDApp.is_client %}
-        <a href="{% url 'myDonations' %}" class="btn btn-primary">Mis donaciones</a>
-    {% endif %}
+    <h1 class="text-center fw-semibold mb-4">Campañas de donacion {% if view_finalized_donations %}finalizadas{% endif %}</h1>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+        {% if view_finalized_donations %}
+            <a href="{% url 'listDonations' %}" class="btn btn-secondary">Atrás</a>
+        {% else %}
+            {% if perms.OMDApp.is_vet %}
+                <a href="{% url 'registerEvent' %}" class="btn btn-primary">Crear Campaña</a>
+                <a href="{% url 'listFinalizedDonations' %}" class="btn btn-primary">Ver campañas finalizadas</a>
+            {% endif %}
+            {% if perms.OMDApp.is_client %}
+                <a href="{% url 'myDonations' %}" class="btn btn-primary">Mis donaciones</a>
+            {% endif %}
+        {% endif %}
+    </div>
     <div class="row mt-3 mb-2">
         <div class="col-md-12 table-responsive">
             <table class="table table-sm">
@@ -51,6 +58,6 @@
         </div>
     </div>
 {% else %}
-    <h1 class="text-center fw-semibold mb-4">No hay campañas de donacion</h1>
+    <h1 class="text-center fw-semibold mb-4">No hay campañas de donacion {% if view_finalized_donations %}finalizadas{% endif %}</h1>
 {% endif %}
 {% endblock content %}

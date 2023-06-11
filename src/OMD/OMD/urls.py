@@ -26,8 +26,8 @@ from OMDApp.views.dogs_view import (DogListView, ProfileDogView, EditProfileDogV
 from OMDApp.views.turns_view import (AskForTurn, ViewAcceptedTurns, ViewPendingTurns, AcceptTurn, RejectTurn,
                                      ViewMyTurns, CancelTurn, AttendTurnView, GenerateUrgencyView, AttendUrgencyView,
                                      NewUrgencyButtonView)
-
-from OMDApp.views.donations_view import (RegisterDonation , ViewCampaigns, RegisterEvent , InsertCardView, ViewMyDonations,AllDonations)
+from OMDApp.views.donations_view import (RegisterDonation , ViewCampaigns, RegisterEvent , InsertCardView, ViewMyDonations,AllDonations,
+                                         ViewFinalizedCampaigns)
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
@@ -83,6 +83,7 @@ urlpatterns = [
     path('registerevent/',RegisterEvent,name='registerEvent'),
     path('mydonations/',ViewMyDonations, name='myDonations'),
     path('listdonations/',AllDonations, name='listDonations'),
+    path('listFdonations/',ViewFinalizedCampaigns, name='listFinalizedDonations'),
     path('introcard/', InsertCardView , name='insertCard')
     
 

@@ -149,6 +149,7 @@ class UserAdoption(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 class Campana(models.Model):
+    state = models.CharField(max_length=1, default='V') # vigente(valid) ^ finalizada
     name = models.CharField(max_length=50)
     estimated_amount = models.FloatField(max_length=10, blank=True, null=True)
     colected_amount = models.FloatField(max_length=10, default=0)
@@ -161,9 +162,10 @@ class Donacion(models.Model):
     amount = models.FloatField(max_length=10, blank=True, null=True)
     message = models.CharField(blank=True,null=True, max_length=50)
     campana = models.ForeignKey(Campana, on_delete=models.CASCADE)
-    #usuario= models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
     
 class Tarjeta(models.Model):
+    card_name = models.CharField(max_length=50)
     card_number = models.IntegerField()
     card_number_security = models.IntegerField()
     from_donation = models.OneToOneField(Donacion, on_delete=models.CASCADE, primary_key=True) 
