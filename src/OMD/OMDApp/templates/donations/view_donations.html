@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block css %}
-	<link rel="stylesheet" href="{% static 'css/form.css' %}">
+	<link rel="stylesheet" href="{% static 'css/list.css' %}">
 {% endblock css %}
 
 {% block title %} Campañas de Donaciones{% endblock title %}
@@ -21,8 +21,10 @@
                     <tr>
                         <th><strong>Nombre</strong></th>
                         <th><strong>Monto estimado</strong></th>
+                        <th><strong>Monto recaudado</strong></th>
                         <th><strong>Fecha comienzo</strong></th>
                         <th><strong>Fecha final</strong></th>
+                        <th><strong>Opciones</strong></th>
                     </tr>
                 </thead> 
                 <tbody>
@@ -30,6 +32,7 @@
                         <tr>
                             <td class="vertical-align-middle"><strong>{{campana.name}}</strong></td>
                             <td class="vertical-align-middle">{{campana.estimated_amount}}</td>
+                            <td class="vertical-align-middle">{{campana.colected_amount}}</td>
                             <td class="vertical-align-middle">{{campana.date_in}}</td>
                             <td class="vertical-align-middle">{{campana.date_out}}</td>
                             {% if campana %}

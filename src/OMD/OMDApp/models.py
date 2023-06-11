@@ -151,6 +151,7 @@ class UserAdoption(models.Model):
 class Campana(models.Model):
     name = models.CharField(max_length=50)
     estimated_amount = models.FloatField(max_length=10, blank=True, null=True)
+    colected_amount = models.FloatField(max_length=10, default=0)
     date_in = models.DateField()
     date_out = models.DateField()
 
