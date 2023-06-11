@@ -95,5 +95,9 @@ def ViewMyDonations(request):
     return render(request, "donations/donations.html", {"list_donations" : donaciones})
 
 def AllDonations(request):
-    donaciones=  list(Campana.objects.order_by('name'))
+    donaciones=  list(Donacion.objects.order_by('campana__name'))
+    return render(request, "donations/donations.html", {"list_donations" : donaciones})
+
+def CampaignDonations(request, campana_id):
+    donaciones=  list(Donacion.objects.filter(id=campana_id))
     return render(request, "donations/donations.html", {"list_donations" : donaciones}) 

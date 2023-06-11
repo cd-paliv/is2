@@ -49,7 +49,7 @@
             "password" : "user",
             "first_name" : "Devs",
             "last_name" : "PNG",
-            "dni" : "34567891",
+            "dni" : "40998514",
             "birthdate" : "1992-01-01",
             "email_confirmed": "True"
         }
@@ -331,8 +331,10 @@
         "model": "OMDApp.Campana",
         "pk":1,
         "fields":{
+            "state" : "F",
             "name":"Una monedita para los perritos",
-            "estimated_amount": 50000, 
+            "estimated_amount": 50000,
+            "colected_amount": 50001,
             "date_in": "2023-06-07", 
             "date_out": "2023-06-21"
         }
@@ -345,6 +347,18 @@
             "estimated_amount": 20000,
             "date_in": "2023-06-08", 
             "date_out": "2023-12-31"
+        }
+    },
+    {
+        "model": "OMDApp.Donacion",
+        "pk":1,
+        "fields":{
+            "name":"Nahuel Rodriguez",
+            "email": "nahuel@gmail.com",
+            "amount": 50001, 
+            "message": "Me gustan los perritos",
+            "campana": 1,
+            "usuario": 4
         }
     }
     

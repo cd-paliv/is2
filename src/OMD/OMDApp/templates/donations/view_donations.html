@@ -10,7 +10,7 @@
     <h1 class="text-center fw-semibold mb-4">Campañas de donacion {% if view_finalized_donations %}finalizadas{% endif %}</h1>
     <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
         {% if view_finalized_donations %}
-            <a href="{% url 'listDonations' %}" class="btn btn-secondary">Atrás</a>
+            <a href="{% url 'viewCampaigns' %}" class="btn btn-secondary">Atrás</a>
         {% else %}
             {% if perms.OMDApp.is_vet %}
                 <a href="{% url 'registerEvent' %}" class="btn btn-primary">Crear Campaña</a>
@@ -45,7 +45,7 @@
                             {% if campana %}
                                 <td class="vertical-align-middle">
                                     {% if perms.OMDApp.is_vet %} 
-                                        <a href="{% url  'listDonations' %}" class="btn btn-secondary btn-sm">Ver donaciones</a>
+                                        <a href="{% url  'listCampaignDonations' campana_id=campana.id %}" class="btn btn-secondary btn-sm">Ver donaciones</a>
                                     {% else %}
                                         <a href="{% url 'registerDonation' campana_id=campana.id %}" class="btn btn-secondary btn-sm">Donar</a>
                                     {% endif %}

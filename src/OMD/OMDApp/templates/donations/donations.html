@@ -1,13 +1,52 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block css %}
-	<link rel="stylesheet" href="{% static 'css/form.css' %}">
+	<link rel="stylesheet" href="{% static 'css/list.css' %}">
 {% endblock css %}
 
 
 {% block title %} {% if perms.OMDApp.is_client %} Mis {% endif %}Donaciones{% if perms.OMDApp.is_vet  %} hechas {% endif %}{% endblock title %}
 {% block content %}
-    <div class="container py-5 form_width mb-5">
-        <h1 class="text-center fw-semibold mb-4 pb-3">{% if perms.OMDApp.is_client %} Mis {% endif %}Donaciones{% if perms.OMDApp.is_vet  %} hechas {% endif %}</h1>
+
+{% if list_donations %}
+    <h1 class="text-center fw-semibold mb-4 pb-3">{% if perms.OMDApp.is_client %} Mis {% endif %}Donaciones{% if perms.OMDApp.is_vet  %} hechas {% endif %}</h1>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+        <a href="{% url 'viewCampaigns' %}" class="btn btn-secondary">Atrás</a>
     </div>
+    <div class="row mt-3 mb-2">
+        <div class="col-md-12 table-responsive">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        {% if perms.OMDApp.is_vet  %}
+                        <th><strong>Nombre</strong></th>
+                        <th><strong>Email</strong></th>
+                        {% endif %}
+                        <th><strong>Monto</strong></th>
+                        <th><strong>Mensaje</strong></th>
+                        <th><strong>Campaña</strong></th>
+                    </tr>
+                </thead> 
+                <tbody>
+                    {% for don in list_donations %}
+                        <tr>
+                            {% if perms.OMDApp.is_vet  %}
+                            <td class="vertical-align-middle"><strong>{{don.name}}</strong></td>
+                            <td class="vertical-align-middle">{{don.email}}</td>
+                            {% endif %}
+                            <td class="vertical-align-middle">{{don.amount}}</td>
+                            <td class="vertical-align-middle">{{don.message}}</td>
+                            <td class="vertical-align-middle">{{don.campana.name}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% else %}
+    <h1 class="text-center fw-semibold mb-4">No hay donaciones</h1>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+        <a href="{% url 'viewCampaigns' %}" class="btn btn-secondary">Atrás</a>
+    </div>
+{% endif %}
 {% endblock content %}

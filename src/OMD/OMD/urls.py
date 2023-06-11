@@ -27,7 +27,7 @@ from OMDApp.views.turns_view import (AskForTurn, ViewAcceptedTurns, ViewPendingT
                                      ViewMyTurns, CancelTurn, AttendTurnView, GenerateUrgencyView, AttendUrgencyView,
                                      NewUrgencyButtonView)
 from OMDApp.views.donations_view import (RegisterDonation , ViewCampaigns, RegisterEvent , InsertCardView, ViewMyDonations,AllDonations,
-                                         ViewFinalizedCampaigns)
+                                         ViewFinalizedCampaigns, CampaignDonations)
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
@@ -78,11 +78,12 @@ urlpatterns = [
     path('attendUrgency/<int:turn_id>/', AttendUrgencyView, name='attendUrgency'),
 
     # Donations
-    path('registerdonation/<int:campana_id>',RegisterDonation,name='registerDonation'), #esta es la donacion
+    path('registerdonation/<int:campana_id>/',RegisterDonation,name='registerDonation'), #esta es la donacion
     path('viewcampaigns/',ViewCampaigns,name='viewCampaigns'),
     path('registerevent/',RegisterEvent,name='registerEvent'),
     path('mydonations/',ViewMyDonations, name='myDonations'),
     path('listdonations/',AllDonations, name='listDonations'),
+    path('listcampaigndonations/<int:campana_id>/',CampaignDonations, name='listCampaignDonations'),
     path('listFdonations/',ViewFinalizedCampaigns, name='listFinalizedDonations'),
     path('introcard/', InsertCardView , name='insertCard')
     
