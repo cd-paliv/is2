@@ -37,7 +37,7 @@
                                     {% if perms.OMDApp.is_vet %} 
                                         <a href="{% url  'listDonations' %}" class="btn btn-secondary btn-sm">Ver donaciones</a>
                                     {% else %}
-                                        <a href="{% url 'registerDonation' %}" class="btn btn-secondary btn-sm">Donar</a>
+                                        <a href="{% url 'registerDonation' campana_id=campana.id %}" class="btn btn-secondary btn-sm">Donar</a>
                                     {% endif %}
                             </td>
                         {% endif %}

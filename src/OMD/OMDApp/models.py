@@ -160,6 +160,7 @@ class Donacion(models.Model):
     amount = models.FloatField(max_length=10, blank=True, null=True)
     message = models.CharField(blank=True,null=True, max_length=50)
     campana = models.ForeignKey(Campana, on_delete=models.CASCADE)
+    #usuario= models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     
 class Tarjeta(models.Model):
     card_number = models.IntegerField()
