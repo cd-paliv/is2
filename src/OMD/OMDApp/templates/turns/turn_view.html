@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+	<link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock css %}
+
+{% block title %} Turno {% endblock title %}
+
+{% block content %}
+<div class="container py-5 form_width mb-5">
+  <h1 class="text-center fw-semibold mb-4">Turno de {{ turn_type_mapping|get_item:turn.type }} finalizado</h1>
+  <div class="mb-3">
+      <div class="d-grid gap-2 gap-md-4 d-md-flex justify-content-md-center">
+          <div class="col">
+              <label for="date" class="form-label">Fecha:</label>
+              <input type="text" class="form-control" id="date" value="{{ turn.date|date:'d/m/Y' }}" disabled>
+          </div>
+          <div class="col">
+              <label for="hour" class="form-label">Horario:</label>
+              <input type="text" class="form-control" id="hour" value="{{ turn_hour_mapping|get_item:turn.hour }}" disabled>
+          </div>
+      </div>
+  </div>
+  <div class="mb-3">
+    <div class="d-grid gap-2 gap-md-4 d-md-flex justify-content-md-center">
+      <div class="col">
+        <label for="amount" class="form-label">Costo:</label>
+        <input type="text" class="form-control" id="amount" value="${{ actual_amount }}" disabled>
+      </div>
+      <div class="col">
+        <label for="discount" class="form-label">Descuento: ({{discount_percentage}}%)</label>
+        <input type="text" class="form-control" id="discount" value="${{ discounted_total }}" disabled>
+      </div>
+    </div>
+  </div>
+  <div class="mb-3">
+    <label for="final_amount" class="form-label">Monto final:</label>
+    <input type="text" class="form-control" id="final_amount" value="${{ turn.amount }}" disabled>
+  </div>
+  
+    <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
+        <a href="{% url 'home' %}" class="btn btn-primary">Aceptar</a>
+    </div>
+</div>
+{% endblock %}

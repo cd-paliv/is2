@@ -3,9 +3,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from OMDApp.models import Turno, Veterinario, Perro
+from OMDApp.models import Turno, Veterinario, Perro, Donacion
 from OMDApp.decorators import email_verification_required
-from OMDApp.forms.turns_form import (AskForTurnForm, AttendTurnForm, EvaluationForm)
+from OMDApp.forms.turns_form import (AskForTurnForm, AttendTurnForm, EvaluationForm, AttendUrgencyForm)
 from django.views.decorators.cache import cache_control
 from django.db.models import Q
 from datetime import date
@@ -14,6 +14,7 @@ from OMDApp.views.helpers import (turn_type_mapping, turn_hour_mapping, actual_t
                                     generate_date, append_data, delete_unwanted_next_turns, get_filtered_interventions,
                                     get_days_until_next_turn)
 from datetime import datetime
+from decimal import Decimal
 
 
 # Create your views here
@@ -158,6 +159,22 @@ def CancelTurn(request, turn_id):
     messages.success(request, "Turno cancelado")
     return redirect(reverse("myTurns"))
 
+def get_discount(user_id, total):
+    user = get_user_model().objects.get(id=user_id)
+    donations = Donacion.objects.filter(usuario=user)
+    total_donated = 0
+    for donation in donations:
+        total_donated += donation.amount
+
+    if total_donated != 0:
+        discount_limit = Decimal(total) * Decimal('0.5')
+        discount_amount = min(Decimal(total_donated) * Decimal('0.2'), discount_limit)
+        discount_percentage = (discount_amount * total) / Decimal('100') if discount_amount != discount_limit else 50
+        discounted_total = Decimal(total) - discount_amount
+
+        return discount_percentage, discounted_total
+    else:
+        return 0, 0
 
 @login_required(login_url='/login/')
 @email_verification_required
@@ -192,12 +209,27 @@ def AttendTurnView(request, turn_id, urgency=False):
             turn.add_to_clinic_history()
 
             messages.success(request, "Turno finalizado")
-            return redirect(reverse('home'))
+            return redirect(reverse('showFinalizedTurn', kwargs={'turn_id': turn.id}))
         else:
             form.data = form.data.copy()
     else:
         form = AttendTurnForm(initial={'weight': dog.weight})
     return render(request, "turns/attend_turn.html", {'form': form, 'dog': dog})
+
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
+def ShowFinalizedTurn(request, turn_id):
+    turn = Turno.objects.get(id=turn_id)
+    actual_amount = turn.amount
+    discount_percentage, discounted_total = get_discount(turn.solicited_by.owner.id, turn.amount)
+    turn.amount = discounted_total
+    turn.save()
+
+    return render(request, "turns/turn_view.html", {'turn': turn, 'actual_amount': actual_amount, 'discounted_total': discounted_total,
+                                                    'discount_percentage': discount_percentage,'turn_type_mapping': turn_type_mapping(),
+                                                    'turn_hour_mapping': turn_hour_mapping()})
+
 
 @login_required(login_url='/login/')
 @email_verification_required
@@ -227,7 +259,7 @@ def AttendUrgencyView(request, turn_id):
     dog = turn.solicited_by
     urgency_choices = get_filtered_interventions(dog)
     if request.method == "POST":
-        form = AttendTurnForm(data=request.POST, urgency_choices=urgency_choices)
+        form = AttendUrgencyForm(data=request.POST, urgency_choices=urgency_choices)
         if form.is_valid():
             weight = form.cleaned_data['weight']
             Perro.objects.filter(id=dog.id).update(weight=weight)
@@ -253,7 +285,7 @@ def AttendUrgencyView(request, turn_id):
         else:
             form.data = form.data.copy()
     else:
-        form = AttendTurnForm(urgency_choices=urgency_choices, initial={'weight': dog.weight})
+        form = AttendUrgencyForm(urgency_choices=urgency_choices, initial={'weight': dog.weight})
         #form = AttendTurnForm(initial={'weight': dog.weight})
     return render(request, "turns/attend_turn.html", {'form': form, 'dog': dog, 'type': 'U', 'turn_id': turn.id,
                                                       'urgency_choices': get_filtered_interventions(dog)})

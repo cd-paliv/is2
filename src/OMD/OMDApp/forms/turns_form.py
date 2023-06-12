@@ -51,6 +51,19 @@ class AttendTurnForm(forms.Form):
                                                              'placeholder': 'Ingrese el costo de la atención'}),
                                                              validators=[EmptyFieldValidator(), GreaterThanZeroValidator(), FloatFieldValidator()])
 
+class AttendUrgencyForm(forms.Form):
+    weight = forms.FloatField(label="Peso", localize=True, 
+                               widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputPeso',
+                                                             'placeholder': 'Ingrese el peso del perro'}),
+                                                             validators=[FloatFieldValidator()])
+    observations = forms.CharField(label="Observaciones",
+                               widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputObservaciones',
+                                                             'placeholder': 'Ingrese observaciones sobre la atención'}))
+    amount = forms.FloatField(label="Costo(*)",
+                               widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputCosto',
+                                                             'placeholder': 'Ingrese el costo de la atención'}),
+                                                             validators=[EmptyFieldValidator(), GreaterThanZeroValidator(), FloatFieldValidator()])
+
     def __init__(self, urgency_choices=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if urgency_choices:

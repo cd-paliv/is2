@@ -25,7 +25,7 @@ from OMDApp.views.dogs_view import (DogListView, ProfileDogView, EditProfileDogV
                                     AdoptedDogListView, HealthBookDogView, ClinicHistoryDogView)
 from OMDApp.views.turns_view import (AskForTurn, ViewAcceptedTurns, ViewPendingTurns, AcceptTurn, RejectTurn,
                                      ViewMyTurns, CancelTurn, AttendTurnView, GenerateUrgencyView, AttendUrgencyView,
-                                     NewUrgencyButtonView, Evaluation)
+                                     NewUrgencyButtonView, Evaluation, ShowFinalizedTurn)
 from OMDApp.views.donations_view import (RegisterDonation , ViewCampaigns, RegisterEvent , InsertCardView, ViewMyDonations,AllDonations,
                                          ViewFinalizedCampaigns, CampaignDonations)
 
@@ -67,7 +67,8 @@ urlpatterns = [
     path('rejectingTurn/<int:turn_id>/', RejectTurn, name='rejectTurn'),
     path('cancelingTurn/<int:turn_id>/', CancelTurn, name='cancelTurn'),
     path('attendTurnView/<int:turn_id>/', AttendTurnView, name='attendTurnView'),
-    path('evaluation/',Evaluation, name='evaluation'),
+    path('evaluation/', Evaluation, name='evaluation'),
+    path('showFturn/<int:turn_id>/', ShowFinalizedTurn, name='showFinalizedTurn'),
 
     # Turns - Urgency
     path('selectUrgency/', NewUrgencyButtonView, name='selectUrgency'),
