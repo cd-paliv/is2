@@ -360,6 +360,16 @@
             "campana": 1,
             "usuario": 4
         }
+    },
+    {
+        "model": "OMDApp.Tarjeta",
+        "pk":1,
+        "fields":{
+            "card_name":"Nahuel Rodriguez",
+            "card_number": 123456789098,
+            "card_number_security": 123, 
+            "from_donation": 1
+        }
     }
     
 ]
