@@ -80,7 +80,7 @@ def AskForTurn(request):
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
 def ViewPendingTurns(request):
-    turnos = list(Turno.objects.filter(state="S").order_by('-hour', 'date')) # solicited
+    turnos = list(Turno.objects.filter(state="S").order_by('-hour', 'date').exclude(type="U")) # solicited
     return render(request, "turns/turn_list.html", {"turn_list" : turnos, "turns" : "P",
                                                     'turn_type_mapping': turn_type_mapping(), 'turn_hour_mapping': turn_hour_mapping()})
 
@@ -88,7 +88,7 @@ def ViewPendingTurns(request):
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
 def ViewAcceptedTurns(request):
-    turnos = list(Turno.objects.filter(state="A").order_by('-hour', 'date')) # accepted
+    turnos = list(Turno.objects.filter(state="A").order_by('-hour', 'date').exclude(type="U")) # accepted
     return render(request, "turns/turn_list.html", {"turn_list" : turnos, "turns" : "A", "todays_date": date.today(),
                                                     'turn_type_mapping': turn_type_mapping(), 'turn_hour_mapping': turn_hour_mapping()})
 
@@ -133,7 +133,7 @@ def RejectTurn(request, turn_id):
 def ViewMyTurns(request):
     user = request.user
     dogs = Perro.objects.filter(owner=user)
-    turnos = list(Turno.objects.filter(solicited_by__in=dogs).order_by('state', 'date', '-hour').exclude(state="F"))
+    turnos = list(Turno.objects.filter(solicited_by__in=dogs).order_by('state', 'date', '-hour').exclude(state="F").exclude(type="U"))
     return render(request, "turns/turn_list.html", {"turn_list" : turnos, "turns" : "U",
                                                     'turn_type_mapping': turn_type_mapping(), 'turn_hour_mapping': turn_hour_mapping()})
 

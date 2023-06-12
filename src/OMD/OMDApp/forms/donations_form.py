@@ -8,14 +8,14 @@ class RegisterDonationEventsForm(forms.ModelForm):
                            widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control','id': 'inputCampName',
                                                          'placeholder': 'Ingresa el nombre del evento', 'required': 'True'}),
                                                          validators=[EmptyFieldValidator(), NoNumbersFieldValidator()])
-    estimated_amount = forms.FloatField(label= "Monto esperado a recaudar",widget= forms.NumberInput(attrs={'type': 'number', 'class': 'form-control', 'id': 'inputAmount',
+    estimated_amount = forms.FloatField(label= "Monto esperado a recaudar(*)",widget= forms.NumberInput(attrs={'type': 'number', 'class': 'form-control', 'id': 'inputAmount',
                                                              'placeholder': 'Ingrese el monto esperado a recaudar'}),
                                                              validators=[EmptyFieldValidator(), GreaterThanZeroValidator(), NumbersFieldValidator()])
-    date_in = forms.DateField(label="Fecha de inicio del evento ",
+    date_in = forms.DateField(label="Fecha de inicio del evento(*)",
                                 widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'type': 'date', 'class': 'form-control', 'id': 'inputDateIn',
                                                               'placeholder': 'Ingresa la fecha de inicio del evento',
                                                               'required': 'True'}), validators=[EmptyFieldValidator()])
-    date_out = forms.DateField(label="Fecha de fin del evento ",
+    date_out = forms.DateField(label="Fecha de fin del evento(*)",
                                 widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'type': 'date', 'class': 'form-control', 'id': 'inputDateOut',
                                                               'placeholder': 'Ingresa la fecha de fin de evento',
                                                               'required': 'True'}), validators=[EmptyFieldValidator()])

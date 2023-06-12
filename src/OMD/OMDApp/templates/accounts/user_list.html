@@ -10,20 +10,6 @@
     <h1 class="text-center fw-semibold mb-4">Listado de usuarios</h1>
 
     {% if model_list %}
-    <form method="GET" action="{% url 'adoption_dog_list_filtered' %}">
-        <div class="d-grid gap-2 gap-md-4 d-md-flex justify-content-md-center py-2">
-            <select class="form-select" id="type" name="typeFilter">
-                <option value="all" {% if t == "all" %} selected="selected"{% endif %}>Todos</option>
-                <option value="age" {% if t == "age" %} selected="selected"{% endif %}>Edad</option>
-                <option value="breed" {% if t == "breed" %} selected="selected"{% endif %}>Raza</option>
-            </select>
-            <select class="form-select" id="criteria" name="criteriaFilter">
-                <option value="asc" {% if c == "asc" %} selected="selected"{% endif %}>Ascendente</option>
-                <option value="desc" {% if c == "desc" %} selected="selected"{% endif %}>Descendente</option>
-            </select>
-            <input class="btn btn-secondary" type="submit" name="type" value="Filtrar" />
-        </div>
-    </form>
 
     <div class="row mt-3 mb-2">
         <div class="col-md-12 table-responsive">
