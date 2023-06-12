@@ -157,6 +157,7 @@ class Campana(models.Model):
     date_out = models.DateField()
 
 class Donacion(models.Model):
+    state = models.CharField(max_length=1, default='D') # donated ^ used
     name = models.CharField(max_length=50)
     email = models.EmailField(_('email address') )
     amount = models.FloatField(max_length=10, blank=True, null=True)

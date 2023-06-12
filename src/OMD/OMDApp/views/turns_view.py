@@ -162,7 +162,7 @@ def CancelTurn(request, turn_id):
 
 def get_discount(user_id, total):
     user = get_user_model().objects.get(id=user_id)
-    donations = Donacion.objects.filter(usuario=user)
+    donations = Donacion.objects.filter(usuario=user, state='D')
     total_donated = 0
     for donation in donations:
         total_donated += donation.amount
@@ -230,6 +230,9 @@ def ShowFinalizedTurn(request, turn_id):
     discount_percentage, discounted_total = get_discount(turn.solicited_by.owner.id, turn.amount)
     turn.amount = discounted_total
     turn.save()
+
+    # Delete donations
+    Donacion.objects.filter(usuario=turn.solicited_by.owner).update(state='U')
 
     return render(request, "turns/turn_view.html", {'turn': turn, 'actual_amount': actual_amount, 'discounted_total': discounted_total,
                                                     'discount_percentage': discount_percentage,'turn_type_mapping': turn_type_mapping(),

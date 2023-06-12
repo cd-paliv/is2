@@ -253,6 +253,51 @@
         }
       },
       {
+        "model": "OMDApp.turno",
+        "pk": 4,
+        "fields": {
+          "state": "S",
+          "type": "VA",
+          "hour": "Morning",
+          "date": "2023-08-15",
+          "motive": "Vacunacion",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 2,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 5,
+        "fields": {
+          "state": "S",
+          "type": "D",
+          "hour": "Morning",
+          "date": "2023-08-15",
+          "motive": "Desparasitacion",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 2,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 6,
+        "fields": {
+          "state": "S",
+          "type": "VB",
+          "hour": "Morning",
+          "date": "2023-08-15",
+          "motive": "vacunacion",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 1,
+          "accepted_by": null
+        }
+      },
+      {
         "model": "OMDApp.PPEA",
         "pk": 1,
         "fields": {
