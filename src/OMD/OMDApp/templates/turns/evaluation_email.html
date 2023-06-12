@@ -1,0 +1,11 @@
+{% autoescape off %}
+Hola {{ vet.user.first_name }} {{ vet.user.last_name }},
+
+Evaluacion del usuario:
+
+Puntaje:{{ puntaje }}
+Observaciones:{{ observaciones }}
+{% if not anonimo %}
+Usuario: {{ user.first_name }} {{ user.last_name }}
+{% endif %}
+{% endautoescape %}

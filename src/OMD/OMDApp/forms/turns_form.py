@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from OMDApp.models import Turno
+from OMDApp.models import Turno, Evaluacion
 from django.utils.translation import gettext as _
 from OMDApp.validators.form_validator import (EmptyFieldValidator, FloatFieldValidator, 
                                                 NumbersFieldValidator, TurnDateBetweenValidator, TurnDateTodayValidator,

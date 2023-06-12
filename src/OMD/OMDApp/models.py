@@ -169,3 +169,8 @@ class Tarjeta(models.Model):
     card_number = models.IntegerField()
     card_number_security = models.IntegerField()
     from_donation = models.OneToOneField(Donacion, on_delete=models.CASCADE, primary_key=True) 
+
+class Evaluacion(models.Model):
+    score= models.IntegerField()
+    observation= models.CharField(max_length=50)
+    anonymity= models.BooleanField(null=True)

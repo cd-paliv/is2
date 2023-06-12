@@ -67,7 +67,7 @@ urlpatterns = [
     path('rejectingTurn/<int:turn_id>/', RejectTurn, name='rejectTurn'),
     path('cancelingTurn/<int:turn_id>/', CancelTurn, name='cancelTurn'),
     path('attendTurnView/<int:turn_id>/', AttendTurnView, name='attendTurnView'),
-    path('evaluation/',Evaluation, name='evaluation'),
+    path('evaluation/<int:turn_id>',Evaluation, name='evaluation'),
 
     # Turns - Urgency
     path('selectUrgency/', NewUrgencyButtonView, name='selectUrgency'),

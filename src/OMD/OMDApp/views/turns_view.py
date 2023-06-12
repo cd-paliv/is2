@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from OMDApp.models import Turno, Veterinario, Perro
+from OMDApp.models import Turno, Veterinario, Perro, Evaluacion
 from OMDApp.decorators import email_verification_required
 from OMDApp.forms.turns_form import (AskForTurnForm, AttendTurnForm, EvaluationForm)
 from django.views.decorators.cache import cache_control
@@ -14,7 +14,7 @@ from OMDApp.views.helpers import (turn_type_mapping, turn_hour_mapping, actual_t
                                     generate_date, append_data, delete_unwanted_next_turns, get_filtered_interventions,
                                     get_days_until_next_turn)
 from datetime import datetime
-
+from django.template.loader import render_to_string
 
 # Create your views here
 
@@ -191,6 +191,10 @@ def AttendTurnView(request, turn_id, urgency=False):
             turn.save()
             turn.add_to_clinic_history()
 
+            user=dog.owner
+            message_user = 'Turno finalizado, por favor evalue nuestro servicio en http://127.0.0.1:8000/evaluation/%s'% turn.id
+            user.email_user('Turno Finalizado', message_user)
+
             messages.success(request, "Turno finalizado")
             return redirect(reverse('home'))
         else:
@@ -239,6 +243,11 @@ def AttendUrgencyView(request, turn_id):
             turn.save()
             turn.add_to_health_book()
             turn.add_to_clinic_history()
+
+            user=dog.owner
+
+            message_user = 'Urgencia finalizada, por favor evalue nuestro servicio en http://127.0.0.1:8000/evaluation/%s'% turn.id
+            user.email_user('Urgencia finalizada', message_user)
 
             # Add urgency interventions
             allowed_choices = request.POST.getlist('urgency')
@@ -290,15 +299,21 @@ def GenerateTurnForUrgencyView(turn_id, vet, dog, opt):
     append_data(turn, opt)
 
 @cache_control(max_age=3600, no_store=True)
-def Evaluation(request):
+def Evaluation(request, turn_id):
+    turn= Turno.objects.get(id=turn_id)
     if  request.method == 'POST':
-        eva = EvaluationForm(request.POST)
-        if eva.is_valid():
-            eva.save()
-
+        form = EvaluationForm(request.POST)
+        if form.is_valid():
+            user= turn.solicited_by.owner
+            vet= turn.accepted_by
+            puntaje= form.cleaned_data['Evaluacion']
+            observaciones = form.cleaned_data['observations']
+            anonimo = form.cleaned_data['anonimous']
+            message = render_to_string('turns/evaluation_email.html', {'puntaje': puntaje, 'observaciones': observaciones, 'anonimo': anonimo, 'vet': vet, 'user':user})
+            vet.user.email_user('Evaluacion Servicio', message)
             return redirect(reverse("home"))
         else:
-            eva.data = eva.data.copy
+            form.data = form.data.copy
     else:
         evalua = EvaluationForm()
     return render(request, 'turns/evaluate.html', {'form':evalua})
