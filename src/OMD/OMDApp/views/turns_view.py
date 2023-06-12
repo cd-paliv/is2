@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from OMDApp.models import Turno, Veterinario, Perro
 from OMDApp.decorators import email_verification_required
-from OMDApp.forms.turns_form import (AskForTurnForm, AttendTurnForm)
+from OMDApp.forms.turns_form import (AskForTurnForm, AttendTurnForm, EvaluationForm)
 from django.views.decorators.cache import cache_control
 from django.db.models import Q
 from datetime import date
@@ -288,3 +288,17 @@ def GenerateTurnForUrgencyView(turn_id, vet, dog, opt):
 
     # Add new intervention to urgency
     append_data(turn, opt)
+
+@cache_control(max_age=3600, no_store=True)
+def Evaluation(request):
+    if  request.method == 'POST':
+        eva = EvaluationForm(request.POST)
+        if eva.is_valid():
+            eva.save()
+
+            return redirect(reverse("home"))
+        else:
+            eva.data = eva.data.copy
+    else:
+        evalua = EvaluationForm()
+    return render(request, 'turns/evaluate.html', {'form':evalua})

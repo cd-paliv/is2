@@ -60,3 +60,13 @@ class AttendTurnForm(forms.Form):
                 widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
                 required=False
             )
+
+class EvaluationForm(forms.Form):
+    CHOICES = [("1", "1"), ("2", "2"), ("3", "3"), ("4", "4"), ("5", "5"), ("6", "6"), ("7", "7"), ("8", "8"), ("9", "9"), ("10", "10")]
+    Evaluacion      = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
+    observations = forms.CharField(label="Observaciones de la consulta(*)",
+                           widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control','id': 'inputMotive',
+                                                         'placeholder': 'Ingrese observaciones sobre la atención', 'required': 'True'}),
+                                                         validators=[EmptyFieldValidator()])
+    bool_options = {(1, 'Si'), (0, 'No')}
+    anonimous = forms.ChoiceField(label="¿Valorar como anonimo?(*)", choices=bool_options, widget=forms.RadioSelect(attrs={'type': 'radio'}))
