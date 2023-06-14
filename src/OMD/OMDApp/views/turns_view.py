@@ -34,6 +34,10 @@ def AskForTurn(request):
         if form.is_valid():
             turn = form.save(commit=False)
 
+            if Turno.objects.filter(solicited_by=turn.solicited_by, date=turn.date).exists:
+                messages.error("No puede solicitar un turno para la misma fecha con el mismo perro dos veces")
+                return redirect(reverse("askForTurn"))
+
             if turn.type not in get_filtered_interventions(turn.solicited_by):
                 if turn.type == 'C':
                     messages.error(request, "No puede solicitar un turno de castración para un perro castrado")
@@ -114,12 +118,16 @@ def AcceptTurn(request, turn_id):
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
 def RejectTurn(request, turn_id):
+    motive = request.POST.get('motive')
+    print(motive)
     turn = Turno.objects.get(id=turn_id)
 
     soliciter = get_user_model().objects.get(id=turn.solicited_by.owner.id)
     hours = str(turn_hour_mapping().get(turn.hour)).split(': ')[1]
     turn_type = str(turn_type_mapping().get(turn.type))
-    message = 'Se ha rechazado su turno de %s del %s a las %s en Oh My Dog' % (turn_type, turn.date.strftime('%d/%m/%Y'), hours)
+    message = 'Se ha rechazado su turno de %s del %s a las %s en Oh My Dog.' % (turn_type, turn.date.strftime('%d/%m/%Y'), hours)
+    if motive:
+        message += '\n\nMotivo: %s' % motive
     soliciter.email_user('Cambio en estado de turno', message)
 
     turn.delete()
@@ -143,6 +151,10 @@ def ViewMyTurns(request):
 def CancelTurn(request, turn_id):
     turn = Turno.objects.get(id=turn_id)
 
+    if turn.state == 'A' and turn.date == date.today():
+        messages.error(request, "No puede cancelar un turno para hoy que ya fue aceptado")
+        return redirect(reverse("myTurns"))
+
     soliciter = get_user_model().objects.get(id=turn.solicited_by.owner.id)
     hours = str(turn_hour_mapping().get(turn.hour)).split(': ')[1]
     turn_type = str(turn_type_mapping().get(turn.type))
@@ -152,7 +164,7 @@ def CancelTurn(request, turn_id):
     if turn.accepted_by is not None:
         vet = Veterinario.objects.get(id=turn.accepted_by.id)
         message_vet = 'Se ha cancelado un turno de "%s" del %s a las %s en Oh My Dog' % (turn_type, turn.date.strftime('%d/%m/%Y'), hours)
-        vet.email_user('Cambio en estado de turno', message_vet)
+        vet.user.email_user('Cambio en estado de turno', message_vet)
 
     turn.delete()
 
