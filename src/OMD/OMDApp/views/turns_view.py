@@ -34,8 +34,9 @@ def AskForTurn(request):
         if form.is_valid():
             turn = form.save(commit=False)
 
-            if Turno.objects.filter(solicited_by=turn.solicited_by, date=turn.date).exists:
-                messages.error("No puede solicitar un turno para la misma fecha con el mismo perro dos veces")
+            if Turno.objects.filter(solicited_by=turn.solicited_by, date=turn.date).exists():
+                print(Turno.objects.filter(solicited_by=turn.solicited_by, date=turn.date))
+                messages.error(request, "No puede solicitar un turno para la misma fecha con el mismo perro dos veces")
                 return redirect(reverse("askForTurn"))
 
             if turn.type not in get_filtered_interventions(turn.solicited_by):
