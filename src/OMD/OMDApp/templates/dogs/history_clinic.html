@@ -10,7 +10,11 @@
   <div class="container py-5 form_width mb-5">
       <h1 class="text-center fw-semibold mb-4 pb-3">Historial clínico de {{ name }}</h1>
       <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
-        <a href="{% url 'dog_profile' dog_id=dog_id %}" class="btn btn-secondary">Atrás</a>
+        {% if perms.OMDApp.is_client %}
+            <a href="{% url 'dog_profile' dog_id=dog.id %}" class="btn btn-secondary">Atrás</a>
+        {% elif perms.OMDApp.is_vet %}
+            <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Atrás</a>
+        {% endif %}
       </div>
         {% for turn in turns %}
           <div class="card mt-3 border-secondary">
@@ -46,7 +50,11 @@
 {% else %}
   <h1 class="text-center fw-semibold mb-5">Todavía no existe un historial clínico para este perro.</h1>
   <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
-    <a href="{% url 'dog_profile' dog_id=dog_id %}" class="btn btn-secondary">Atrás</a>
+    {% if perms.OMDApp.is_client %}
+        <a href="{% url 'dog_profile' dog_id=dog.id %}" class="btn btn-secondary">Atrás</a>
+    {% elif perms.OMDApp.is_vet %}
+        <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Atrás</a>
+    {% endif %}
   </div>
 {% endif %}
 {% endblock content %}

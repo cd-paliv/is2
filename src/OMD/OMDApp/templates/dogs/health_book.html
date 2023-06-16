@@ -104,7 +104,11 @@
         
 
         <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
-            <a href="{% url 'dog_profile' dog_id=dog.id %}" class="btn btn-secondary">Atrás</a>
+            {% if perms.OMDApp.is_client %}
+                <a href="{% url 'dog_profile' dog_id=dog.id %}" class="btn btn-secondary">Atrás</a>
+            {% elif perms.OMDApp.is_vet %}
+                <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Atrás</a>
+            {% endif %}
         </div>
     </div>
 {% endblock content %}

@@ -15,11 +15,55 @@
             <h5 class="card-header text-center"><strong>{{ turn_type_mapping|get_item:turn.type }}</strong></h5>
             <div class="card-body">
               <div class="row">
-                <div class="col-md-auto">
-                  <h6 class="card-title"><strong>Fecha:</strong> {{ turn.date|date:'d/m/Y' }}</h6>
-                  <p class="card-text mt-3"><strong>Horario:</strong> {{ turn_hour_mapping|get_item:turn.hour }} </p>
-                  {% if turn.motive %}<p class="card-text"><strong>Motivo:</strong> {{ turn.motive }} </p>{% endif %}
-                  <p class="card-text"><strong>Estado:</strong> {% if turn.state == "S" %}Solicitado{% elif turn.state == "A" %}Aceptado{% endif %} </p>
+                <div class="col-md-auto mx-auto">
+                  {% if perms.OMDApp.is_client %}
+                  <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Horario</th>
+                            <th>Motivo</th>
+                            <th>Estado</th>
+                            <th>Perro</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ turn.date|date:'d/m/Y' }}</td>
+                            <td>{{ turn_hour_mapping|get_item:turn.hour }}</td>
+                            <td>{% if turn.motive %}{{ turn.motive }}{% else %}-{% endif %}</td>
+                            <td>{% if turn.state == "S" %}Solicitado{% elif turn.state == "A" %}Aceptado{% endif %}</td>
+                            <td>{{ turn.solicited_by.name }}</td>
+                        </tr>
+                    </tbody>
+                  </table>
+                  {% elif perms.OMDApp.is_vet %}
+                  <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Horario</th>
+                            <th>Motivo</th>
+                            <th>Solicitante</th>
+                            <th>Perro</th>
+                            <th>Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ turn.date|date:'d/m/Y' }}</td>
+                            <td>{{ turn_hour_mapping|get_item:turn.hour }}</td>
+                            <td>{% if turn.motive %}{{ turn.motive }}{% else %}-{% endif %}</td>
+                            <td>{{ turn.solicited_by.owner.first_name }} {{ turn.solicited_by.owner.last_name }}</td>
+                            <td>{{ turn.solicited_by.name }}</td>
+                            <td class="gap-2">
+                              <a href="{% url 'dog_health_book' dog_id=turn.solicited_by.id %}" class="btn btn-sm btn-outline-primary">Libreta</a>
+                              <a href="{% url 'dog_clinic_history' dog_id=turn.solicited_by.id %}" class="btn btn-sm btn-outline-primary">Historial</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                  </table>
+                  {% endif %}
                 </div>
                 <div class="d-grid gap-2 d-md-flex justify-content-lg-center justify-content-center mt-3">
                   {% if turns == "P" %}
@@ -69,3 +113,12 @@
   <h1 class="text-center fw-semibold mb-4">No hay turnos{% if turns == "P" %} pendientes{% elif turns == "A" %} aceptados{% endif %}</h1>
 {% endif %}
 {% endblock content %}
+
+{% block js %}
+<style>
+  td {
+    text-align: center;
+    vertical-align : middle;
+  }
+</style>
+{% endblock %}

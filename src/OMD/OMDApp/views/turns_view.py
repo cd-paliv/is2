@@ -35,7 +35,6 @@ def AskForTurn(request):
             turn = form.save(commit=False)
 
             if Turno.objects.filter(solicited_by=turn.solicited_by, date=turn.date).exists():
-                print(Turno.objects.filter(solicited_by=turn.solicited_by, date=turn.date))
                 messages.error(request, "No puede solicitar un turno para la misma fecha con el mismo perro dos veces")
                 return redirect(reverse("askForTurn"))
 
@@ -45,13 +44,9 @@ def AskForTurn(request):
                     return redirect(reverse("askForTurn"))
                 
                 if turn.type == 'D':
-                    has_desp_turn = lambda: True if Turno.objects.filter(date=date.today(), type='D').exists() else False
+                    has_desp_turn = True if Turno.objects.filter(date=date.today(), type='D').exists() else False
                     if has_desp_turn:
                         messages.error(request, "No puede solicitar mas de un turno de desparasitacion por dia para el mismo perro")
-                        return redirect(reverse("askForTurn"))
-                    dog_age = calculate_age(turn.solicited_by.birthdate)
-                    if "Menos de" not in dog_age:
-                        messages.error(request, "No puede desaparasitar un perro mayor a un año")
                         return redirect(reverse("askForTurn"))
                 
                 if turn.type == 'VA' or turn.type == 'VB':

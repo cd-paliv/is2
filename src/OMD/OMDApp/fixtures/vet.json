@@ -47,10 +47,10 @@
         "fields" : {
             "email" : "user@gmail.com",
             "password" : "user",
-            "first_name" : "Devs",
-            "last_name" : "PNG",
-            "dni" : "40998514",
-            "birthdate" : "1992-01-01",
+            "first_name" : "Paula",
+            "last_name" : "Vaccaro",
+            "dni" : "42827258",
+            "birthdate" : "2000-07-26",
             "email_confirmed": "True"
         }
     },
