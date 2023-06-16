@@ -106,6 +106,10 @@ def RegisterAdoptionDogView(request):
             if PPEA.objects.filter(name=dog.name, breed=dog.breed, color=dog.color, birthdate=dog.birthdate, state='A').exists():
                 messages.error(request, 'El perro en adopción ya se encuentra registrado')
                 return redirect(reverse("adoption_dog_list"))
+            
+            if PPEA.objects.filter(publisher=request.user, name=dog.name).exists():
+                messages.error(request, 'Ya ha dado de alta un perro con el nombre ingresado')
+                return redirect(reverse("adoption_dog_list"))
 
             dog.state = "A"
             dog.publisher = request.user
