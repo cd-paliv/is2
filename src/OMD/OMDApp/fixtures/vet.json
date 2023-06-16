@@ -365,10 +365,21 @@
         "model": "OMDApp.Tarjeta",
         "pk":1,
         "fields":{
-            "card_name":"Nahuel Rodriguez",
-            "card_number": 123456789098,
-            "card_number_security": 123, 
+            "holder":"Nahuel Rodriguez",
+            "number": 123456789098,
+            "security_number": 123,
+            "expiration" : "2026-08-01",
             "from_donation": 1
+        }
+    },
+    {
+        "model": "OMDApp.Tarjeta",
+        "pk": 2,
+        "fields":{
+            "holder":"Paula Vaccaro",
+            "number": 123456789,
+            "security_number": 123,
+            "expiration" : "2024-01-01"
         }
     }
     

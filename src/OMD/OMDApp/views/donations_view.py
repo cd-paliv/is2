@@ -1,12 +1,12 @@
-from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.contrib import messages
-from OMDApp.models import Campana,Donacion
+from OMDApp.models import Campana,Donacion, Tarjeta
 from django.contrib.auth.decorators import login_required
 from OMDApp.forms.donations_form import RegisterDonationForm,RegisterCardForm, RegisterDonationEventsForm
 from OMDApp.decorators import email_verification_required
 from django.views.decorators.cache import cache_control
+from datetime import date
 
 @login_required(login_url='/login/')
 @email_verification_required
@@ -17,6 +17,11 @@ def RegisterEvent(request):
         if form.is_valid():
             camp = form.save(commit=False)
             camp.name = camp.name.title()
+
+            if Campana.objects.filter(name__iexact=camp.name, date_in=camp.date_in, date_out=camp.date_out).exists():
+                messages.error(request, "Ya existe una campaña de donación con el nombre ingresado en las fechas ingresadas")
+                return redirect(reverse("viewCampaigns"))
+            
             camp.save()
             messages.success(request, 'Registro de campaña exitoso')
             return redirect(reverse("home"))
@@ -45,17 +50,16 @@ def InsertCardView(request):
             don_data = request.session.get('don_data')
             don_data['campana'] = Campana.objects.get(id=campana_id)
             don = Donacion.objects.create(**don_data)
-            del request.session['don_data']
-            del request.session['camp_id']
 
             # Change data
-            don.name = don.name.capitalize()
+            don.name = don.name.title()
             don.message = don.message.capitalize()
             don.usuario = request.user if request.user.is_authenticated else None
             don.save()
             
             # Save card
             card = form.save(commit=False)
+
             card.from_donation = don
             card.save()
 
@@ -65,8 +69,12 @@ def InsertCardView(request):
             if camp.colected_amount >= camp.estimated_amount:
                 camp.state = 'F'
             camp.save()
+
+            # Remove session data
+            del request.session['don_data']
+            del request.session['camp_id']
             
-            messages.success(request, 'Donacion realizada')
+            messages.success(request, 'Donación realizada')
             return redirect(reverse("home"))
         else:
             form.data = form.data.copy()

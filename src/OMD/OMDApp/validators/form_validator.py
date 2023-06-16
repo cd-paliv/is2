@@ -120,3 +120,45 @@ class ImageFileTypeValidator:
     
     def get_help_text(self):
         return _("Sólo se permiten archivos JPG, JPEG o PNG.")
+
+from OMDApp.models import Tarjeta
+    
+class CardNumberValidation:
+    def __call__(self, field):
+        if not Tarjeta.objects.filter(number=field).exists():
+            raise ValidationError(_(f"El número de tarjeta ingresado no coincide con una tarjeta existente"))
+
+    def get_help_text(self, field):
+        return _(f"El número de tarjeta ingresado no coincide con una tarjeta existente")
+    
+class CardSecurityNumberValidation:
+    def __call__(self, field):
+        if not Tarjeta.objects.filter(security_number=field).exists():
+            raise ValidationError(_(f"El código de seguridad ingresado es incorrecto"))
+
+    def get_help_text(self, field):
+        return _(f"El código de seguridad ingresado es incorrecto")
+
+class CardHolderValidation:
+    def __call__(self, field):
+        if not Tarjeta.objects.filter(holder__iexact=field).exists():
+            raise ValidationError(_(f"El titular de la tarjeta ingresado es incorrecto"))
+
+    def get_help_text(self, field):
+        return _(f"El titular de la tarjeta ingresado es incorrecto")
+    
+class CardValidExpirationValidation:
+    def __call__(self, field):
+        if field <= date.today():
+            raise ValidationError(_(f"La tarjeta ingresada está vencida"))
+
+    def get_help_text(self, field):
+        return _(f"La tarjeta ingresada está vencida")
+
+class CardExpirationValidation:
+    def __call__(self, field):
+        if not Tarjeta.objects.filter(expiration=field).exists():
+            raise ValidationError(_(f"La fecha de vencimiento de la tarjeta no coincide con la ingresada"))
+
+    def get_help_text(self, field):
+        return _(f"La fecha de vencimiento de la tarjeta no coincide con la ingresada")

@@ -1,6 +1,8 @@
 from django import forms
 from OMDApp.models import Campana, Donacion, Tarjeta
-from OMDApp.validators.form_validator import (EmptyFieldValidator, NoNumbersFieldValidator,GreaterThanZeroValidator, ExistsDNIValidator, NumbersFieldValidator)
+from OMDApp.validators.form_validator import (EmptyFieldValidator, NoNumbersFieldValidator,GreaterThanZeroValidator, ExistsDNIValidator, NumbersFieldValidator,
+                                              CardNumberValidation, CardSecurityNumberValidation, CardHolderValidation, CardExpirationValidation,
+                                              CardValidExpirationValidation)
 
 
 class RegisterDonationEventsForm(forms.ModelForm):
@@ -44,19 +46,23 @@ class RegisterDonationForm(forms.ModelForm):
         fields = ("name", "email", "amount")
 
 class RegisterCardForm(forms.ModelForm):
-   card_name = forms.CharField(label = "Titular(*)",
+   holder = forms.CharField(label = "Titular(*)",
                           widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control','id': 'inputNameCard',
-                                                         'placeholder': 'Ingresa el nombre del propietario de la tarjeta', 'required': 'True'}),
-                                                         validators=[EmptyFieldValidator(), NoNumbersFieldValidator()]) 
-   card_number = forms.IntegerField(label = "Numero de tarjeta(*)",
+                                                         'placeholder': 'Ingresa el nombre del titular de la tarjeta', 'required': 'True'}),
+                                                         validators=[EmptyFieldValidator(), NoNumbersFieldValidator(), CardHolderValidation()]) 
+   number = forms.IntegerField(label = "Numero de tarjeta(*)",
                                     widget= forms.NumberInput(attrs={'type': 'number', 'class': 'form-control', 'id': 'inputCardNumber',
                                                              'placeholder': 'Ingrese su tarjeta'}),
-                                                             validators=[EmptyFieldValidator(), GreaterThanZeroValidator(), NumbersFieldValidator()])
-   card_number_security = forms.IntegerField(label="Numero de seguridad de la tarjeta(*)",
+                                                             validators=[EmptyFieldValidator(), GreaterThanZeroValidator(), NumbersFieldValidator(), CardNumberValidation()])
+   security_number = forms.IntegerField(label="Numero de seguridad de la tarjeta(*)",
                                              widget=forms.NumberInput(attrs={'type': 'number', 'class': 'form-control', 'id': 'inputCardNumberSecurity',
                                                              'placeholder': 'Ingrese su numero de seguridad de la tarjeta'}),
-                                                             validators=[EmptyFieldValidator(), GreaterThanZeroValidator(), NumbersFieldValidator()])
-   
+                                                             validators=[EmptyFieldValidator(), GreaterThanZeroValidator(), NumbersFieldValidator(), CardSecurityNumberValidation()])
+   expiration = forms.DateField(label="Fecha de vencimiento de la tarjeta(*)",
+                                widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'type': 'date', 'class': 'form-control', 'id': 'inputExpiration',
+                                                              'placeholder': 'Ingresa la fecha de vencimiento de la tarjeta',
+                                                              'required': 'True'}), validators=[EmptyFieldValidator(), CardExpirationValidation(), CardValidExpirationValidation()])
+
    class Meta:
         model = Tarjeta
-        fields = ("card_name", "card_number", "card_number_security")
+        fields = ("holder", "number", "security_number", "expiration")

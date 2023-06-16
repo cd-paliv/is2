@@ -165,7 +165,8 @@ class Donacion(models.Model):
     usuario = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
     
 class Tarjeta(models.Model):
-    card_name = models.CharField(max_length=50)
-    card_number = models.IntegerField()
-    card_number_security = models.IntegerField()
-    from_donation = models.OneToOneField(Donacion, on_delete=models.CASCADE, primary_key=True) 
+    holder = models.CharField(max_length=50)
+    number = models.IntegerField()
+    security_number = models.IntegerField()
+    expiration = models.DateField()
+    from_donation = models.OneToOneField(Donacion, on_delete=models.CASCADE, blank=True, null=True) 
