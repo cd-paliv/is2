@@ -20,9 +20,9 @@ class AskForTurnForm(forms.ModelForm):
                             widget=forms.DateInput(format=('%Y-%m-%d'), attrs={'type': 'date', 'class': 'form-control', 'id': 'inputDate',
                                                             'placeholder': 'Ingrese la fecha en la que quiera pedir el turno'}),
                                                             validators=[EmptyFieldValidator(), TurnDateBetweenValidator(), TurnDateTodayValidator()])
-    motive = forms.CharField(label="Razon(*)",
+    motive = forms.CharField(label="Razón(*)",
                              widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control','id': 'inputMotivo',
-                                                         'placeholder': 'Ingrese la razon por la cual quiere su turno'}),
+                                                         'placeholder': 'Ingrese la razón por la cual quiere su turno'}),
                                                          validators=[EmptyFieldValidator()])
     
     def __init__(self, *args, **kwargs):
@@ -43,7 +43,7 @@ class AttendTurnForm(forms.Form):
                                widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputPeso',
                                                              'placeholder': 'Ingrese el peso del perro'}),
                                                              validators=[FloatFieldValidator()])
-    observations = forms.CharField(label="Observaciones",
+    observations = forms.CharField(label="Observaciones", required=False,
                                widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputObservaciones',
                                                              'placeholder': 'Ingrese observaciones sobre la atención'}))
     amount = forms.FloatField(label="Costo(*)",
@@ -56,7 +56,7 @@ class AttendUrgencyForm(forms.Form):
                                widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputPeso',
                                                              'placeholder': 'Ingrese el peso del perro'}),
                                                              validators=[FloatFieldValidator()])
-    observations = forms.CharField(label="Observaciones",
+    observations = forms.CharField(label="Observaciones", required=False,
                                widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputObservaciones',
                                                              'placeholder': 'Ingrese observaciones sobre la atención'}))
     amount = forms.FloatField(label="Costo(*)",
@@ -82,4 +82,4 @@ class EvaluationForm(forms.Form):
                                                          'placeholder': 'Ingrese observaciones sobre la atención', 'required': 'True'}),
                                                          validators=[EmptyFieldValidator()])
     bool_options = {(1, 'Si'), (0, 'No')}
-    anonimous = forms.ChoiceField(label="¿Valorar como anonimo?(*)", choices=bool_options, widget=forms.RadioSelect(attrs={'type': 'radio'}))
+    anonimous = forms.ChoiceField(label="¿Valorar como anónimo?(*)", choices=bool_options, widget=forms.RadioSelect(attrs={'type': 'radio'}))

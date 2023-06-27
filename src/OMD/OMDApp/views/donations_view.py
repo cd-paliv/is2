@@ -1,3 +1,4 @@
+import datetime
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.contrib import messages
@@ -45,6 +46,11 @@ def InsertCardView(request):
     if request.method == 'POST':
         form = RegisterCardForm(request.POST)
         if form.is_valid():
+            card = form.save(commit=False)
+            if card.holder != 'Paula Vaccaro' or card.security_number != 123 or card.expiration != date(2024, 1, 1):
+                messages.error(request, "Hubo un error en el pago")
+                return redirect(reverse("insertCard"))
+
             # Create Donacion
             campana_id = request.session.get('camp_id')
             don_data = request.session.get('don_data')
@@ -58,8 +64,6 @@ def InsertCardView(request):
             don.save()
             
             # Save card
-            card = form.save(commit=False)
-
             card.from_donation = don
             card.save()
 

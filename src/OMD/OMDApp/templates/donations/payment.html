@@ -13,13 +13,111 @@
 		<form method="POST">
 			{% csrf_token %}
 
-            {% include 'form_iterator.html' with form=form %}
-			
+			<div class="mb-3">
+				<label for="id_number" class="form-label">Numero de tarjeta:</label>
+				<input type="{{ form.number.field.widget.input_type }}" class="form-control {% if form.number.errors %}is-invalid{% endif %}"
+					   id="id_number" name="{{ form.number.html_name }}"
+					   placeholder="{{ form.number.field.widget.attrs.placeholder }}"
+					   {% if form.number.value %} value="{{ form.number.value }}"{% endif %}>
+				{% if form.holder.errors %}
+					<div class="invalid-feedback">
+						{% for error in form.holder.errors %}
+							{{ error|escape|linebreaks }}
+						{% endfor %}
+					</div>
+				{% endif %}
+				{% if form.holder.help_text %}
+					<small class="form-text text-muted">{{ form.holder.help_text }}</small>
+				{% endif %}
+			</div>
+		  
+			<div class="mb-3">
+			  <label for="id_holder" class="form-label">Titular:</label>
+			  <input type="{{ form.holder.field.widget.input_type }}" class="form-control {% if form.holder.errors %}is-invalid{% endif %}"
+					 id="id_holder" name="{{ form.holder.html_name }}"
+					 placeholder="{{ form.holder.field.widget.attrs.placeholder }}"
+					 {% if form.holder.value %} value="{{ form.holder.value }}"{% endif %}
+					 {% if not enableFields%} disabled {% endif %}>
+				{% if form.holder.errors %}
+					<div class="invalid-feedback">
+						{% for error in form.holder.errors %}
+							{{ error|escape|linebreaks }}
+						{% endfor %}
+					</div>
+				{% endif %}
+				{% if form.holder.help_text %}
+					<small class="form-text text-muted">{{ form.holder.help_text }}</small>
+				{% endif %}
+			</div>
+		  
+			<div class="mb-3">
+			  <label for="id_security_number" class="form-label">Numero de seguridad:</label>
+			  <input type="{{ form.security_number.field.widget.input_type }}" class="form-control {% if form.security_number.errors %}is-invalid{% endif %}"
+					 id="id_security_number" name="{{ form.security_number.html_name }}"
+					 placeholder="{{ form.security_number.field.widget.attrs.placeholder }}"
+					 {% if form.security_number.value %} value="{{ form.security_number.value }}"{% endif %}>
+				{% if form.holder.errors %}
+					<div class="invalid-feedback">
+						{% for error in form.holder.errors %}
+							{{ error|escape|linebreaks }}
+						{% endfor %}
+					</div>
+				{% endif %}
+				{% if form.holder.help_text %}
+					<small class="form-text text-muted">{{ form.holder.help_text }}</small>
+				{% endif %}
+			</div>
+		  
+			<div class="mb-3">
+			  <label for="id_expiration" class="form-label">Fecha de vencimiento:</label>
+			  <input type="{{ form.expiration.field.widget.input_type }}" class="form-control {% if form.expiration.errors %}is-invalid{% endif %}"
+					 id="id_expiration" name="{{ form.expiration.html_name }}"
+					 placeholder="{{ form.expiration.field.widget.attrs.placeholder }}"
+					 {% if form.expiration.value %} value="{{ form.expiration.value }}"{% endif %}>
+				{% if form.holder.errors %}
+					<div class="invalid-feedback">
+						{% for error in form.holder.errors %}
+							{{ error|escape|linebreaks }}
+						{% endfor %}
+					</div>
+				{% endif %}
+				{% if form.holder.help_text %}
+					<small class="form-text text-muted">{{ form.holder.help_text }}</small>
+				{% endif %}
+			</div>
+		  
 			<div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">
-				<button class="btn btn-primary" type="submit">Pagar</button>
+				<button class="btn btn-primary" type="submit" {% if not enableFields %} disabled {% endif %}>Pagar</button>
 				<a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>
 			</div>
-		</form>
+		  </form>
+		  
 	</div>
 </body>
 {% endblock content %}
+
+{% block js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Initially disable the other fields
+    var enableFields = false;
+    enableDisableFields(enableFields);
+
+    // Listen for changes in the number field
+    $('#id_number').on('input', function() {
+        var numberValue = $(this).val();
+        enableFields = (numberValue === '123456789' || numberValue === '987654321');
+        enableDisableFields(enableFields);
+    });
+
+    // Function to enable/disable the other fields
+    function enableDisableFields(enable) {
+        $('#id_holder').prop('disabled', !enable);
+        $('#id_security_number').prop('disabled', !enable);
+        $('#id_expiration').prop('disabled', !enable);
+		$('button[type="submit"]').prop('disabled', !enable);
+    }
+});
+</script>
+{% endblock %}

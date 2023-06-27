@@ -6,8 +6,7 @@ from django.utils.translation import gettext as _
 from OMDApp.validators.password_validation import SymbolValidator, NumberValidator, UppercaseValidator, MinimumLengthValidator
 from OMDApp.validators.form_validator import (EmptyFieldValidator, NoNumbersFieldValidator, 
                                               GreaterThanZeroValidator, UserAgeValidator, DogAgeValidator,
-                                              ExistsEmailValidator, ExistsDNIValidator, NumbersFieldValidator,
-                                              ImageFileTypeValidator)
+                                              ExistsEmailValidator, ExistsDNIValidator, NumbersFieldValidator)
 
 
 # Create your forms here.
