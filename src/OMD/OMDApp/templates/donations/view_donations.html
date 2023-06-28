@@ -31,7 +31,7 @@
                         <th><strong>Monto recaudado</strong></th>
                         <th><strong>Fecha comienzo</strong></th>
                         <th><strong>Fecha final</strong></th>
-                        <th><strong>Opciones</strong></th>
+                        {% if not view_finalized_donations or perms.OMDApp.is_vet %}<th><strong>Opciones</strong></th>{% endif %}
                     </tr>
                 </thead> 
                 <tbody>
@@ -42,15 +42,16 @@
                             <td class="vertical-align-middle">{{campana.colected_amount}}</td>
                             <td class="vertical-align-middle">{{campana.date_in}}</td>
                             <td class="vertical-align-middle">{{campana.date_out}}</td>
-                            {% if campana %}
+                            
+                                {% if perms.OMDApp.is_vet %} 
                                 <td class="vertical-align-middle">
-                                    {% if perms.OMDApp.is_vet %} 
-                                        <a href="{% url  'listCampaignDonations' campana_id=campana.id %}" class="btn btn-secondary btn-sm">Ver donaciones</a>
-                                    {% else %}
-                                        <a href="{% url 'registerDonation' campana_id=campana.id %}" class="btn btn-secondary btn-sm">Donar</a>
-                                    {% endif %}
-                            </td>
-                            {% endif %}
+                                    <a href="{% url  'listCampaignDonations' campana_id=campana.id %}" class="btn btn-secondary btn-sm">Ver donaciones</a>
+                                </td>
+                                {% elif not view_finalized_donations %}
+                                <td class="vertical-align-middle">
+                                    <a href="{% url 'registerDonation' campana_id=campana.id %}" class="btn btn-secondary btn-sm">Donar</a>
+                                </td>
+                                {% endif %}
                         </tr>
                     {% endfor %}
                 </tbody>

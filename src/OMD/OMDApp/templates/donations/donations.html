@@ -22,9 +22,9 @@
                         <th><strong>Nombre</strong></th>
                         <th><strong>Email</strong></th>
                         {% endif %}
+                        <th><strong>Campaña</strong></th>
                         <th><strong>Monto</strong></th>
                         <th><strong>Mensaje</strong></th>
-                        <th><strong>Campaña</strong></th>
                     </tr>
                 </thead> 
                 <tbody>
@@ -34,9 +34,9 @@
                             <td class="vertical-align-middle"><strong>{{don.name}}</strong></td>
                             <td class="vertical-align-middle">{{don.email}}</td>
                             {% endif %}
+                            <td class="vertical-align-middle">{{don.campana.name}}</td>
                             <td class="vertical-align-middle">{{don.amount}}</td>
                             <td class="vertical-align-middle">{{don.message}}</td>
-                            <td class="vertical-align-middle">{{don.campana.name}}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
