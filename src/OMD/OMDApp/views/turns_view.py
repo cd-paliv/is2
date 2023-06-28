@@ -189,6 +189,8 @@ def get_discount(user_id, total):
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
 def AttendTurnView(request, turn_id, urgency=False):
+    if request.session.get('show_finalized_turn_visited'):
+        return redirect(reverse('home'))
     turn = Turno.objects.get(id=turn_id)
     dog = turn.solicited_by
     if request.method == "POST":
@@ -236,6 +238,8 @@ def ShowFinalizedTurn(request, turn_id):
     discount_percentage, discounted_total = get_discount(turn.solicited_by.owner.id, turn.amount)
     turn.amount = discounted_total
     turn.save()
+
+    request.session['show_finalized_turn_visited'] = True
 
     message = render_to_string("turns/turn_evaluate_mail.html", {'dia': turn.date, 'perro': turn.solicited_by.name,
                                         'absolute_url': request.build_absolute_uri(reverse('evaluation', kwargs={'turn_id': turn.id})) })
