@@ -46,7 +46,7 @@ def AskForTurn(request):
                 if turn.type == 'D':
                     has_desp_turn = True if Turno.objects.filter(date=date.today(), type='D').exists() else False
                     if has_desp_turn:
-                        messages.error(request, "No puede solicitar mas de un turno de desparasitacion por dia para el mismo perro")
+                        messages.error(request, "No puede solicitar mas de un turno de desparasitación por día para el mismo perro")
                         return redirect(reverse("askForTurn"))
                 
                 if turn.type == 'VA' or turn.type == 'VB':
@@ -224,6 +224,8 @@ def AttendTurnView(request, turn_id, urgency=False):
         form = AttendTurnForm(initial={'weight': dog.weight})
     return render(request, "turns/attend_turn.html", {'form': form, 'dog': dog})
 
+from django.utils.html import format_html
+
 @login_required(login_url='/login/')
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
@@ -233,6 +235,11 @@ def ShowFinalizedTurn(request, turn_id):
     discount_percentage, discounted_total = get_discount(turn.solicited_by.owner.id, turn.amount)
     turn.amount = discounted_total
     turn.save()
+
+    message = render_to_string("turns/turn_evaluate_mail.html", {'dia': turn.date, 'perro': turn.solicited_by.name,
+                                        'absolute_url': request.build_absolute_uri(reverse('evaluation', kwargs={'turn_id': turn.id})) })
+
+    turn.solicited_by.owner.email_user("Encuesta de evaluación de servicio", message)
 
     return render(request, "turns/turn_view.html", {'turn': turn, 'actual_amount': actual_amount, 'discounted_total': discounted_total,
                                                     'discount_percentage': discount_percentage,'turn_type_mapping': turn_type_mapping(),
@@ -329,16 +336,24 @@ def GenerateTurnForUrgencyView(turn_id, vet, dog, opt):
     # Add new intervention to urgency
     append_data(turn, opt)
 
+from django.template.loader import render_to_string
+
 @cache_control(max_age=3600, no_store=True)
-def Evaluation(request):
+def Evaluation(request, turn_id):
     if  request.method == 'POST':
         eva = EvaluationForm(request.POST)
         if eva.is_valid():
-            eva.save()
+            turn = Turno.objects.get(id=turn_id)
+            data_dict = eva.cleaned_data
+
+            print(data_dict['anonymus'])
+
+            message = render_to_string('turns/turn_evaluated_email.html', {'eva': data_dict, 'turn': turn})
+            turn.accepted_by.user.email_user("Se ha evaluado su atención", message)
 
             return redirect(reverse("home"))
         else:
             eva.data = eva.data.copy
     else:
-        evalua = EvaluationForm()
-    return render(request, 'turns/evaluate.html', {'form':evalua})
+        eva = EvaluationForm()
+    return render(request, 'turns/evaluate.html', {'form':eva})

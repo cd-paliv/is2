@@ -1,0 +1,12 @@
+{% autoescape off %}
+Hola {{ turn.accepted_by.user.first_name }} {{ turn.accepted_by.user.last_name }},
+
+La evaluación del turno {{ turn.date|date:'d/m/Y' }} es:
+
+Evaluación: {{ eva.value }}
+{% if eva.observations %}Observaciones: {{eva.observations}}{% endif %}
+{% if eva.anonymus == '0' %}Cliente: {{ turn.solicited_by.owner.first_name }} {{ turn.solicited_by.owner.last_name }}
+Se atendió al perro: {{ turn.solicited_by.name }}
+{% endif %}
+
+{% endautoescape %}

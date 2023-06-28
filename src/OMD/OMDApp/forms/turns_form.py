@@ -76,10 +76,9 @@ class AttendUrgencyForm(forms.Form):
 
 class EvaluationForm(forms.Form):
     CHOICES = [("1", "1"), ("2", "2"), ("3", "3"), ("4", "4"), ("5", "5"), ("6", "6"), ("7", "7"), ("8", "8"), ("9", "9"), ("10", "10")]
-    Evaluacion      = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
-    observations = forms.CharField(label="Observaciones de la consulta(*)",
+    value = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
+    observations = forms.CharField(label="Observaciones", required=False,
                            widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control','id': 'inputMotive',
-                                                         'placeholder': 'Ingrese observaciones sobre la atención', 'required': 'True'}),
-                                                         validators=[EmptyFieldValidator()])
+                                                         'placeholder': 'Ingrese observaciones sobre la atención'}))
     bool_options = {(1, 'Si'), (0, 'No')}
-    anonimous = forms.ChoiceField(label="¿Valorar como anónimo?(*)", choices=bool_options, widget=forms.RadioSelect(attrs={'type': 'radio'}))
+    anonymus = forms.ChoiceField(label="¿Valorar como anónimo?(*)", choices=bool_options, widget=forms.RadioSelect(attrs={'type': 'radio'}))
