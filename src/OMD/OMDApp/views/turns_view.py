@@ -70,6 +70,7 @@ def AskForTurn(request):
             messages.success(request, f'Solicitud de turno exitosa')
             return redirect(reverse("home"))
         else:
+            form.fields['solicited_by'].choices = [(dog.id, dog.name) for dog in Perro.objects.filter(owner=request.user)]
             form.data = form.data.copy()
     else:
         user_dogs = Perro.objects.filter(owner=request.user)

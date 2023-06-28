@@ -5,6 +5,13 @@
             <input type="date" class="form-control {% if field.errors %}is-invalid{% endif %}" id="{{ field.id_for_label }}"
                     name="{{ field.html_name }}" placeholder="{{ field.field.widget.attrs.placeholder }}"
                     {% if field.value %} value="{{ field.value|date:'Y-m-d' }}" {% endif %}>
+        {% elif field.html_name == 'solicited_by' %}
+            <!-- Render solicited_by field in AskForTurn -->
+            <select class="form-control {% if field.errors %}is-invalid{% endif %}" id="{{ field.id_for_label }}" name="{{ field.html_name }}">
+                {% for choice_value, choice_label in field.field.choices %}
+                    <option value="{{ choice_value }}" {% if field.value|stringformat:"s" == choice_value|stringformat:"s" %} selected {% endif %}>{{ choice_label }}</option>
+                {% endfor %}
+            </select>
         {% elif field.field.widget.input_type == 'select' %}
             {{ field }}
         {% elif field.field.widget.input_type == 'radio' %}
