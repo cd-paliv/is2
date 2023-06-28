@@ -14,8 +14,8 @@
         {% else %}
             {% if perms.OMDApp.is_vet %}
                 <a href="{% url 'registerEvent' %}" class="btn btn-primary">Crear Campaña</a>
-                <a href="{% url 'listFinalizedDonations' %}" class="btn btn-primary">Ver campañas finalizadas</a>
             {% endif %}
+                <a href="{% url 'listFinalizedDonations' %}" class="btn btn-primary">Ver campañas finalizadas</a>
             {% if perms.OMDApp.is_client %}
                 <a href="{% url 'myDonations' %}" class="btn btn-primary">Mis donaciones</a>
             {% endif %}
@@ -50,7 +50,7 @@
                                         <a href="{% url 'registerDonation' campana_id=campana.id %}" class="btn btn-secondary btn-sm">Donar</a>
                                     {% endif %}
                             </td>
-                        {% endif %}
+                            {% endif %}
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -58,6 +58,19 @@
         </div>
     </div>
 {% else %}
-    <h1 class="text-center fw-semibold mb-4">No hay campañas de donacion {% if view_finalized_donations %}finalizadas{% endif %}</h1>
+    <h1 class="text-center fw-semibold mb-4">No hay campañas de donacion {% if view_finalized_donations %}finalizadas{% else %}activas{% endif %}</h1>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+        {% if view_finalized_donations %}
+            <a href="{% url 'viewCampaigns' %}" class="btn btn-secondary">Atrás</a>
+        {% else %}
+            {% if perms.OMDApp.is_vet %}
+                <a href="{% url 'registerEvent' %}" class="btn btn-primary">Crear Campaña</a>
+            {% endif %}
+                <a href="{% url 'listFinalizedDonations' %}" class="btn btn-primary">Ver campañas finalizadas</a>
+            {% if perms.OMDApp.is_client %}
+                <a href="{% url 'myDonations' %}" class="btn btn-primary">Mis donaciones</a>
+            {% endif %}
+        {% endif %}
+    </div>
 {% endif %}
 {% endblock content %}
