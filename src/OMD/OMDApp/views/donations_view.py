@@ -102,14 +102,19 @@ def RegisterDonation(request, campana_id):
         donation = RegisterDonationForm()
     return render(request, 'donations/make_donation.html', {'form': donation})
 
+@login_required(login_url='/login/')
+@email_verification_required
+@cache_control(max_age=3600, no_store=True)
 def ViewMyDonations(request):
     donaciones=  list(Donacion.objects.filter(usuario=request.user))
     return render(request, "donations/donations.html", {"list_donations" : donaciones})
 
+@cache_control(max_age=3600, no_store=True)
 def AllDonations(request):
     donaciones=  list(Donacion.objects.order_by('campana__name'))
     return render(request, "donations/donations.html", {"list_donations" : donaciones})
 
+@cache_control(max_age=3600, no_store=True)
 def CampaignDonations(request, campana_id):
     donaciones=  list(Donacion.objects.filter(id=campana_id))
     return render(request, "donations/donations.html", {"list_donations" : donaciones}) 

@@ -28,6 +28,7 @@ from OMDApp.views.turns_view import (AskForTurn, ViewAcceptedTurns, ViewPendingT
                                      NewUrgencyButtonView, Evaluation, ShowFinalizedTurn)
 from OMDApp.views.donations_view import (RegisterDonation , ViewCampaigns, RegisterEvent , InsertCardView, ViewMyDonations,AllDonations,
                                          ViewFinalizedCampaigns, CampaignDonations)
+from OMDApp.views.services_view import (RegisterService, ViewCuidadores, ViewPaseadores, ContactService)
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
@@ -80,14 +81,20 @@ urlpatterns = [
     path('attendUrgency/<int:turn_id>/', AttendUrgencyView, name='attendUrgency'),
 
     # Donations
-    path('registerdonation/<int:campana_id>/',RegisterDonation,name='registerDonation'), #esta es la donacion
+    path('registerdonation/<int:campana_id>/',RegisterDonation,name='registerDonation'), 
     path('viewcampaigns/',ViewCampaigns,name='viewCampaigns'),
     path('registerevent/',RegisterEvent,name='registerEvent'),
     path('mydonations/',ViewMyDonations, name='myDonations'),
     path('listdonations/',AllDonations, name='listDonations'),
     path('listcampaigndonations/<int:campana_id>/',CampaignDonations, name='listCampaignDonations'),
     path('listFdonations/',ViewFinalizedCampaigns, name='listFinalizedDonations'),
-    path('introcard/', InsertCardView , name='insertCard')
+    path('introcard/', InsertCardView , name='insertCard'),
+
+    # Services
+    path('registerservice/<str:type_s>/', RegisterService, name='registerService'),
+    path('viewcuidadores/', ViewCuidadores, name='viewCuidadores'),
+    path('viewpaseadores/', ViewPaseadores, name='viewPaseadores'),
+    path('contact/<int:serv_id>', ContactService, name='contactService'),
     
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

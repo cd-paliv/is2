@@ -381,6 +381,17 @@
             "security_number": 123,
             "expiration" : "2024-01-01"
         }
+    },
+    {
+        "model": "OMDApp.Servicio",
+        "pk": 1,
+        "fields":{
+            "email":"pablito@gmail.com",
+            "first_name": "Pablo",
+            "last_name": "Lopez",
+            "service" : "C",
+            "phone" : 2214595085
+        }
     }
     
 ]

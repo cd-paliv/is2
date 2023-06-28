@@ -170,3 +170,10 @@ class Tarjeta(models.Model):
     security_number = models.IntegerField()
     expiration = models.DateField()
     from_donation = models.OneToOneField(Donacion, on_delete=models.CASCADE, blank=True, null=True) 
+
+class Servicio(models.Model):
+    email = models.EmailField(_('email address'), unique=True)
+    first_name = models.CharField(max_length=20)
+    last_name = models.CharField(max_length=30)
+    service = models.CharField(max_length=1) # p ^ c
+    phone = models.IntegerField()
