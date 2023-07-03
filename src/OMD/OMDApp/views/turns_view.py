@@ -10,7 +10,7 @@ from django.views.decorators.cache import cache_control
 from django.db.models import Q
 from datetime import date
 import json
-from OMDApp.views.helpers import (turn_type_mapping, turn_hour_mapping, actual_turn_hour_check, calculate_age,
+from OMDApp.views.helpers import (turn_type_mapping, turn_hour_mapping, actual_turn_hour_check, turn_type_mapping_with_urgency,
                                     generate_date, append_data, delete_unwanted_next_turns, get_filtered_interventions,
                                     get_days_until_next_turn)
 from datetime import datetime
@@ -170,7 +170,7 @@ def CancelTurn(request, turn_id):
 
 def get_discount(user_id, total):
     user = get_user_model().objects.get(id=user_id)
-    donations = Donacion.objects.filter(usuario=user)
+    donations = Donacion.objects.filter(usuario=user, used=0)
     total_donated = 0
     for donation in donations:
         total_donated += donation.amount
@@ -180,6 +180,7 @@ def get_discount(user_id, total):
         discount_amount = min(Decimal(total_donated) * Decimal('0.2'), discount_limit)
         discount_percentage = (discount_amount * total) / Decimal('100') if discount_amount != discount_limit else 50
         discounted_total = Decimal(total) - discount_amount
+        donations.update(used=1)
 
         return discount_percentage, discounted_total
     else:
@@ -190,6 +191,7 @@ def get_discount(user_id, total):
 @cache_control(max_age=3600, no_store=True)
 def AttendTurnView(request, turn_id, urgency=False):
     if request.session.get('show_finalized_turn_visited'):
+        del request.session['show_finalized_turn_visited']
         return redirect(reverse('home'))
     turn = Turno.objects.get(id=turn_id)
     dog = turn.solicited_by
@@ -236,8 +238,9 @@ def ShowFinalizedTurn(request, turn_id):
     turn = Turno.objects.get(id=turn_id)
     actual_amount = turn.amount
     discount_percentage, discounted_total = get_discount(turn.solicited_by.owner.id, turn.amount)
-    turn.amount = discounted_total
-    turn.save()
+    if discounted_total != 0:
+        turn.amount = discounted_total
+        turn.save()
 
     request.session['show_finalized_turn_visited'] = True
 
@@ -247,7 +250,7 @@ def ShowFinalizedTurn(request, turn_id):
     turn.solicited_by.owner.email_user("Encuesta de evaluación de servicio", message)
 
     return render(request, "turns/turn_view.html", {'turn': turn, 'actual_amount': actual_amount, 'discounted_total': discounted_total,
-                                                    'discount_percentage': discount_percentage,'turn_type_mapping': turn_type_mapping(),
+                                                    'discount_percentage': discount_percentage,'turn_type_mapping': turn_type_mapping_with_urgency(),
                                                     'turn_hour_mapping': turn_hour_mapping()})
 
 
@@ -275,6 +278,9 @@ def GenerateUrgencyView(request, dog_id):
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
 def AttendUrgencyView(request, turn_id):
+    if request.session.get('show_finalized_turn_visited'):
+        del request.session['show_finalized_turn_visited']
+        return redirect(reverse('home'))
     turn = Turno.objects.get(id=turn_id)
     dog = turn.solicited_by
     urgency_choices = get_filtered_interventions(dog)
@@ -301,7 +307,7 @@ def AttendUrgencyView(request, turn_id):
             for intervention in turn.urgency_turns:
                 delete_unwanted_next_turns(turn.solicited_by, intervention)
 
-            return redirect(reverse('home'))
+            return redirect(reverse('showFinalizedTurn', kwargs={'turn_id': turn.id}))
         else:
             form.data = form.data.copy()
     else:
