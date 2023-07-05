@@ -25,17 +25,17 @@
     <div class="d-grid gap-2 gap-md-4 d-md-flex justify-content-md-center">
       <div class="col">
         <label for="amount" class="form-label">Costo:</label>
-        <input type="text" class="form-control" id="amount" value="${{ actual_amount }}" disabled>
+        <input type="text" class="form-control" id="amount" value="${{ actual_amount|floatformat:"2g" }}" disabled>
       </div>
       <div class="col">
         <label for="discount" class="form-label">Descuento: ({{discount_percentage}}%)</label>
-        <input type="text" class="form-control" id="discount" value="${{ discounted_total }}" disabled>
+        <input type="text" class="form-control" id="discount" value="${{ discounted_total|floatformat:"2g" }}" disabled>
       </div>
     </div>
   </div>
   <div class="mb-3">
     <label for="final_amount" class="form-label">Monto final:</label>
-    <input type="text" class="form-control" id="final_amount" value="${{ turn.amount }}" disabled>
+    <input type="text" class="form-control" id="final_amount" value="${{ turn.amount|floatformat:"2g" }}" disabled>
   </div>
   
     <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-auto py-4">

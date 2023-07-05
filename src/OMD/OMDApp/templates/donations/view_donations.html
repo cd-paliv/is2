@@ -38,10 +38,10 @@
                     {% for campana in view_donations %}
                         <tr>
                             <td class="vertical-align-middle"><strong>{{campana.name}}</strong></td>
-                            <td class="vertical-align-middle">{{campana.estimated_amount}}</td>
-                            <td class="vertical-align-middle">{{campana.colected_amount}}</td>
-                            <td class="vertical-align-middle">{{campana.date_in}}</td>
-                            <td class="vertical-align-middle">{{campana.date_out}}</td>
+                            <td class="vertical-align-middle">${{campana.estimated_amount|floatformat:"2g"}}</td>
+                            <td class="vertical-align-middle">${{campana.colected_amount|floatformat:"2g"}}</td>
+                            <td class="vertical-align-middle">{{campana.date_in|date:'d/m/Y'}}</td>
+                            <td class="vertical-align-middle">{{campana.date_out|date:'d/m/Y'}}</td>
                             
                                 {% if perms.OMDApp.is_vet %} 
                                 <td class="vertical-align-middle">

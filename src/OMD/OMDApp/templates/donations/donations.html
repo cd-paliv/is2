@@ -35,7 +35,7 @@
                             <td class="vertical-align-middle">{{don.email}}</td>
                             {% endif %}
                             <td class="vertical-align-middle">{{don.campana.name}}</td>
-                            <td class="vertical-align-middle">{{don.amount}}</td>
+                            <td class="vertical-align-middle">${{don.amount|floatformat:"2g"}}</td>
                             <td class="vertical-align-middle">{{don.message}}</td>
                         </tr>
                     {% endfor %}
