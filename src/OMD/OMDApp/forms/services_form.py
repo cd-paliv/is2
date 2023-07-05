@@ -23,10 +23,21 @@ class RegisterServiceForm(forms.ModelForm):
                                    widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputPhone',
                                                                  'placeholder': 'Ingrese el número de teléfono'}),
                                    validators=[RegexValidator(phone_regex, message='Por favor, introduce un número de teléfono válido.')])
+    plaza_options = {
+        ('PM', 'Plaza Moreno'), ('PSM', 'Plaza San Martín'), ('PMA', 'Plaza Malvinas Argentinas (ex Islas Malvinas)'),
+        ('PR', 'Plaza Rivadavia'), ('PV', 'Parque Vucetich'), ('PRO', 'Plaza Rocha'), ('PI', 'Plaza Italia'), ('PS', 'Parque Saavedra'),
+        ('PMT', 'Plaza Matheu'), ('PE', 'Plaza España'), ('PSAR', 'Plaza Sarmiento'), ('PC', 'Parque Castelli'), ('PPE', 'Plaza Perón (ex Brandsen)'),
+        ('PY', 'Plaza Yrigoyen'), ('PROS', 'Plaza Rosas (ex Máximo Paz)'), ('PA', 'Plaza Alsina'), ('PO', 'Plaza Olazábal'), ('PBE', 'Plaza Belgrano'),
+        ('PG', 'Plaza Güemes'), ('PAI', 'Parque Alberti'), ('P19N', 'Plaza 19 de Noviembre'), ('PAZ', 'Plaza Azcuénaga'), ('PP', 'Plaza Paso'),
+    }
+    zone = forms.ChoiceField(label="Zona(*)", choices=plaza_options,
+                             widget=forms.Select(attrs={'class': 'form-control','id': 'inputZone',
+                                                        'placeholder': 'Seleccione la zona donde trabaja'}))
+
 
     class Meta:
         model = Servicio
-        fields = ("first_name", "last_name", "email", "phone")
+        fields = ("first_name", "last_name", "email", "phone", "zone")
 
 class ContactServiceForm(forms.Form):
     first_name = forms.CharField(label="Nombre(*)",

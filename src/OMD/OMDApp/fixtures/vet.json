@@ -390,6 +390,7 @@
             "first_name": "Pablo",
             "last_name": "Lopez",
             "service" : "C",
+            "zone" : "PM",
             "phone" : 2214595085
         }
     }

@@ -145,3 +145,33 @@ def get_days_until_next_turn(dog, turn_type):
         return days_left if days_left > 0 else None
 
     return None
+
+# Services
+def zone_mapping():
+    map = {
+        'PM': 'Plaza Moreno',
+        'PSM': 'Plaza San Martín',
+        'PMA': 'Plaza Malvinas Argentinas (ex Islas Malvinas)',
+        'PR': 'Plaza Rivadavia',
+        'PV': 'Parque Vucetich',
+        'PRO': 'Plaza Rocha',
+        'PI': 'Plaza Italia',
+        'PS': 'Parque Saavedra',
+        'PMT': 'Plaza Matheu',
+        'PE': 'Plaza España',
+        'PSAR': 'Plaza Sarmiento',
+        'PC': 'Parque Castelli',
+        'PPE': 'Plaza Perón (ex Brandsen)',
+        'PY': 'Plaza Yrigoyen',
+        'PROS': 'Plaza Rosas (ex Máximo Paz)',
+        'PA': 'Plaza Alsina',
+        'PO': 'Plaza Olazábal',
+        'PBE': 'Plaza Belgrano',
+        'PG': 'Plaza Güemes',
+        'PAI': 'Parque Alberti',
+        'P19N': 'Plaza 19 de Noviembre',
+        'PAZ': 'Plaza Azcuénaga',
+        'PP': 'Plaza Paso',
+    }
+
+    return map

@@ -26,7 +26,7 @@
                     {% for service in services %}
                         <tr>
                             <td class="vertical-align-middle"><strong>{{service.first_name}} {{service.last_name}}</strong></td>
-                            <td class="vertical-align-middle">-</td>
+                            <td class="vertical-align-middle">{{ zone_mapping|get_item:service.zone}}</td>
                             {% if not perms.OMDApp.is_vet %}
                                 <td class="vertical-align-middle">
                                     <a href="{% url 'contactService' serv_id=service.id %}" class="btn btn-secondary btn-sm">Contactar</a>

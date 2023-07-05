@@ -76,7 +76,7 @@ class AttendUrgencyForm(forms.Form):
 
 class EvaluationForm(forms.Form):
     CHOICES = [("1", "1"), ("2", "2"), ("3", "3"), ("4", "4"), ("5", "5"), ("6", "6"), ("7", "7"), ("8", "8"), ("9", "9"), ("10", "10")]
-    value = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
+    value = forms.ChoiceField(label="Evaluación(*)", widget=forms.RadioSelect, choices=CHOICES)
     observations = forms.CharField(label="Observaciones", required=False,
                            widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control','id': 'inputMotive',
                                                          'placeholder': 'Ingrese observaciones sobre la atención'}))

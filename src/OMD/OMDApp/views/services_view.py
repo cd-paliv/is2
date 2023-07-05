@@ -1,17 +1,22 @@
 from django.contrib import messages
-from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_control
 from OMDApp.decorators import email_verification_required
 from django.template.loader import render_to_string
 from OMDApp.forms.services_form import RegisterServiceForm, ContactServiceForm
 from OMDApp.models import Servicio
 from django.core.mail import send_mail
+from OMDApp.views.helpers import zone_mapping
 
 # Create your views here.
+from django.template.defaulttags import register
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
+
+
 @login_required(login_url='/login/')
 @email_verification_required
 @cache_control(max_age=3600, no_store=True)
@@ -36,11 +41,13 @@ def RegisterService(request, type_s):
 
 def ViewCuidadores(request):
     cuidadores = Servicio.objects.filter(service='C')
-    return render(request, "services/service_list.html", {'services': cuidadores, 'type': 'C'})
+    return render(request, "services/service_list.html", {'services': cuidadores, 'type': 'C',
+                                                          'zone_mapping': zone_mapping()})
 
 def ViewPaseadores(request):
     paseadores = Servicio.objects.filter(service='P')
-    return render(request, "services/service_list.html", {'services': paseadores, 'type': 'P'})
+    return render(request, "services/service_list.html", {'services': paseadores, 'type': 'P',
+                                                          'zone_mapping': zone_mapping()})
 
 def ContactService(request, serv_id):
     if request.method == "POST":
