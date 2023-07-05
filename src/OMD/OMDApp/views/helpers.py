@@ -146,6 +146,13 @@ def get_days_until_next_turn(dog, turn_type):
 
     return None
 
+def convert_days_to_date(dog, turn_type):
+
+    days = get_days_until_next_turn(dog, turn_type)
+    next_turn_date = date.today() + timedelta(days=days)
+
+    return next_turn_date
+
 # Services
 def zone_mapping():
     map = {

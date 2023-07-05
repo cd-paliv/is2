@@ -2,6 +2,7 @@ from django.core.management import BaseCommand, call_command
 from OMDApp.models import Veterinario, Turno
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
+from django.db.models import Q
 from datetime import date
 # from yourapp.models import User # if you have a custom user
 
@@ -23,7 +24,7 @@ class Command(BaseCommand):
             user.set_password(user.password)
             user.save()
         
-        for turn in Turno.objects.all():
+        for turn in Turno.objects.all().exclude(Q(type="VA") | Q(state="A")):
             turn.date = date.today()
             turn.save()
 

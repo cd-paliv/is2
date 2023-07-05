@@ -216,7 +216,7 @@
           "type": "T",
           "hour": "Morning",
           "date": "2023-11-15",
-          "motive": "Turno",
+          "motive": "Consulta",
           "solicited_by": 1,
           "accepted_by": null
         }
@@ -250,6 +250,52 @@
           "finalized_at": "2023-03-15",
           "solicited_by": 1,
           "accepted_by": 2
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 4,
+        "fields": {
+          "state": "S",
+          "type": "VA",
+          "hour": "Morning",
+          "date": "2023-08-15",
+          "motive": "Vacunación",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 2,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 5,
+        "fields": {
+          "state": "A",
+          "type": "T",
+          "hour": "Morning",
+          "date": "2023-08-15",
+          "motive": "Consulta",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 2,
+          "accepted_by": null
+        }
+      },
+      
+      {
+        "model": "OMDApp.turno",
+        "pk": 6,
+        "fields": {
+          "state": "A",
+          "type": "T",
+          "hour": "Morning",
+          "date": "2023-07-10",
+          "motive": "Consulta",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 2,
+          "accepted_by": null
         }
       },
       {

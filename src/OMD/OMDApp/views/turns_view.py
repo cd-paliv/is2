@@ -12,7 +12,7 @@ from datetime import date
 import json
 from OMDApp.views.helpers import (turn_type_mapping, turn_hour_mapping, actual_turn_hour_check, calculate_age,
                                     generate_date, append_data, delete_unwanted_next_turns, get_filtered_interventions,
-                                    get_days_until_next_turn)
+                                    get_days_until_next_turn, convert_days_to_date)
 from datetime import datetime
 from decimal import Decimal
 
@@ -208,7 +208,7 @@ def AttendTurnView(request, turn_id, urgency=False):
                 turn.add_to_health_book()
 
                 # Automatic new vacunation turn
-                new_date = generate_date(dog.birthdate, type=turn.type)
+                new_date = convert_days_to_date(dog, turn.type)
                 motive = f"Generación automática de turno para vacunación tipo {'A' if turn.type == 'VA' else 'B'}"
                 Turno.objects.create(state='S', type=turn.type, hour=turn.hour, date=new_date, motive=motive, solicited_by=dog)
 
@@ -287,6 +287,7 @@ def AttendUrgencyView(request, turn_id):
             turn.observations = form.cleaned_data['observations']
             turn.amount = form.cleaned_data['amount']
             turn.state = 'F'
+            turn.finalized_at = date.today()
 
             turn.save()
             turn.add_to_health_book()
@@ -311,21 +312,24 @@ def AttendUrgencyView(request, turn_id):
                                                       'urgency_choices': get_filtered_interventions(dog)})
 
 def GenerateTurnForUrgencyView(turn_id, vet, dog, opt):
-    print(opt)
     turn = Turno.objects.get(id=turn_id)
     if opt == 'VA' or opt == 'VB':
         # Generate vacunation turn
         motive = f"Vacunación tipo {'A' if opt == 'VA' else 'B'} realizada en urgencia"
         vacc_turn = Turno.objects.create(state='F', type=opt, hour=datetime.now().time(), date=turn.date, motive=motive, solicited_by=dog,
-                                         accepted_by=Veterinario.objects.get(user=vet), amount=0.0)
+                                         accepted_by=Veterinario.objects.get(user=vet), amount=0.0, finalized_at = date.today())
         vacc_turn.add_to_health_book()
-        #vacc_turn.add_to_clinic_history()
+
+        # Create new vaccination turn
+        new_date = convert_days_to_date(vacc_turn.solicited_by, vacc_turn.type)
+        new_motive = f"Generación automática de turno para vacunación tipo {'A' if turn.type == 'VA' else 'B'}"
+        Turno.objects.create(state='S', type=opt, hour=turn.hour, date=new_date, motive=new_motive, solicited_by=dog)
 
     elif opt == 'C':
         # Generate castration turn
         motive = f"Castración realizada en urgencia"
         cast_turn = Turno.objects.create(state='F', type=opt, hour=datetime.now().time(), date=turn.date, motive=motive, solicited_by=dog,
-                                         accepted_by=Veterinario.objects.get(user=vet), amount=0.0)
+                                         accepted_by=Veterinario.objects.get(user=vet), amount=0.0, finalized_at = date.today())
         cast_turn.add_to_health_book()
         #cast_turn.add_to_clinic_history()
 
@@ -335,7 +339,7 @@ def GenerateTurnForUrgencyView(turn_id, vet, dog, opt):
     elif opt == 'D':
         motive = f"Desparasitación realizada en urgencia"
         desp_turn = Turno.objects.create(state='F', type=opt, hour=datetime.now().time(), date=turn.date, motive=motive, solicited_by=dog,
-                                         accepted_by=Veterinario.objects.get(user=vet), amount=0.0)
+                                         accepted_by=Veterinario.objects.get(user=vet), amount=0.0, finalized_at = date.today())
         desp_turn.add_to_health_book()
 
     # Add new intervention to urgency
