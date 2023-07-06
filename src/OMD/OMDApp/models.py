@@ -158,6 +158,7 @@ class Campana(models.Model):
 
 class Donacion(models.Model):
     name = models.CharField(max_length=50)
+    used = models.IntegerField(default=0)
     email = models.EmailField(_('email address') )
     amount = models.FloatField(max_length=10, blank=True, null=True)
     message = models.CharField(blank=True,null=True, max_length=50)
