@@ -225,7 +225,7 @@
         "model": "OMDApp.turno",
         "pk": 2,
         "fields": {
-          "state": "S",
+          "state": "A",
           "type": "C",
           "hour": "Morning",
           "date": "2023-08-15",
@@ -240,27 +240,26 @@
         "model": "OMDApp.turno",
         "pk": 3,
         "fields": {
-          "state": "F",
+          "state": "A",
           "type": "VA",
           "hour": "Morning",
-          "date": "2023-03-15",
+          "date": "2023-08-15",
           "motive": "Vacunación",
-          "observations": "Anterior",
-          "amount": 2345.9,
-          "finalized_at": "2023-03-15",
+          "observations": "",
+          "amount": null,
           "solicited_by": 1,
-          "accepted_by": 2
+          "accepted_by": null
         }
       },
       {
         "model": "OMDApp.turno",
         "pk": 4,
         "fields": {
-          "state": "S",
-          "type": "VA",
+          "state": "A",
+          "type": "T",
           "hour": "Morning",
           "date": "2023-08-15",
-          "motive": "Vacunación",
+          "motive": "Demo",
           "observations": "",
           "amount": null,
           "solicited_by": 2,
@@ -272,26 +271,40 @@
         "pk": 5,
         "fields": {
           "state": "A",
-          "type": "T",
+          "type": "VB",
           "hour": "Morning",
-          "date": "2023-08-15",
-          "motive": "Consulta",
+          "date": "2023-07-10",
+          "motive": "Vacunación B",
           "observations": "",
           "amount": null,
-          "solicited_by": 2,
+          "solicited_by": 1,
           "accepted_by": null
         }
       },
-      
       {
         "model": "OMDApp.turno",
         "pk": 6,
         "fields": {
           "state": "A",
-          "type": "T",
+          "type": "D",
           "hour": "Morning",
           "date": "2023-07-10",
-          "motive": "Consulta",
+          "motive": "Desparasitación",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 1,
+          "accepted_by": null
+        }
+      },
+      {
+        "model": "OMDApp.turno",
+        "pk": 7,
+        "fields": {
+          "state": "S",
+          "type": "D",
+          "hour": "Morning",
+          "date": "2023-11-08",
+          "motive": "Demo",
           "observations": "",
           "amount": null,
           "solicited_by": 2,

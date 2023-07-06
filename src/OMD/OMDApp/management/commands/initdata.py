@@ -24,7 +24,7 @@ class Command(BaseCommand):
             user.set_password(user.password)
             user.save()
         
-        for turn in Turno.objects.all().exclude(Q(type="VA") | Q(state="A")):
+        for turn in Turno.objects.all().exclude(motive="Demo"):
             turn.date = date.today()
             turn.save()
 
