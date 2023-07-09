@@ -233,7 +233,7 @@
           "observations": "",
           "amount": null,
           "solicited_by": 1,
-          "accepted_by": null
+          "accepted_by": 2
         }
       },
       {
@@ -248,7 +248,7 @@
           "observations": "",
           "amount": null,
           "solicited_by": 1,
-          "accepted_by": null
+          "accepted_by": 2
         }
       },
       {
@@ -263,7 +263,7 @@
           "observations": "",
           "amount": null,
           "solicited_by": 2,
-          "accepted_by": null
+          "accepted_by": 2
         }
       },
       {
@@ -278,7 +278,7 @@
           "observations": "",
           "amount": null,
           "solicited_by": 1,
-          "accepted_by": null
+          "accepted_by": 2
         }
       },
       {
@@ -293,7 +293,7 @@
           "observations": "",
           "amount": null,
           "solicited_by": 1,
-          "accepted_by": null
+          "accepted_by": 2
         }
       },
       {
