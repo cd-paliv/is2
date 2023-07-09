@@ -60,7 +60,10 @@ def ContactService(request, serv_id):
             message = render_to_string("services/contact_email.html", {'type': service_type, 'data': contact_data})
             send_mail("Solicitud de contacto", message, 'noreply.omd@gmail.com', [service.email])
             
-            return redirect(reverse("viewPaseadores"))
+            if service.service == 'C':
+                return redirect(reverse("viewCuidadores"))
+            else:
+                return redirect(reverse("viewPaseadores"))
         else:
             form.data = form.data.copy()
     else:
