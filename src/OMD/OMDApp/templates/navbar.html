@@ -11,22 +11,22 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-2">
-          <li class="nav-item dropdown opt-nav-center">
-            <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="margin-left: 0%;">
-              Perros
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-                {% if perms.OMDApp.is_client %}
-                  <li><a class="dropdown-item" href="{% url 'my_dogs' %}">Mis perros</a></li>
-                {% endif %}
-                {% if perms.OMDApp.is_client or perms.OMDApp.is_vet %}
-                  <li><a class="dropdown-item" href="{% url 'adoption_dog_list' %}">Perros en adopción</a></li> <!--clivet-->
-                  <li><a class="dropdown-item" href="{% url 'adopted_dogs' %}">Perros adoptados</a></li> <!--clivet-->
-                {% endif %}
-                <li><a class="dropdown-item" href="/">Perros encontrados</a></li>
-                <li><a class="dropdown-item" href="/">Perros perdidos</a></li>
-            </ul>
-          </li>
+          {% if user.is_authenticated %}
+            <li class="nav-item dropdown opt-nav-center">
+              <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="margin-left: 0%;">
+                Perros
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                  {% if perms.OMDApp.is_client %}
+                    <li><a class="dropdown-item" href="{% url 'my_dogs' %}">Mis perros</a></li>
+                  {% endif %}
+                  {% if perms.OMDApp.is_client or perms.OMDApp.is_vet %}
+                    <li><a class="dropdown-item" href="{% url 'adoption_dog_list' %}">Perros en adopción</a></li> <!--clivet-->
+                    <li><a class="dropdown-item" href="{% url 'adopted_dogs' %}">Perros adoptados</a></li> <!--clivet-->
+                  {% endif %}
+              </ul>
+            </li>
+          {% endif %}
 
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="margin-left: 0%;">
@@ -56,11 +56,8 @@
               </ul>
             </li>
           {% endif %}
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="{% url 'viewCampaigns' %}">Donaciones</a>
-            </li>
           <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/">Nosotros</a>
+            <a class="nav-link" aria-current="page" href="{% url 'viewCampaigns' %}">Donaciones</a>
           </li>
           <div class="vr"></div>
           {% if user.is_authenticated %}

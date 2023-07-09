@@ -312,6 +312,21 @@
         }
       },
       {
+        "model": "OMDApp.turno",
+        "pk": 8,
+        "fields": {
+          "state": "A",
+          "type": "C",
+          "hour": "Afternoon",
+          "date": "2023-07-27",
+          "motive": "Demo",
+          "observations": "",
+          "amount": null,
+          "solicited_by": 2,
+          "accepted_by": 2
+        }
+      },
+      {
         "model": "OMDApp.PPEA",
         "pk": 1,
         "fields": {
