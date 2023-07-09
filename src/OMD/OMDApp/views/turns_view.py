@@ -219,6 +219,9 @@ def AttendTurnView(request, turn_id, urgency=False):
                 Perro.objects.filter(id=dog.id).update(castrated=True)
                 turn.add_to_health_book()
             
+            elif turn.type == 'D':
+                turn.add_to_health_book()
+            
             turn.add_to_clinic_history()
 
             messages.success(request, "Turno finalizado")

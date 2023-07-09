@@ -35,6 +35,7 @@ def turn_type_mapping_with_urgency():
     map = {
         'T': 'Turno normal',
         'C': 'Castración',
+        'D': 'Desparasitacion',
         'VA': 'Vacunación - Tipo A',
         'VB': 'Vacunacion - Tipo B',
         'U': 'Urgencia',
@@ -108,10 +109,7 @@ def get_filtered_interventions(dog):
             continue
 
         if choice_label == 'D':
-            dog_age = calculate_age(dog.birthdate)
-            if "Menos de" not in dog_age:
-                continue
-            if Turno.objects.filter(date=date.today(), type='D').exists():
+            if Turno.objects.filter(date=date.today(), type='D', state='F').exists():
                 continue
 
         most_recent_turn = Turno.objects.filter(solicited_by=dog, type=choice_label, state='F').order_by('-date').first()
