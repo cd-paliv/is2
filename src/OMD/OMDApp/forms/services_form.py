@@ -14,6 +14,10 @@ class RegisterServiceForm(forms.ModelForm):
                                 widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputLastname',
                                                               'placeholder': 'Ingrese el apellido'}),
                                                               validators=[EmptyFieldValidator(), NoNumbersFieldValidator()])
+    hour = forms.CharField(label="Horario(*)",
+                                widget=forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'inputLastname',
+                                                              'placeholder': 'Ingrese el horario'}),
+                                                              validators=[EmptyFieldValidator()])
     email = forms.EmailField(label="Email(*)",
                              widget=forms.EmailInput(attrs={'type': 'email', 'class': 'form-control', 'id': 'inputEmail',
                                                             'placeholder': 'Ingrese el email'}),
@@ -37,7 +41,7 @@ class RegisterServiceForm(forms.ModelForm):
 
     class Meta:
         model = Servicio
-        fields = ("first_name", "last_name", "email", "phone", "zone")
+        fields = ("first_name", "last_name", "hour", "zone", "email", "phone")
 
 class ContactServiceForm(forms.Form):
     first_name = forms.CharField(label="Nombre(*)",

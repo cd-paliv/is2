@@ -464,6 +464,7 @@
             "first_name": "Pablo",
             "last_name": "Lopez",
             "service" : "C",
+            "hour": "8hs a 12hs",
             "zone" : "PM",
             "phone" : 2214595085
         }

@@ -177,5 +177,6 @@ class Servicio(models.Model):
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=30)
     service = models.CharField(max_length=1) # p ^ c
+    hour = models.CharField(max_length=20)
     zone = models.CharField(max_length=4)
     phone = models.IntegerField()

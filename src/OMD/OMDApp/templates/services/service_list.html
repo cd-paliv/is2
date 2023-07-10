@@ -19,6 +19,7 @@
                     <tr>
                         <th><strong>Nombre</strong></th>
                         <th><strong>Zona</strong></th>
+                        <th><strong>Horario</strong></th>
                         {% if not perms.OMDApp.is_vet %}<th><strong>Opciones</strong></th>{% endif %}
                     </tr>
                 </thead> 
@@ -27,6 +28,7 @@
                         <tr>
                             <td class="vertical-align-middle"><strong>{{service.first_name}} {{service.last_name}}</strong></td>
                             <td class="vertical-align-middle">{{ zone_mapping|get_item:service.zone}}</td>
+                            <td class="vertical-align-middle">{{ service.hour }}</td>
                             {% if not perms.OMDApp.is_vet %}
                                 <td class="vertical-align-middle">
                                     <a href="{% url 'contactService' serv_id=service.id %}" class="btn btn-secondary btn-sm">Contactar</a>
